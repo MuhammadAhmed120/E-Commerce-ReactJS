@@ -1,13 +1,20 @@
 import Navbar from '../components/navbar'
 import { useState, useEffect, useContext } from 'react'
-import { useNavigate, useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
-import Button from '@mui/material/Button';
 
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import Card from '../components/card.js';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+
+import Gallery from 'react-image-gallery';
+import 'react-image-gallery/styles/css/image-gallery.css';
+import ReactImageMagnify from 'react-image-magnify';
+
 
 import { notification } from 'antd';
 
@@ -24,6 +31,13 @@ const ProductDisplay = ({ v1, v2 }) => {
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [quantity, setQuantity] = useState(1);
+
+    const [age, setAge] = useState('');
+
+    const handleChange = (event) => {
+        setAge(event.target.value);
+        console.log(age)
+    };
 
 
     useEffect(() => {
@@ -71,13 +85,15 @@ const ProductDisplay = ({ v1, v2 }) => {
 
     const handleQuantityChange = (e) => {
         const newQuantity = parseInt(e.target.value);
-        console.log(e.target)
-        console.log(newQuantity)
-        console.log('quantity--->', quantity)
-        // if (e.target.value) {
         setQuantity(newQuantity);
-        // }
     };
+
+    const handleCheckValue = (e) => {
+        const blurQuan = e.target.value
+        if (!blurQuan.trim()) {
+            setQuantity(1)
+        }
+    }
 
 
     const handleCardClick = (event) => {
@@ -87,11 +103,24 @@ const ProductDisplay = ({ v1, v2 }) => {
         });
     };
 
+    const [selectedImage, setSelectedImage] = useState(0);
 
     if (clothData.length >= 1) {
         let { clothStatus, clothImg, clothImgHover, clothTitle, clothCon, clothPrice } = clothData[productId];
 
         let galleryImages = Object.values(clothData[productId].galleryImages);
+
+        const handleImageChange = (index) => {
+            setSelectedImage(index);
+        };
+
+        const handlePrevImage = () => {
+            setSelectedImage((selectedImage - 1 + galleryImages.length) % galleryImages.length);
+        };
+
+        const handleNextImage = () => {
+            setSelectedImage((selectedImage + 1) % galleryImages.length);
+        };
 
         return (
             <div>
@@ -100,7 +129,7 @@ const ProductDisplay = ({ v1, v2 }) => {
                 {notificationContextHolder}
                 <h1></h1>
 
-                <span className='navs'>Home/Product/{clothTitle}/</span>
+                <span className='navs'>Home / Product / {clothTitle}/</span>
 
                 <div className='cloth-display-con'>
                     <div className='img-con'>
@@ -122,12 +151,17 @@ const ProductDisplay = ({ v1, v2 }) => {
                             </Carousel>
                         </div>
                     </div>
+
                     <div className='display-det'>
                         <h3 className='display-status'>{clothStatus}</h3>
                         <h1 className='display-title'>{clothTitle}</h1>
                         <p className='display-con'>{clothCon}</p>
                         <h2 className='display-price'>RS {clothPrice}/-</h2>
-                        <div className='count-add-con'>
+
+                        <div className='display-quan-con'>
+                            <div>
+                                <p>QUANTITY: </p>
+                            </div>
                             <span className='quan-count-con'>
                                 <button
                                     className={`quan-count-btn minus-btn ${quantity === 1 && 'btn-disabled'}`}
@@ -135,12 +169,11 @@ const ProductDisplay = ({ v1, v2 }) => {
                                 >-</button>
 
                                 <input
-                                    className='quan-inp custom-input'
+                                    className='quan-inp'
                                     type='number'
                                     value={quantity}
                                     onChange={handleQuantityChange}
-                                    inputMode='none'
-                                    defaultValue={1}
+                                    onBlur={handleCheckValue}
                                 />
 
                                 <button
@@ -148,7 +181,34 @@ const ProductDisplay = ({ v1, v2 }) => {
                                     onClick={handleIncrement}
                                 >+</button>
                             </span>
+                        </div>
+
+                        <div className='display-quan-con'>
                             <div>
+                                <p>SIZE:</p>
+                            </div>
+                            {/* <FormControl sx={{ m: 2, minWidth: 120 }}> */}
+                            <Select
+                                value={age}
+                                onChange={handleChange}
+                                displayEmpty
+                                size='small'
+                            >
+                                <MenuItem disabled value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value='Extra Small'>XS</MenuItem>
+                                <MenuItem value='Small'>S</MenuItem>
+                                <MenuItem value='Medium'>M</MenuItem>
+                                <MenuItem value='Large'>L</MenuItem>
+                                <MenuItem value='Extra Large'>XL</MenuItem>
+                                <MenuItem value='Extra Extra Large'>XXL</MenuItem>
+                            </Select>
+                            {/* </FormControl> */}
+                        </div>
+
+                        <div className='buy-add-con'>
+                            <div className='btn-container'>
                                 <Button
                                     className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
                                     variant="contained"
@@ -156,8 +216,18 @@ const ProductDisplay = ({ v1, v2 }) => {
                                     onClick={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity)}
                                 >ADD TO CART</Button>
                             </div>
+                            <div className='btn-container'>
+                                <Button
+                                    className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
+                                    variant="contained"
+                                    size='large'
+                                >
+                                    BUY
+                                </Button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
 
@@ -193,4 +263,3 @@ const ProductDisplay = ({ v1, v2 }) => {
 };
 
 export default ProductDisplay
-// https://mui.com/material-ui/getting-started/templates/checkout/

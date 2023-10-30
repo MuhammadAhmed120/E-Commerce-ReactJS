@@ -73,9 +73,9 @@ const Lists = ({ onClose }) => {
                 <div>
                     <NavLink to={clothCart.length === 0 ? '#' : '/home/checkout'}>
                         <div className={`checkout-btn ${clothCart.length === 0 ? `btn-disabled` : ``}`}>
-                            <span>
+                            <NavLink style={{ color: '#fff' }} to={"/home/checkout"}>
                                 CHECKOUT
-                            </span>
+                            </NavLink>
                             <span style={{ display: 'flex' }}>
                                 <IoBagCheckOutline />
                             </span>

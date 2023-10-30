@@ -2,7 +2,7 @@ import { useState, useContext, useRef, useEffect } from 'react';
 import Navbar from '../components/navbar'
 import Card from '../components/card.js';
 import axios from 'axios';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import '../index.css'
 
 import CartContext from '../config/cartContext.js';
@@ -38,40 +38,11 @@ export default function Home() {
 
     const [notificationApi, notificationContextHolder] = notification.useNotification();
 
-    // useEffect(() => {
-    //     const intersectionObserver = new IntersectionObserver((entries) => {
-    //         entries.forEach((entry) => {
-    //             if (entry.isIntersecting) {
-    //                 entry.target.classList.add('reveal');
-    //             }
-    //              else {
-    //                 entry.target.classList.remove('reveal');
-    //             }
-    //             console.log(entry.isIntersecting)
-    //             console.log(entry)
-    //         });
-    //     });
-    //
-    //     const cards = document.querySelectorAll('.card');
-    //     cards.forEach((card) => {
-    //         intersectionObserver.observe(card);
-    //     });
-
-    //     return () => {
-    //         intersectionObserver.disconnect();
-    //     };
-    // }, []);
-
-    // const disbaleBtnFunc = () => {
-    //     setShowCartBtn(false)
-    // }
-
     return (
         <div>
             <Navbar />
 
             {notificationContextHolder}
-            {/* <h1 style={{color: 'black'}}>1</h1> */}
             <h1>1</h1>
 
             <div className='card-con'>
@@ -84,8 +55,8 @@ export default function Home() {
                             clothImgHover={item.clothImgHover}
                             clothTitle={item.clothTitle}
                             clothPrice={item.clothPrice}
-                            className='card'
                             showBtn={false}
+                            className="card"
                         />
                     </NavLink>
                 ))}

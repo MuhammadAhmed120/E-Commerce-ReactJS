@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Select } from 'antd';
+import {  Checkbox, Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { CiLock } from 'react-icons/ci'
-import { FaCircleUser } from 'react-icons/fa6'
 import '../index.css'
 
 import Navbar from '../components/navbar'

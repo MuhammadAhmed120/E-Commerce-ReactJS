@@ -1,12 +1,10 @@
 // import * as React from 'react';
-import { forwardRef } from 'react';
 import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
 
 import { Carousel } from 'antd';
 
@@ -23,7 +21,7 @@ const DisplayCard = ({ AddCartFunc, clothStatus, clothImg, clothTitle, clothPric
     }
 
     return (
-        <Card className='card' sx={{ maxWidth: 220 }} onClick={onCardClick}>
+        <Card className='card' onClick={onCardClick}>
             {/* IMAGE */}
             <Carousel autoplay>
                 <div onMouseEnter={imgHovered} onMouseLeave={imgNotHovered}>
