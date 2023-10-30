@@ -38,9 +38,9 @@ const Login = () => {
     const [error, setError] = useState("")
 
     const onFinish = async (values) => {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
         setLoading(true)
-        console.log('working')
+        // console.log('working')
         try {
             const customerData = {
                 customerEmail: values.email,
