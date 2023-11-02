@@ -27,82 +27,61 @@ function PlaceOrder() {
         setClothCart(savedCart)
     }, [quanNum])
 
-    function quanFunc(func, item, del, e) {
-        const updatedCart = [...clothCart];
-        let itemIndex = clothCart.findIndex(cartItem => cartItem.item.clothID === item.item.clothID);
-
-        if (itemIndex !== -1) {
-            if (func === 'inc' || func === 'dec') {
-                func === 'inc' ? updatedCart[itemIndex].qty += 1 : updatedCart[itemIndex].qty > 1 ? updatedCart[itemIndex].qty -= 1 : updatedCart[itemIndex].qty = 1;
-                setCartNum(updatedCart.length);
-
-                setClothCart(updatedCart);
-                localStorage.setItem('cart', JSON.stringify(updatedCart));
-            }
-
-            if (del) {
-                // setItemDel(true)
-                const targetParent = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-
-                // targetParent.setAttribute('class', 'ant-list-item-meta list-con')
-
-                // setTimeout(() => {
-                updatedCart.splice(itemIndex, 1)
-
-                setCartNum(updatedCart.length);
-                setClothCart(updatedCart);
-                localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-                setItemDel(false)
-                // }, 3300);
-            }
-        }
-    }
 
     let totalQuan = clothCart.map(v => v.qty).reduce((acc, qty) => acc + qty, 0)
     let totalPrice = clothCart.reduce((acc, qty) => acc + Number(qty.item.clothPrice) * Number(qty.qty), 0)
 
 
-
     const [loading, setLoading] = useState(null)
-    const [address, setAddress] = useState("")
-
-    const navigate = useNavigate()
+    const navigation = useNavigate()
 
     const onFinish = async (values) => {
-        console.log('Received values of form: ', values);
-
-        const userID = localStorage.getItem('UID')
-
         setLoading(true)
+        const userToken = localStorage.getItem('UID')
+
         try {
-            const customerData = {
-                customerID: userID,
+            const cart = clothCart.reduce((acc, items) => {
+                acc[items.item.clothID] = {
+                    "qty": items.qty,
+                    "name": items.item.clothTitle,
+                    "price": items.item.clothPrice,
+                    "size": items.size
+                };
+                return acc;
+            }, {});
+
+            const customerOrderData = {
                 customerName: values.fullname,
                 customerNumber: values.phone,
                 customerEmail: values.email,
                 customerAddress: values.address,
                 customerZIPCode: values.ZIPCode,
-                // items: 
+                items: cartNum,
+                amount: totalPrice,
+                cart: cart
             }
-            // const registerCustomer = await axios.post('http://localhost:3001/', customerData)
-            // console.log('registerCustomer.data---->', registerCustomer.data)
-            // localStorage.setItem('UID', registerCustomer.data.token)
-            
-            console.log(customerData)
-            setLoading(false)
 
-            // const userUID = localStorage.getItem('UID')
-            // userUID && navigate('/home')
+            const headers = {
+                'Authorization': `Bearer ${userToken}`
+            };
+
+            const placingOrder = await axios.post('http://localhost:3001/home/checkout', customerOrderData, { headers })
+            console.log(placingOrder)
+
+            console.log('Status ~ ', placingOrder.data.orderStatus)
+
+            if (placingOrder.data.status === 200) {
+                localStorage.removeItem('cart')
+                setTimeout(() => {
+                    navigation('/home')
+                }, 1000);
+            }
+            setLoading(false)
         } catch (error) {
             console.log(error)
             setLoading(false)
         }
     };
-
-    // const placeOrder = () => {
-
-    // }
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
@@ -117,6 +96,8 @@ function PlaceOrder() {
     );
 
 
+
+    // console.log(cartObject)
 
     return (
         <>
@@ -291,6 +272,7 @@ function PlaceOrder() {
                                                     <div style={{ fontWeight: '600', color: '#126373' }}>
                                                         RS {item.item.clothPrice * item.qty}
                                                     </div>
+                                                    <div>SIZE: <b>{item.size}</b></div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                         <div>QTY: {item.qty}</div>
                                                     </div>
