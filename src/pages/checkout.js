@@ -130,9 +130,11 @@ function Checkout() {
                         <Button variant='outlined'>BROWSE</Button>
                     </NavLink>
                 </div>
+
                 <List
                     itemLayout="horizontal"
                     dataSource={clothCart}
+                    className='list-check'
                     renderItem={(item, index) => {
                         return (
                             <List.Item
@@ -158,6 +160,7 @@ function Checkout() {
                                             <div style={{ fontWeight: '600', color: '#126373' }}>
                                                 RS {item.item.clothPrice * item.qty}
                                             </div>
+                                            <div>SIZE: <b>{item.size}</b></div>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                                                     <div >QTY: </div>
@@ -183,9 +186,9 @@ function Checkout() {
 
                 <div className='checkout-num'>
                     <div style={{ display: 'flex', gap: '1rem' }}>
-                        <p>Total: Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</p>
-                        <p>Items: {cartNum < 10 ? `0${cartNum}` : cartNum}</p>
-                        <p> Quantity: {totalQuan < 10 ? `0${totalQuan}` : totalQuan}</p>
+                        <p>Total: <b> Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</b></p>
+                        <p>Items: <b>{cartNum < 10 ? `0${cartNum}` : cartNum}</b></p>
+                        <p> Quantity: <b>{totalQuan < 10 ? `0${totalQuan}` : totalQuan}</b></p>
                     </div>
                     <div>
                         <NavLink to={'/home/checkout/order'}>
