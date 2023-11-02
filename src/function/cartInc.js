@@ -1,6 +1,6 @@
 import { notification } from "antd";
 
-export default function cartInc(event, item, setCartNum, setQuanNum, itemQuan) {
+export default function cartInc(event, item, setCartNum, setQuanNum, itemQuan, size) {
     event.preventDefault();
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     let dupItem = cart.findIndex(cartItem => cartItem.item.clothID === item.clothID);
@@ -13,9 +13,9 @@ export default function cartInc(event, item, setCartNum, setQuanNum, itemQuan) {
         }
     } else {
         if (itemQuan) {
-            cart.push({ item, qty: itemQuan });
+            cart.push({ item, qty: itemQuan, size });
         } else {
-            cart.push({ item, qty: 1 });
+            cart.push({ item, qty: 1, size });
         }
     }
 
