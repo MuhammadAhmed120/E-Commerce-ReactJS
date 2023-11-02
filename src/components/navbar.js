@@ -84,6 +84,8 @@ function ResponsiveAppBar({ }) {
                 fontWeight: 700,
                 letterSpacing: '.1rem',
                 color: '#0b0027',
+                width: 'fit-content'
+
               }}
             >
               <span>FLEX</span><span style={{ color: '#fff' }}>US</span>
@@ -147,6 +149,7 @@ function ResponsiveAppBar({ }) {
                 fontWeight: 700,
                 color: '#fff',
                 textDecoration: 'none',
+                width: 'fit-content'
               }}
             >
               <span style={{ color: '#000' }}>FLEX</span> <span>US</span>
@@ -173,7 +176,7 @@ function ResponsiveAppBar({ }) {
               <CiSearch className='nav-search-but' /> */}
 
 
-              <Search style={{ maxWidth: '30%', marginLeft: 'auto' }} placeholder="Search clothes" loading={false} />
+              {/* <Search style={{ maxWidth: '30%', marginLeft: 'auto' }} placeholder="Search clothes" loading={false} /> */}
 
 
 
@@ -221,6 +224,13 @@ function ResponsiveAppBar({ }) {
               </NavLink>
             }
 
+            <Button onClick={() => {
+              localStorage.clear()
+              window.location.reload();
+            }} variant="contained">
+              LOGOUT
+            </Button>
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -246,14 +256,15 @@ function ResponsiveAppBar({ }) {
           </Box>
         </Toolbar>
 
-        {location.pathname !== '/login' && location.pathname !== '/' ?
+        {/* {location.pathname !== '/login' && location.pathname !== '/' ?
           <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', flexGrow: 1, justifyContent: 'center', my: 1 }}>
-            {/* <input style={{ width: '250px', marginLeft: 'auto' }} type="search" placeholder='Search Clothes' className='nav-search-bar' />
-            <CiSearch style={{ marginRight: 'auto' }} className='nav-search-but' /> */}
+            <input style={{ width: '250px', marginLeft: 'auto' }} type="search" placeholder='Search Clothes' className='nav-search-bar' />
+            <CiSearch style={{ marginRight: 'auto' }} className='nav-search-but' />
 
             <Search style={{ maxWidth: '90%', margin: '0 auto' }} placeholder="Search clothes" loading={false} />
 
-          </Box> : <></>}
+          </Box> : <></>} */}
+
       </Container>
     </AppBar >
   );
