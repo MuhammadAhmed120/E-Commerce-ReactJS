@@ -32,11 +32,11 @@ const ProductDisplay = ({ v1, v2 }) => {
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [quantity, setQuantity] = useState(1);
 
-    const [age, setAge] = useState('');
+    const [size, setSize] = useState('');
 
     const handleChange = (event) => {
-        setAge(event.target.value);
-        console.log(age)
+        setSize(event.target.value);
+        console.log(size)
     };
 
 
@@ -189,10 +189,11 @@ const ProductDisplay = ({ v1, v2 }) => {
                             </div>
                             {/* <FormControl sx={{ m: 2, minWidth: 120 }}> */}
                             <Select
-                                value={age}
+                                defaultValue='S'
+                                value={size}
                                 onChange={handleChange}
                                 displayEmpty
-                                size='small'
+                            // size='small'
                             >
                                 <MenuItem disabled value="">
                                     <em>None</em>
@@ -213,7 +214,7 @@ const ProductDisplay = ({ v1, v2 }) => {
                                     className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
                                     variant="contained"
                                     size="large"
-                                    onClick={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity)}
+                                    onClick={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size)}
                                 >ADD TO CART</Button>
                             </div>
                             <div className='btn-container'>
