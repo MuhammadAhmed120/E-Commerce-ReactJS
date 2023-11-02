@@ -20,7 +20,7 @@ body {
     scrollbar-width: thin;
     scrollbar-color: #4A90E2 #ECECEC;
 
-    &::-webkit-scrollbar {
+    /* &::-webkit-scrollbar {
         width: 8px;
     }
 
@@ -30,7 +30,7 @@ body {
 
     &::-webkit-scrollbar-track {
         background-color: #ECECEC;
-    }
+    } */
 }
 
 h1 {
@@ -195,6 +195,22 @@ input[type=number] {
     pointer-events: none;
 }
 
+.deleteAni{
+    animation-name: deleteAni;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes deleteAni {
+    from{
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to{
+        opacity: 0.4;
+        transform: translateX(-110%);
+    }
+}
 
 .quan-con {
     position: absolute;
@@ -452,12 +468,12 @@ input[type=number] {
 @keyframes loadAnimation {
     from {
         opacity: 0.2;
-        transform: translateY(4%);
+        transform: translateX(-7%);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0%);
+        transform: translateX(0%);
     }
 }
 
@@ -1066,6 +1082,10 @@ input[type=number] {
     border-bottom: 2px solid #2c69eb;
 }
 
+.list-check{
+    margin-bottom: 20px;
+}
+
 .checkout-num {
     border-top: 1px solid #2c69eb;
     display: flex;
@@ -1076,7 +1096,7 @@ input[type=number] {
 
 .checkout-num>div>p {
     margin: 0;
-    font-weight: 600;
+    /* font-weight: 600; */
     font-size: 20px;
     color: black !important;
 }
