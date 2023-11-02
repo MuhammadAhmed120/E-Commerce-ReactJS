@@ -14,6 +14,7 @@ const Lists = ({ onClose }) => {
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [clothCart, setClothCart] = useState([])
     const [itemDel, setItemDel] = useState(null)
+    const [deletedItemIndex, setDeletedItemIndex] = useState(null);
 
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const Lists = ({ onClose }) => {
         setClothCart(savedCart)
     }, [quanNum])
 
-    function quanFunc(func, item, del, e) {
+    function quanFunc(func, item, del, e, index) {
         const updatedCart = [...clothCart];
         let itemIndex = clothCart.findIndex(cartItem => cartItem.item.clothID === item.item.clothID);
 
@@ -35,26 +36,31 @@ const Lists = ({ onClose }) => {
             }
 
             if (del) {
-                // setItemDel(true)
-                const targetParent = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+                setDeletedItemIndex(index);
 
-                // targetParent.setAttribute('class', 'ant-list-item-meta list-con')
+                setTimeout(() => {
+                    updatedCart.splice(itemIndex, 1)
 
-                // setTimeout(() => {
-                updatedCart.splice(itemIndex, 1)
-
-                setCartNum(updatedCart.length);
-                setClothCart(updatedCart);
-                localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-                setItemDel(false)
-                // }, 3300);
+                    setCartNum(updatedCart.length);
+                    setClothCart(updatedCart);
+                    localStorage.setItem('cart', JSON.stringify(updatedCart));
+                }, 480)
             }
         }
     }
 
     let totalQuan = clothCart.map(v => v.qty).reduce((acc, qty) => acc + qty, 0)
     let totalPrice = clothCart.reduce((acc, qty) => acc + Number(qty.item.clothPrice) * Number(qty.qty), 0)
+
+    useEffect(() => {
+        if (deletedItemIndex !== null) {
+            const timeoutId = setTimeout(() => {
+                setDeletedItemIndex(null);
+            }, 1000); // Change 1000 to match the animation duration in milliseconds (1s in this case)
+            return () => clearTimeout(timeoutId);
+        }
+    }, [deletedItemIndex]);
+
 
     return (
         <div className='lists-con'>
@@ -83,6 +89,7 @@ const Lists = ({ onClose }) => {
                     </NavLink>
                 </div>
             </div>
+
             {clothCart.length !== 0 ?
                 <List
                     itemLayout="horizontal"
@@ -91,6 +98,7 @@ const Lists = ({ onClose }) => {
                         return (
                             <List.Item
                                 key={index}
+                                className={index === deletedItemIndex ? 'deleteAni' : ''} F
                             >
                                 <List.Item.Meta
                                     avatar={<img className='drawer-cart-img' src={item.item.clothImg} />}
@@ -108,10 +116,10 @@ const Lists = ({ onClose }) => {
                                     }
                                     description={
                                         <div>
-                                            <div>{item.item.clothCon}</div>
                                             <div style={{ fontWeight: '600', color: '#126373' }}>
                                                 RS {item.item.clothPrice * item.qty}
                                             </div>
+                                            <div>SIZE: <b>{item.size}</b></div>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                                                     <div >QTY: </div>
@@ -124,7 +132,7 @@ const Lists = ({ onClose }) => {
                                                     </div>
                                                 </div>
                                                 <div className='drawer-trash-con'>
-                                                    <IoMdTrash className='drawer-trash' size={19} onClick={(e) => quanFunc('', item, true, e)} />
+                                                    <IoMdTrash className='drawer-trash' size={19} onClick={(e) => quanFunc('', item, true, e, index)} />
                                                 </div>
                                             </div>
                                         </div>
