@@ -32,13 +32,11 @@ const ProductDisplay = ({ v1, v2 }) => {
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [quantity, setQuantity] = useState(1);
 
-    const [size, setSize] = useState('');
+    const [size, setSize] = useState('Small');
 
     const handleChange = (event) => {
         setSize(event.target.value);
-        console.log(size)
     };
-
 
     useEffect(() => {
         async function fetchDataFunc() {
@@ -127,7 +125,7 @@ const ProductDisplay = ({ v1, v2 }) => {
                 <Navbar />
 
                 {notificationContextHolder}
-                <h1></h1>
+                <h1>1</h1>
 
                 <span className='navs'>Home / Product / {clothTitle}/</span>
 
@@ -187,25 +185,19 @@ const ProductDisplay = ({ v1, v2 }) => {
                             <div>
                                 <p>SIZE:</p>
                             </div>
-                            {/* <FormControl sx={{ m: 2, minWidth: 120 }}> */}
                             <Select
-                                defaultValue='S'
                                 value={size}
                                 onChange={handleChange}
-                                displayEmpty
-                            // size='small'
+                                size='small'
+                                className='size-select'
                             >
-                                <MenuItem disabled value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value='Extra Small'>XS</MenuItem>
-                                <MenuItem value='Small'>S</MenuItem>
-                                <MenuItem value='Medium'>M</MenuItem>
-                                <MenuItem value='Large'>L</MenuItem>
-                                <MenuItem value='Extra Large'>XL</MenuItem>
-                                <MenuItem value='Extra Extra Large'>XXL</MenuItem>
+                                <MenuItem value='Extra Small'>Extra Small (XS)</MenuItem>
+                                <MenuItem value='Small'>Small (S)</MenuItem>
+                                <MenuItem value='Medium'>Medium (M)</MenuItem>
+                                <MenuItem value='Large'>Large (L)</MenuItem>
+                                <MenuItem value='Extra Large'>Extra Large (XL)</MenuItem>
+                                <MenuItem value='Extra Extra Large'>Extra Extra Large (XXL)</MenuItem>
                             </Select>
-                            {/* </FormControl> */}
                         </div>
 
                         <div className='buy-add-con'>
@@ -227,6 +219,7 @@ const ProductDisplay = ({ v1, v2 }) => {
                                 </Button>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
