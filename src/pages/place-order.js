@@ -1,4 +1,4 @@
-import Navbar from '../components/navbar'
+import Navbar from '../components/navbar';
 import { List } from 'antd';
 import { useEffect, useState, useContext } from 'react';
 import CartContext from '../config/cartContext';
@@ -6,6 +6,8 @@ import QuanContext from '../config/quanContext';
 import { BsArrowRight } from 'react-icons/bs'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
+import { GiTakeMyMoney } from 'react-icons/gi';
+import { CiCircleInfo } from 'react-icons/ci'
 import { Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import '../index.css'
@@ -95,20 +97,49 @@ function PlaceOrder() {
         </Form.Item>
     );
 
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        // Add an event listener to handle scroll events
+        const handleScroll = () => {
+            if (window.scrollY >= 110) {
+                setIsSticky(true);
+            } else if (window.scrollY === 0) {
+                setIsSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
 
-    // console.log(cartObject)
 
     return (
         <>
             <Navbar />
-            <h1></h1>
 
             <p className='disclaimer'>Delivery only available in <b style={{ marginLeft: 5 }}> KARACHI</b>, Pakistan</p>
 
-            <span className='navs'>Home / Checkout / Order /</span>
+            <span className='navs'>
+                <NavLink className='navs-link' to={'/home'}>
+                    Home
+                </NavLink>
+                /
+                <NavLink className='navs-link' to={'/home/checkout'}>
+                    Checkout
+                </NavLink>
+                /
+                <NavLink className='navs-link' to={'/home/checkout/order'}>
+                    Order
+                </NavLink>
+                /
+            </span>
 
-            <div className='check-con'>
+            <div className={`check-con ${isSticky ? 'pos-mar' : ''}`}>
                 <h1 className='checkout-title'>CHECKOUT </h1>
                 <p className='checkout-step'>2</p>
             </div>
@@ -122,10 +153,14 @@ function PlaceOrder() {
                         onFinish={onFinish}
                         scrollToFirstError={true}
                     >
-                        <div className='form-name order-del-title'>
+                        <div className='order-del-title'>
                             <h2>User Details:</h2>
                         </div>
 
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 15 }}>
+                            <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 300, margin: 0 }} >Enter your correct details.</p>
+                            <CiCircleInfo />
+                        </div>
 
                         <Form.Item
                             name="fullname"
@@ -184,59 +219,73 @@ function PlaceOrder() {
 
                         <div className='form-separator'></div>
 
-                        <div className='form-name order-del-title'>
+                        <div className='order-del-title'>
                             <h2>Delivery Address:</h2>
                         </div>
 
-                        <Form.Item
-                            name="address"
-                            label="House Address"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your address!',
-                                },
-                            ]}
-                        >
-                            <TextArea
-                                placeholder="Gulshan-e-Iqbal, Block-13, House No 843/13, Karachi."
-                                autoSize={{
-                                    minRows: 1,
-                                    maxRows: 6,
-                                }}
-                            />
-                        </Form.Item>
-
-                        <Form.Item
-                            name="ZIPCode"
-                            label="Postal Code"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input zip code!',
-                                },
-                            ]}
-                        >
-                            <Input
-                                style={{
-                                    width: 120,
-                                }}
-                                placeholder='ZIP Code'
-                                maxLength={5}
-                            />
-                        </Form.Item>
-
-                        <div className='form-separator'></div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: 30 }}>
-                            <div style={{ margin: 0 }} className='form-name order-del-title'>
-                                <h2 >Payment Method:</h2>
+                        <div>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 15 }}>
+                                <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 300, margin: 0 }} >Enter your current residential address.</p>
+                                <CiCircleInfo />
                             </div>
-                            <p style={{ margin: 0, fontSize: 20, fontWeight: 500 }}>CASH ON DELIVERY</p>
+                            <Form.Item
+                                name="address"
+                                label="House Address"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your address!',
+                                    },
+                                ]}
+                            >
+                                <TextArea
+                                    placeholder="Gulshan-e-Iqbal, Block-13, House No 843/13, Karachi."
+                                    autoSize={{
+                                        minRows: 1,
+                                        maxRows: 6,
+                                    }}
+                                />
+                            </Form.Item>
+
+                            <Form.Item
+                                name="ZIPCode"
+                                label="Postal Code"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input zip code!',
+                                    },
+                                ]}
+                            >
+                                <Input
+                                    style={{
+                                        width: 120,
+                                    }}
+                                    placeholder='ZIP Code'
+                                    maxLength={5}
+                                />
+                            </Form.Item>
                         </div>
 
 
-                        {/* <div className='form-separator'></div> */}
+                        <div className='form-separator'></div>
+
+                        {/* display: 'flex', alignItems: 'center', gap: '1rem', */}
+                        <div style={{ marginBottom: 50 }}>
+                            <div style={{ margin: 0 }} className='order-del-title'>
+                                <h2 >Payment Method:</h2>
+                            </div>
+
+                            <div>
+                                <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 300, marginTop: 5, marginBottom: 15 }}>Only one method available.</p>
+                                <p className='cod-con'>
+                                    <GiTakeMyMoney color='white' size={22} autoSize /> CASH ON DELIVERY
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div className='form-separator'></div>
 
                         <LoadingButton type='primary' loading={loading} variant="contained" className="form-button">
                             PLACE ORDER
@@ -272,7 +321,7 @@ function PlaceOrder() {
                                                     <div style={{ fontWeight: '600', color: '#126373' }}>
                                                         RS {item.item.clothPrice * item.qty}
                                                     </div>
-                                                    <div>SIZE: <b>{item.size}</b></div>
+                                                    <div>SIZE: <b>{item.size.toUpperCase()}</b></div>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                         <div>QTY: {item.qty}</div>
                                                     </div>
