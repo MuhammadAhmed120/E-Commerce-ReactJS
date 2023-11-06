@@ -8,6 +8,7 @@ import { IoMdTrash } from 'react-icons/io'
 import { TbMoodEmpty } from 'react-icons/tb'
 import { IoBagCheckOutline } from 'react-icons/io5'
 import { NavLink } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const Lists = ({ onClose }) => {
     const { cartNum, setCartNum } = useContext(CartContext)
@@ -56,7 +57,7 @@ const Lists = ({ onClose }) => {
         if (deletedItemIndex !== null) {
             const timeoutId = setTimeout(() => {
                 setDeletedItemIndex(null);
-            }, 1000); // Change 1000 to match the animation duration in milliseconds (1s in this case)
+            }, 1000);
             return () => clearTimeout(timeoutId);
         }
     }, [deletedItemIndex]);
@@ -119,7 +120,7 @@ const Lists = ({ onClose }) => {
                                             <div style={{ fontWeight: '600', color: '#126373' }}>
                                                 RS {item.item.clothPrice * item.qty}
                                             </div>
-                                            <div>SIZE: <b>{item.size}</b></div>
+                                            <div>SIZE: <b>{item.size.toUpperCase()}</b></div>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                                                     <div >QTY: </div>
@@ -148,6 +149,9 @@ const Lists = ({ onClose }) => {
                                 <TbMoodEmpty />
                             </h2>
                             <p style={{ fontWeight: 'bold', marginTop: -10 }}>Cart is Empty!</p>
+                            <NavLink to={'/home'}>
+                                <Button disableElevation variant="outlined" size="meduim">GO BACK SHOPPING</Button>
+                            </NavLink>
                         </div>
                     </List>
                 </>}
