@@ -107,17 +107,43 @@ function Checkout() {
         </Form.Item>
     );
 
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        // Add an event listener to handle scroll events
+        const handleScroll = () => {
+            if (window.scrollY >= 110) {
+                setIsSticky(true);
+            } else if (window.scrollY === 0) {
+                setIsSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
 
 
     return (
         <>
             <Navbar />
-            <h1></h1>
 
+            <span className='navs'>
+                <NavLink className='navs-link' to={'/home'}>
+                    Home
+                </NavLink>
+                /
+                <NavLink className='navs-link' to={'/home/checkout'}>
+                    Checkout
+                </NavLink>
+                /
+            </span>
 
-            <span className='navs'>Home / Checkout /</span>
-
-            <div className='check-con'>
+            <div className={`check-con ${isSticky ? 'pos-mar' : ''}`}>
                 <h1 className='checkout-title'>CHECKOUT </h1>
                 <p className='checkout-step'>1</p>
             </div>
@@ -160,7 +186,7 @@ function Checkout() {
                                             <div style={{ fontWeight: '600', color: '#126373' }}>
                                                 RS {item.item.clothPrice * item.qty}
                                             </div>
-                                            <div>SIZE: <b>{item.size}</b></div>
+                                            <div>SIZE: <b>{item.size.toUpperCase()}</b></div>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                                                     <div >QTY: </div>

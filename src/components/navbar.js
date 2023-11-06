@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -43,9 +43,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-function ResponsiveAppBar({ }) {
+function ResponsiveAppBar({ position }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isSticky, setIsSticky] = useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -67,11 +68,40 @@ function ResponsiveAppBar({ }) {
 
   const location = useLocation()
 
+
+  useEffect(() => {
+    // Add an event listener to handle scroll events
+    const handleScroll = () => {
+      console.log("Scroll-Y ~", window.scrollY.toFixed())
+      
+      if (window.scrollY >= 110) {
+        setIsSticky(true);
+      } else if (window.scrollY === 0) {
+        setIsSticky(false);
+      }
+    };
+
+    // Attach the event listener when the component mounts
+    window.addEventListener('scroll', handleScroll);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
   return (
-    <AppBar position="fixed" className='navbar' sx={{ zIndex: 10 }}>
+    <AppBar
+      className={`navbar ${isSticky ? 'sticky-navbar' : ''}`}
+      sx={{
+        zIndex: 199,
+        position: 'static',
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <NavLink to={'/home'} style={{ textDecoration: 'none', }}>
             <Typography
               variant="h5"
@@ -84,8 +114,7 @@ function ResponsiveAppBar({ }) {
                 fontWeight: 700,
                 letterSpacing: '.1rem',
                 color: '#0b0027',
-                width: 'fit-content'
-
+                width: 'fit-content',
               }}
             >
               <span>FLEX</span><span style={{ color: '#fff' }}>US</span>
@@ -205,11 +234,14 @@ function ResponsiveAppBar({ }) {
 
 
           <Box className='cart-prof-con'>
-            <IconButton aria-label="cart" onClick={() => setOpen(true)}>
-              <StyledBadge style={{ fontSize: '40px' }} badgeContent={cartNum} color="primary">
-                <BsHandbagFill size='22' color='#fff' />
-              </StyledBadge>
-            </IconButton>
+            {
+              cartNum >= 1 &&
+              <IconButton className='cart-con' aria-label="cart" onClick={() => setOpen(true)}>
+                <StyledBadge badgeContent={cartNum} color="primary">
+                  <BsHandbagFill size='22' color='#fff' />
+                </StyledBadge>
+              </IconButton>
+            }
             <CartDrawer open={open} onClose={setOpen} />
 
             {localStorage.getItem('UID') ?
