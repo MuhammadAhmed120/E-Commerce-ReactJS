@@ -5,6 +5,11 @@ import axios from 'axios';
 import { NavLink, useParams } from 'react-router-dom';
 import '../index.css'
 
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
+import { GrSort } from 'react-icons/gr'
+
 import CartContext from '../config/cartContext.js';
 import QuanContext from '../config/quanContext.js';
 
@@ -16,18 +21,26 @@ export default function Home() {
     const [clothData, setClothData] = useState([])
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
-
+    const [notificationApi, notificationContextHolder] = notification.useNotification();
+    const [sorting, setSorting] = useState('featured');
+    const [loader, setLoader] = useState(false)
     const { category } = useParams()
+    const [position, setPosition] = useState("static")
+    const con = useRef(null)
+
 
     useEffect(() => {
         async function fetchDataFunc() {
             try {
+                setLoader(false)
                 if (category) {
                     const fetchData = await axios.get(`http://localhost:3001/home/${category}`)
                     return setClothData(fetchData.data.cloth)
+                    setLoader(true)
                 } else {
                     const fetchData = await axios.get(`http://localhost:3001/home`)
                     return setClothData(fetchData.data.cloth)
+                    setLoader(true)
                 }
             } catch (error) {
                 console.log(error)
@@ -36,33 +49,124 @@ export default function Home() {
         fetchDataFunc()
     }, [category])
 
-    const [notificationApi, notificationContextHolder] = notification.useNotification();
+
+    const handleSort = (sortType) => {
+        let sortedClothData = [...clothData];
+
+        switch (sortType) {
+            case 'featured':
+                sortedClothData = sortedClothData.sort((a, b) => a.clothID - b.clothID);
+                break;
+            case 'price,_high_to_low':
+                sortedClothData = sortedClothData.sort((a, b) => b.clothPrice - a.clothPrice);
+                break;
+            case 'price,_low_to_high':
+                sortedClothData = sortedClothData.sort((a, b) => a.clothPrice - b.clothPrice);
+                break;
+            case 'alphabetically_a-z':
+                sortedClothData = sortedClothData.sort((a, b) => a.clothTitle.localeCompare(b.clothTitle));
+                break;
+            case 'alphabetically_z-a':
+                sortedClothData = sortedClothData.sort((a, b) => b.clothTitle.localeCompare(a.clothTitle));
+                break;
+            case 'newest_arrivals':
+                sortedClothData = sortedClothData.sort((a, b) => b.clothID - a.clothID);
+                break;
+            default:
+                break;
+        }
+
+        con.current.classList.add('animateCard')
+
+        setTimeout(() => {
+            con.current.classList.remove('animateCard')
+        }, 550);
+
+        setClothData(sortedClothData);
+        setSorting(sortType);
+    };
+
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        // Add an event listener to handle scroll events
+        const handleScroll = () => {
+            if (window.scrollY >= 110) {
+                setIsSticky(true);
+            } else if (window.scrollY === 0) {
+                setIsSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
 
     return (
         <div>
-            <Navbar />
+            <Navbar position={position} />
 
             {notificationContextHolder}
-            <h1>1</h1>
 
-            <div className='card-con'>
-                {clothData.map((item, index) => (
-                    <NavLink className="card-link" to={`/home/product/${item.clothID}`} key={index}>
-                        <Card
-                            AddCartFunc={(event) => cartInc(event, item, setCartNum, setQuanNum)}
-                            clothStatus={item.clothStatus}
-                            clothImg={item.clothImg}
-                            clothImgHover={item.clothImgHover}
-                            clothTitle={item.clothTitle}
-                            clothPrice={item.clothPrice}
-                            showBtn={false}
-                            className="card"
-                        />
-                    </NavLink>
-                ))}
+            <div style={{ display: "flex", flex: 1, justifyContent: "center", alignItems: "center", marginBottom: 0 }} className={`${isSticky ? 'pos-mar' : ''}`}>
+                {/* <p style={{ color: '#000', margin: 0, fontSize: 28, fontWeight: 500, width: "fit-content", borderBottom: "2px solid #2c69eb" }}>Products{category ? ` / ${category.toUpperCase()}` : ''}</p> */}
+                <p style={{ color: '#000', margin: 0, fontSize: 28, fontWeight: 500, width: "fit-content", borderBottom: "2px solid #2c69eb" }}>Products</p>
             </div>
 
-        </div >
+
+            <div className='home-sort-con'>
+                {/* <p style={{ color: '#000', margin: 0, fontSize: 20 }}>{sorting.split("_").join(" ").toUpperCase()}</p> */}
+                {/* <div>
+                    <p style={{ color: '#000', margin: 0, fontSize: 20 }}>{category ? ` / ${category.toUpperCase()}` : ''} {`(${sorting.split("_").join(" ").toUpperCase()})`}</p>
+                </div> */}
+                <div>
+                    <p>Sort By:</p>
+                    <Select
+                        value={sorting}
+                        onChange={(event) => handleSort(event.target.value)}
+                        autoWidth={true}
+                        sx={{ borderRadius: 30 }}
+                        size='small'
+                    >
+                        <MenuItem value="featured">Featured</MenuItem>
+                        <MenuItem value="price,_high_to_low">Price, High to Low</MenuItem>
+                        <MenuItem value="price,_low_to_high">Price, Low to High</MenuItem>
+                        <MenuItem value="alphabetically_a-z">Alphabetically A-Z</MenuItem>
+                        <MenuItem value="alphabetically_z-a">Alphabetically Z-A</MenuItem>
+                        <MenuItem value="newest_arrivals">Newest Arrivals</MenuItem>
+                    </Select>
+                    {/* <GrSort size={20} /> */}
+                </div>
+            </div>
+
+
+            {
+                loader ?
+                    <div className='card-con' ref={con}>
+                        {clothData.map((item, index) => (
+                            <NavLink className="card-link" to={`/home/product/${item.clothID}`} key={index}>
+                                <Card
+                                    AddCartFunc={(event) => cartInc(event, item, setCartNum, setQuanNum)}
+                                    clothStatus={item.clothStatus}
+                                    clothImg={item.clothImg}
+                                    clothImgHover={item.clothImgHover}
+                                    clothTitle={item.clothTitle}
+                                    clothPrice={item.clothPrice}
+                                    showBtn={false}
+                                    className="card"
+                                />
+                            </NavLink>
+                        ))}
+                    </div>
+                    : <span className='loader'>FLEXUS</span>
+            }
+
+
+        </div>
     )
 }
 
