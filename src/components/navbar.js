@@ -43,10 +43,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-function ResponsiveAppBar({ position }) {
+function ResponsiveAppBar({ isSticky }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isSticky, setIsSticky] = useState(false);
+  // const [isSticky, setIsSticky] = useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -69,28 +69,6 @@ function ResponsiveAppBar({ position }) {
   const location = useLocation()
 
 
-  useEffect(() => {
-    // Add an event listener to handle scroll events
-    const handleScroll = () => {
-      console.log("Scroll-Y ~", window.scrollY.toFixed())
-      
-      if (window.scrollY >= 110) {
-        setIsSticky(true);
-      } else if (window.scrollY === 0) {
-        setIsSticky(false);
-      }
-    };
-
-    // Attach the event listener when the component mounts
-    window.addEventListener('scroll', handleScroll);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-
   return (
     <AppBar
       className={`navbar ${isSticky ? 'sticky-navbar' : ''}`}
@@ -99,10 +77,15 @@ function ResponsiveAppBar({ position }) {
         position: 'static',
       }}
     >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-          <NavLink to={'/home'} style={{ textDecoration: 'none', }}>
+      <Container maxWidth="m">
+        <Toolbar disableGutters >
+          <NavLink to={'/home'} style={{ textDecoration: 'none', }}
+            onClick={() => {
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+              });
+            }} >
             <Typography
               variant="h5"
               noWrap
@@ -256,12 +239,12 @@ function ResponsiveAppBar({ position }) {
               </NavLink>
             }
 
-            <Button onClick={() => {
+            {/* <Button onClick={() => {
               localStorage.clear()
               window.location.reload();
             }} variant="contained">
               LOGOUT
-            </Button>
+            </Button> */}
 
             <Menu
               sx={{ mt: '45px' }}

@@ -112,6 +112,7 @@ function Checkout() {
     useEffect(() => {
         // Add an event listener to handle scroll events
         const handleScroll = () => {
+            console.log("Scroll-Y ~", window.scrollY.toFixed())
             if (window.scrollY >= 110) {
                 setIsSticky(true);
             } else if (window.scrollY === 0) {
@@ -130,17 +131,17 @@ function Checkout() {
 
     return (
         <>
-            <Navbar />
+            <Navbar isSticky={isSticky} />
 
             <span className='navs'>
                 <NavLink className='navs-link' to={'/home'}>
-                    Home
+                    Home { }
                 </NavLink>
-                /
+                / { }
                 <NavLink className='navs-link' to={'/home/checkout'}>
-                    Checkout
+                    Checkout { }
                 </NavLink>
-                /
+                / { }
             </span>
 
             <div className={`check-con ${isSticky ? 'pos-mar' : ''}`}>
@@ -169,8 +170,8 @@ function Checkout() {
                                 <List.Item.Meta
                                     avatar={<img className='drawer-cart-img' src={item.item.clothImg} />}
                                     title={
-                                        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <span>
+                                        <span style={{ display: 'flex', justifyContent: 'space-between', marginBottom: -5 }}>
+                                            <span style={{ fontSize: 19 }}>
                                                 {item.item.clothTitle}
                                             </span>
                                             <span>
@@ -182,17 +183,17 @@ function Checkout() {
                                     }
                                     description={
                                         <div>
-                                            <div>{item.item.clothCon}</div>
-                                            <div style={{ fontWeight: '600', color: '#126373' }}>
+                                            <div style={{ fontWeight: '400', color: '#126373', fontSize: 17, lineHeight: 1.2 }}>{item.item.clothCon}</div>
+                                            <div style={{ fontWeight: '600', color: '#126373', fontSize: 19, marginBottom: -5 }}>
                                                 RS {item.item.clothPrice * item.qty}
                                             </div>
-                                            <div>SIZE: <b>{item.size.toUpperCase()}</b></div>
+                                            <div style={{ fontWeight: '500', color: '#126373', fontSize: 18 }}>{item.size.toUpperCase()}</div>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-                                                    <div >QTY: </div>
+                                                    <div style={{ fontWeight: '400', color: '#126373', fontSize: 16 }}>QTY: </div>
                                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
                                                         <button onClick={() => quanFunc('dec', item)} className={`quan-btn ${item.qty === 1 ? 'btn-disabled' : ''}`} >-</button>
-                                                        <p style={{ fontSize: 18, margin: 0, color: 'black' }}>
+                                                        <p style={{ fontSize: 20, margin: 0, color: 'black' }}>
                                                             {item.qty}
                                                         </p>
                                                         <button onClick={() => quanFunc('inc', item)} className='quan-btn'>+</button>
@@ -211,7 +212,7 @@ function Checkout() {
                 />
 
                 <div className='checkout-num'>
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div style={{ display: 'flex', gap: '1rem', flexGrow: 1 }}>
                         <p>Total: <b> Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</b></p>
                         <p>Items: <b>{cartNum < 10 ? `0${cartNum}` : cartNum}</b></p>
                         <p> Quantity: <b>{totalQuan < 10 ? `0${totalQuan}` : totalQuan}</b></p>
@@ -222,7 +223,7 @@ function Checkout() {
                         </NavLink>
                     </div>
                 </div>
-            </div>
+            </div >
 
 
             {/* <div className='checkout-details'>

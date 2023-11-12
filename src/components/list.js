@@ -69,7 +69,7 @@ const Lists = ({ onClose }) => {
                 <div className='num-con'>
                     <div>
                         <p style={{ display: 'flex', gap: '0.1rem', alignItems: 'center' }}>
-                            <RiShoppingBasketFill /> Total: Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-
+                            <RiShoppingBasketFill /> Subtotal: Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-
                         </p>
                     </div>
                     <div>
@@ -78,6 +78,7 @@ const Lists = ({ onClose }) => {
                     </div>
                 </div>
                 <div>
+                    <h5>Shipping, taxes, and discount codes calculated at checkout.</h5>
                     <NavLink to={clothCart.length === 0 ? '#' : '/home/checkout'}>
                         <div className={`checkout-btn ${clothCart.length === 0 ? `btn-disabled` : ``}`}>
                             <NavLink style={{ color: '#fff' }} to={"/home/checkout"}>
@@ -104,8 +105,8 @@ const Lists = ({ onClose }) => {
                                 <List.Item.Meta
                                     avatar={<img className='drawer-cart-img' src={item.item.clothImg} />}
                                     title={
-                                        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <span>
+                                        <span style={{ display: 'flex', justifyContent: 'space-between', marginBottom: -5 }}>
+                                            <span style={{ fontSize: 16 }}>
                                                 {item.item.clothTitle}
                                             </span>
                                             <span>
@@ -117,10 +118,12 @@ const Lists = ({ onClose }) => {
                                     }
                                     description={
                                         <div>
-                                            <div style={{ fontWeight: '600', color: '#126373' }}>
+                                            <div style={{ fontWeight: '600', color: '#126373', fontSize: 17, marginBottom: -5 }}>
                                                 RS {item.item.clothPrice * item.qty}
                                             </div>
-                                            <div>SIZE: <b>{item.size.toUpperCase()}</b></div>
+                                            <div style={{ fontWeight: '600', color: '#126373', fontSize: 15 }}>
+                                                {item.size.toUpperCase()}
+                                            </div>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                                                     <div >QTY: </div>

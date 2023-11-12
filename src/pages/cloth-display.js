@@ -13,7 +13,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 import Gallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
-import ReactImageMagnify from 'react-image-magnify';
+// import ReactImageMagnify from 'react-image-magnify';
 
 
 import { notification } from 'antd';
@@ -23,7 +23,7 @@ import QuanContext from '../config/quanContext.js';
 
 import cartInc from '../function/cartInc';
 
-const ProductDisplay = ({ v1, v2 }) => {
+const ProductDisplay = () => {
     const [notificationApi, notificationContextHolder] = notification.useNotification();
     let { productId } = useParams()
     const [clothData, setClothData] = useState([])
@@ -93,7 +93,6 @@ const ProductDisplay = ({ v1, v2 }) => {
         }
     }
 
-
     const handleCardClick = (event) => {
         window.scrollTo({
             top: 0,
@@ -102,6 +101,26 @@ const ProductDisplay = ({ v1, v2 }) => {
     };
 
     const [selectedImage, setSelectedImage] = useState(0);
+
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            console.log("Scroll-Y ~", window.scrollY.toFixed())
+
+            if (window.scrollY >= 110) {
+                setIsSticky(true);
+            } else if (window.scrollY === 0) {
+                setIsSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     if (clothData.length >= 1) {
         let { clothStatus, clothImg, clothImgHover, clothTitle, clothCon, clothPrice } = clothData[productId];
@@ -122,12 +141,23 @@ const ProductDisplay = ({ v1, v2 }) => {
 
         return (
             <div>
-                <Navbar />
+                <Navbar isSticky={isSticky} />
 
                 {notificationContextHolder}
-                <h1>1</h1>
 
-                <span className='navs'>Home / Product / {clothTitle}/</span>
+                <h1 className={`${isSticky ? 'pos-mar' : ''}`} style={{ margin: 0, visibility: 'hidden' }}>1</h1>
+
+                <span className='navs'>
+                    <NavLink className='navs-link' to={'/home'}>
+                        Home { }
+                    </NavLink>
+                    / { }
+                    Product { }
+                    / { }
+                    { } {clothTitle} {` (${productId}) `} { }
+                    /
+                </span>
+
 
                 <div className='cloth-display-con'>
                     <div className='img-con'>
@@ -204,7 +234,7 @@ const ProductDisplay = ({ v1, v2 }) => {
                             <div className='btn-container'>
                                 <Button
                                     className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
-                                    variant="contained"
+                                    variant="outlined"
                                     size="large"
                                     onClick={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size)}
                                 >ADD TO CART</Button>
@@ -256,4 +286,4 @@ const ProductDisplay = ({ v1, v2 }) => {
     return null;
 };
 
-export default ProductDisplay
+export default ProductDisplay;

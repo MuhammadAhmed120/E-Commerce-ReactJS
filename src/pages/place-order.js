@@ -102,6 +102,7 @@ function PlaceOrder() {
     useEffect(() => {
         // Add an event listener to handle scroll events
         const handleScroll = () => {
+            console.log("Scroll-Y ~", window.scrollY.toFixed())
             if (window.scrollY >= 110) {
                 setIsSticky(true);
             } else if (window.scrollY === 0) {
@@ -120,21 +121,21 @@ function PlaceOrder() {
 
     return (
         <>
-            <Navbar />
+            <Navbar isSticky={isSticky} />
 
             <p className='disclaimer'>Delivery only available in <b style={{ marginLeft: 5 }}> KARACHI</b>, Pakistan</p>
 
             <span className='navs'>
                 <NavLink className='navs-link' to={'/home'}>
-                    Home
+                    Home { }
                 </NavLink>
-                /
+                / { }
                 <NavLink className='navs-link' to={'/home/checkout'}>
-                    Checkout
+                    Checkout { }
                 </NavLink>
-                /
+                / { }
                 <NavLink className='navs-link' to={'/home/checkout/order'}>
-                    Order
+                    Order { }
                 </NavLink>
                 /
             </span>
@@ -163,9 +164,26 @@ function PlaceOrder() {
                         </div>
 
                         <Form.Item
+                            name="email"
+                            label="Email"
+                            rules={[
+                                {
+                                    type: 'email',
+                                    message: 'The input is not valid Email!',
+                                },
+                                {
+                                    required: true,
+                                    message: 'Please input your Email!',
+                                },
+                            ]}
+                        >
+                            <Input size='large' placeholder='Email' />
+                        </Form.Item>
+
+                        <Form.Item
                             name="fullname"
                             label="Fullname"
-                            tooltip="Please enter your real name!"
+                            // tooltip="Please enter your real name!"
                             rules={[
                                 {
                                     required: true,
@@ -174,46 +192,29 @@ function PlaceOrder() {
                                 },
                             ]}
                         >
-                            <Input placeholder='Ahmed Khan' />
+                            <Input size='large' placeholder='Full Name' />
                         </Form.Item>
 
                         <Form.Item
                             name="phone"
-                            label="Phone Number"
+                            label="Mobile Number"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your phone number!',
+                                    message: 'Please input your Mobile number!',
                                 },
                             ]}
                             validateTrigger="onBlur"
                         >
                             <Input
-                                // addonBefore={prefixSelector}
                                 maxLength={11}
                                 minLength={11}
+                                size='large'
                                 style={{
                                     width: '100%',
                                 }}
-                                placeholder='0342-8665302'
+                                placeholder='Mobile Number'
                             />
-                        </Form.Item>
-
-                        <Form.Item
-                            name="email"
-                            label="E-mail"
-                            rules={[
-                                {
-                                    type: 'email',
-                                    message: 'The input is not valid E-mail!',
-                                },
-                                {
-                                    required: true,
-                                    message: 'Please input your E-mail!',
-                                },
-                            ]}
-                        >
-                            <Input placeholder='xyz@gmail.com' />
                         </Form.Item>
 
 
@@ -230,7 +231,7 @@ function PlaceOrder() {
                             </div>
                             <Form.Item
                                 name="address"
-                                label="House Address"
+                                label="Residential Address"
                                 rules={[
                                     {
                                         required: true,
@@ -239,7 +240,8 @@ function PlaceOrder() {
                                 ]}
                             >
                                 <TextArea
-                                    placeholder="Gulshan-e-Iqbal, Block-13, House No 843/13, Karachi."
+                                    size='large'
+                                    placeholder="Residential Address"
                                     autoSize={{
                                         minRows: 1,
                                         maxRows: 6,
@@ -253,15 +255,16 @@ function PlaceOrder() {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input zip code!',
+                                        message: 'Please input Postal code!',
                                     },
                                 ]}
                             >
                                 <Input
+                                    size='large'
                                     style={{
                                         width: 120,
                                     }}
-                                    placeholder='ZIP Code'
+                                    placeholder='Postal Code'
                                     maxLength={5}
                                 />
                             </Form.Item>
@@ -284,8 +287,6 @@ function PlaceOrder() {
                             </div>
                         </div>
 
-
-                        <div className='form-separator'></div>
 
                         <LoadingButton type='primary' loading={loading} variant="contained" className="form-button">
                             PLACE ORDER

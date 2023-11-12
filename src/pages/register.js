@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Checkbox, Form, Input, Select } from 'antd';
+import { Checkbox, Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { CiLock } from 'react-icons/ci'
@@ -84,25 +84,27 @@ const Register = () => {
                         },
                     ]}
                 >
-                    <Input placeholder='Ahmed Khan' />
+                    <Input size='large' placeholder='Full Name' />
                 </Form.Item>
 
                 <Form.Item
                     name="email"
-                    label="E-mail"
+                    label="Email"
                     rules={[
                         {
                             type: 'email',
-                            message: 'The input is not valid E-mail!',
+                            message: 'The input is not valid Email!',
                         },
                         {
                             required: true,
-                            message: 'Please input your E-mail!',
+                            message: 'Please input your Email!',
                         },
                     ]}
                 >
-                    <Input placeholder='xyz@gmail.com' />
+                    <Input size='large' placeholder='Email' />
                 </Form.Item>
+
+                
 
                 <Form.Item
                     name="password"
@@ -115,10 +117,10 @@ const Register = () => {
                     ]}
                     hasFeedback
                 >
-                    <Input.Password />
+                    <Input.Password size='large' placeholder='Password' />
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                     name="confirm"
                     label="Confirm Password"
                     dependencies={['password']}
@@ -138,32 +140,33 @@ const Register = () => {
                         }),
                     ]}
                 >
-                    <Input.Password />
-                </Form.Item>
+                    <Input.Password size='large' />
+                </Form.Item> */}
 
                 <Form.Item
                     name="phone"
-                    label="Phone Number"
+                    label="Mobile Number"
                     rules={[
                         {
-                            required: false,
-                            message: 'Please input your phone number!',
+                            required: true,
+                            message: 'Please input your Mobile number!',
                         },
                     ]}
                     validateTrigger="onBlur"
-                    help={
-                        <p style={{ float: 'right', margin: '4px 0' }}>(Optional)</p>
-                    }
+                    // help={
+                    //     <p style={{ float: 'right', margin: '4px 0' }}>(Optional)</p>
+                    // }
                 >
                     <Input
-                        addonBefore={prefixSelector}
+                        // addonBefore={prefixSelector}
                         maxLength={10}
+                        size='large'
                         minLength={10}
                         showCount={false}
                         style={{
                             width: '100%',
                         }}
-                        placeholder='3428665302'
+                        placeholder='Mobile Number'
                     />
                 </Form.Item>
 
@@ -176,7 +179,9 @@ const Register = () => {
                 <Form.Item>
 
                     <LoadingButton type='primary' loading={loading} variant="contained" className="form-button">
-                        Register
+                        <span style={{ fontSize: 17 }}>
+                            Register
+                        </span>
                     </LoadingButton>
                     Or <NavLink to={'/login'}>login now!</NavLink>
                 </Form.Item>

@@ -98,20 +98,21 @@ const Login = () => {
                 </Form.Item>
                 <Form.Item
                     name="email"
-                    label="E-mail"
+                    label="Email"
                     rules={[
                         {
                             type: 'email',
-                            message: 'The input is not valid E-mail!',
+                            message: 'The input is not valid Email!',
                         },
                         {
                             required: true,
-                            message: 'Please input your E-mail!',
+                            message: 'Please input your Email!',
                         },
                     ]}
                 >
-                    <Input />
+                    <Input size='large' placeholder='Email' />
                 </Form.Item>
+
                 <Form.Item
                     name="password"
                     label="Password"
@@ -123,10 +124,11 @@ const Login = () => {
                     ]}
                     hasFeedback
                 >
-                    <Input.Password />
+                    <Input.Password size='large' placeholder='Password' />
                 </Form.Item>
+
                 <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
+                    <Form.Item size='large' name="remember" valuePropName="checked" noStyle>
                         <Checkbox>Remember me</Checkbox>
                     </Form.Item>
 
@@ -135,10 +137,12 @@ const Login = () => {
                     </NavLink>
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item size='large'>
                     {/* <Button type="primary" htmlType="submit" className="form-button"> */}
                     <LoadingButton type='primary' loading={loading} variant="contained" className="form-button">
-                        Login
+                        <span style={{ fontSize: 17 }}>
+                            Login
+                        </span>
                     </LoadingButton>
                     {/* </Button> */}
 
