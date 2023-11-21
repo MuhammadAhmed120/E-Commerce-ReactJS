@@ -1,6 +1,6 @@
 import Navbar from '../components/navbar'
 import { useState, useEffect, useContext } from 'react'
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Button from '@mui/material/Button';
@@ -22,6 +22,7 @@ import CartContext from '../config/cartContext.js';
 import QuanContext from '../config/quanContext.js';
 
 import cartInc from '../function/cartInc';
+import Footer from '../components/footer.js';
 
 const ProductDisplay = () => {
     const [notificationApi, notificationContextHolder] = notification.useNotification();
@@ -37,6 +38,8 @@ const ProductDisplay = () => {
     const handleChange = (event) => {
         setSize(event.target.value);
     };
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         async function fetchDataFunc() {
@@ -106,8 +109,6 @@ const ProductDisplay = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            console.log("Scroll-Y ~", window.scrollY.toFixed())
-
             if (window.scrollY >= 110) {
                 setIsSticky(true);
             } else if (window.scrollY === 0) {
@@ -244,8 +245,11 @@ const ProductDisplay = () => {
                                     className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
                                     variant="contained"
                                     size='large'
+                                    onClick={(event) => { cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size); navigate('/home/checkout') }}
                                 >
-                                    BUY
+                                    <span style={{ flex: 1, color: '#ffffff' }}>
+                                        BUY
+                                    </span>
                                 </Button>
                             </div>
                         </div>
@@ -280,6 +284,7 @@ const ProductDisplay = () => {
                     </div>
                 </div>
 
+                <Footer />
             </div >
         );
     }

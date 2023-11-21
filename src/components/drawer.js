@@ -20,7 +20,6 @@ const CartDrawer = ({ open, onClose }) => {
                                 CART <RiShoppingBasketFill size={20} />
                             </span>
                             <span className='cross-btn'
-                                style={{}}
                                 onClick={() => onClose(false)}
                             >
                                 X

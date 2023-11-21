@@ -26,21 +26,20 @@ const style = {
     color: 'red',
     boxShadow: 2,
     p: 2.5,
+    borderRadius: 1
 };
 
 const Login = () => {
     const [loading, setLoading] = useState(null)
     const navigate = useNavigate()
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
 
     const [error, setError] = useState("")
 
     const onFinish = async (values) => {
-        // console.log('Received values of form: ', values);
         setLoading(true)
-        // console.log('working')
         try {
             const customerData = {
                 customerEmail: values.email,
@@ -49,16 +48,23 @@ const Login = () => {
             const loginCustomer = await axios.post('http://localhost:3001/login', customerData)
             console.log('loginCustomer.data---->', loginCustomer.data)
             setLoading(false)
-            localStorage.setItem('UID', loginCustomer.data.token)
+            localStorage.setItem('token', loginCustomer.data.token)
+            localStorage.setItem('UID', loginCustomer.data.user._id)
 
-            const userUID = localStorage.getItem('UID')
-            userUID && navigate('/home')
+            const userToken = localStorage.getItem('token')
+            userToken && navigate('/home')
         } catch (error) {
-            console.log(error)
-            console.log('error MESSAGE ===>', error.response.data.message)
-            setError(error.response.data.message)
-            setOpen(true);
-            setLoading(false)
+            if (error.message === 'Network Error') {
+                console.log(error)
+                setError(error.message)
+                setOpen(true);
+                setLoading(false)
+            } else {
+                console.log('error MESSAGE ===>', error)
+                setError(error.response.data.message)
+                setOpen(true);
+                setLoading(false)
+            }
         }
     };
 
@@ -74,8 +80,9 @@ const Login = () => {
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="keep-mounted-modal-title" variant="h6" component="h2" className='form-error-modal'>
-                        <RxCross2 color='red' size={19} /> {error}
+                    <Typography id="keep-mounted-modal-title" variant="a" component="a" className='form-error-modal' style={{ cursor: 'pointer' }} onClick={handleClose}>
+                        {/* <RxCross2 color='red' size={19} />  */}
+                        {error}
                     </Typography>
                     <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '10px' }} size='small' variant='contained' disableElevation onClick={handleClose}>
                         Close
@@ -128,9 +135,9 @@ const Login = () => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Form.Item size='large' name="remember" valuePropName="checked" noStyle>
+                    {/* <Form.Item size='large' name="remember" valuePropName="checked" noStyle>
                         <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <NavLink className="login-form-forgot" to={'/login'}>
                         Forgot password

@@ -11,6 +11,7 @@ import { Checkbox, Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import '../index.css'
 import axios from 'axios';
+import Footer from '../components/footer';
 
 const { TextArea } = Input;
 const { Option } = Select
@@ -70,6 +71,10 @@ function Checkout() {
 
     const navigate = useNavigate()
 
+
+
+
+
     const onFinish = async (values) => {
         console.log('Received values of form: ', values);
         setLoading(true)
@@ -112,7 +117,6 @@ function Checkout() {
     useEffect(() => {
         // Add an event listener to handle scroll events
         const handleScroll = () => {
-            console.log("Scroll-Y ~", window.scrollY.toFixed())
             if (window.scrollY >= 110) {
                 setIsSticky(true);
             } else if (window.scrollY === 0) {
@@ -319,6 +323,7 @@ function Checkout() {
                 </Form >
             </div> */}
 
+            <Footer />
         </>
     )
 }

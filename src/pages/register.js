@@ -3,18 +3,39 @@ import { Checkbox, Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { CiLock } from 'react-icons/ci'
-import '../index.css'
-
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import Navbar from '../components/navbar'
+import '../index.css'
 
 import axios from 'axios';
 
 const { Option } = Select
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: 'none',
+    color: 'red',
+    boxShadow: 2,
+    p: 2.5,
+    borderRadius: 1
+};
+
 const Register = () => {
     const [loading, setLoading] = useState(null)
+    const [open, setOpen] = useState(false);
 
+    const handleClose = () => setOpen(false);
     const navigate = useNavigate()
+
+    const [error, setError] = useState("")
 
     const onFinish = async (values) => {
         console.log('Received values of form: ', values);
@@ -30,32 +51,60 @@ const Register = () => {
             const registerCustomer = await axios.post('http://localhost:3001/', customerData)
             console.log('registerCustomer.data---->', registerCustomer.data)
             setLoading(false)
-            localStorage.setItem('UID', registerCustomer.data.token)
+            localStorage.setItem('token', registerCustomer.data.token)
+            localStorage.setItem('UID', registerCustomer.data.user._id)
 
-            const userUID = localStorage.getItem('UID')
-            userUID && navigate('/home')
+            const userToken = localStorage.getItem('token')
+            userToken && navigate('/home')
         } catch (error) {
-            console.log(error)
-            setLoading(false)
+            if (error.message === 'Network Error') {
+                console.log(error)
+                setError(error.message)
+                setOpen(true);
+                setLoading(false)
+            } else {
+                console.log('error MESSAGE ===>', error)
+                setError(error.response.data.message)
+                setOpen(true);
+                setLoading(false)
+            }
         }
     };
 
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-                defaultValue={'+92'}
-            >
-                <Option value="92">+92</Option>
-            </Select>
-        </Form.Item>
-    );
+    // const prefixSelector = (
+    //     <Form.Item name="prefix" noStyle>
+    //         <Select
+    //             style={{
+    //                 width: 70,
+    //             }}
+    //             defaultValue={'+92'}
+    //         >
+    //             <Option value="92">+92</Option>
+    //         </Select>
+    //     </Form.Item>
+    // );
 
     return (
         <>
             <Navbar />
+
+            <Modal
+                keepMounted
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="keep-mounted-modal-title"
+                aria-describedby="keep-mounted-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="keep-mounted-modal-title" variant="a" component="a" className='form-error-modal' style={{ cursor: 'pointer' }} onClick={handleClose}>
+                        {/* <RxCross2 color='red' size={19} />  */}
+                        {error}
+                    </Typography>
+                    <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '10px' }} size='small' variant='contained' disableElevation onClick={handleClose}>
+                        Close
+                    </Button>
+                </Box>
+            </Modal>
 
             <Form
                 name="normal_login"
@@ -75,7 +124,7 @@ const Register = () => {
                 <Form.Item
                     name="fullname"
                     label="Fullname"
-                    tooltip="Please enter your real name!"
+                    tooltip="Please en  ter your real name!C"
                     rules={[
                         {
                             required: true,
@@ -104,7 +153,7 @@ const Register = () => {
                     <Input size='large' placeholder='Email' />
                 </Form.Item>
 
-                
+
 
                 <Form.Item
                     name="password"
@@ -153,9 +202,9 @@ const Register = () => {
                         },
                     ]}
                     validateTrigger="onBlur"
-                    // help={
-                    //     <p style={{ float: 'right', margin: '4px 0' }}>(Optional)</p>
-                    // }
+                // help={
+                //     <p style={{ float: 'right', margin: '4px 0' }}>(Optional)</p>
+                // }
                 >
                     <Input
                         // addonBefore={prefixSelector}
@@ -169,15 +218,15 @@ const Register = () => {
                         placeholder='Mobile Number'
                     />
                 </Form.Item>
-
+                
+                {/* 
                 <Form.Item>
                     <Form.Item name="remember" valuePropName="checked" noStyle>
                         <Checkbox>Remember me</Checkbox>
                     </Form.Item>
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item>
-
                     <LoadingButton type='primary' loading={loading} variant="contained" className="form-button">
                         <span style={{ fontSize: 17 }}>
                             Register
