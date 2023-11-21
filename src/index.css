@@ -78,7 +78,7 @@ input[type=number] {
     height: 40px;
     border: 5px solid #d7d7d7;
     border-radius: 50%;
-    position: fixed;
+    position: absolute;
     box-sizing: border-box;
     left: 50%;
     top: 50%;
@@ -170,7 +170,7 @@ input[type=number] {
 
 
 .pos-mar {
-    margin-top: 84px !important;
+    margin-top: 114px !important;
 }
 
 
@@ -648,6 +648,10 @@ input[type=number] {
     .why-con-desc>h1 {
         font-size: 38px;
     }
+
+    .checkout-2-con {
+        width: 85% !important;
+    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -738,6 +742,18 @@ input[type=number] {
         font-size: 15px;
         margin: 5px auto;
         margin-bottom: 25px;
+    }
+
+    .checkout-2-con {
+        width: 100% !important;
+        padding: 0 20px;
+        flex-direction: column;
+        margin-bottom: 10px !important;
+    }
+
+    .order-con {
+        order: -1;
+        border-bottom: 1px solid #9399a2;
     }
 }
 
@@ -1565,12 +1581,12 @@ input[type=number] {
     gap: 0.8rem;
     text-align: center;
     /* background: #260182; */
-    border-radius: 2px;
     padding: 3px 0px;
     border-radius: 5px;
     /* box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px; */
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 2px 0px;
+    /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 2px 0px; */
     transition: padding 0.2s ease-in-out;
+    border: 1px solid gray;
 }
 
 .quan-inp {
@@ -1651,7 +1667,8 @@ input[type=number] {
 }
 
 .add-button {
-    flex: 1;
+    /* flex: 1; */
+    width: 100%;
     font-family: Rajdhani, 'sans-serif' !important;
     font-size: 15px !important;
     /* border-radius: 5px !important; */
@@ -1753,6 +1770,7 @@ input[type=number] {
     /* background: pink; */
     justify-content: center;
     align-items: center;
+    margin: 30px 0;
     gap: 1rem;
 }
 
@@ -1823,20 +1841,29 @@ input[type=number] {
 
 
 /* 2 */
+.order-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    text-align: center;
+}
+
+.order-modal * {
+    margin: 2px 0;
+}
+
 .checkout-2-con {
     width: 70%;
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    position: relative;
     gap: 5rem;
-    margin-bottom: 50px;
     flex-wrap: wrap;
     flex-grow: 1;
 }
-
-/* .checkout-2-inputs{
-
-} */
 
 .order-del-title {
     color: #202020;
@@ -1853,18 +1880,17 @@ input[type=number] {
 
 .checkout-details {
     flex: 2;
-    /* background: pink; */
+    position: relative;
 }
 
 .order-con {
     /* background: green; */
-    flex: 1;
+    flex: 1.2;
     color: black;
-    background-color: #f3f3f3;
-    border: 1px solid black;
-    border-radius: 15px;
-    padding: 15px;
-    height: fit-content;
+    /* background-color: #f3f3f3; */
+    /* border: 1px solid gainsboro; */
+    /* border-radius: 15px; */
+    /* padding: 15px; */
 }
 
 .order-item-con {
@@ -1927,7 +1953,48 @@ input[type=number] {
     width: 100%;
     bottom: 0px;
     height: 30px;
-    background-color: #1d0163;
-    border-top: 1px solid #04a8d1;
+    /* background-color: #1d0163; */
+    background-color: rgba(5, 168, 209, 0.9);
+    /* border-top: 1px solid #04a8d1; */
     margin: 0;
+}
+
+
+.my-account-con {
+    display: flex;
+    color: black;
+    /* background: pink; */
+    justify-content: space-around;
+    flex-wrap: wrap;
+    position: relative;
+    flex-grow: 1;
+}
+
+.account-det-con {
+    /* background: green; */
+}
+
+.account-con {
+    /* background: #f3f3f3; */
+    /* background: gainsboro; */
+    /* padding: 10px 20px; */
+    padding: 0;
+    text-align: start;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+
+.order-history-con {
+    /* background: greenyellow; */
+}
+
+@media only screen and (max-width: 650px) {
+    .my-account-con {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 3rem;
+        padding: 0 20px;
+    }
 }
