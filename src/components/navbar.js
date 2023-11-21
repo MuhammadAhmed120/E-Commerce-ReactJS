@@ -26,7 +26,7 @@ import CartDrawer from './drawer';
 import '../index.css'
 
 import { BsHandbagFill } from 'react-icons/bs'
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { Input } from 'antd';
 const { Search } = Input;
@@ -46,11 +46,11 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 function ResponsiveAppBar({ isSticky }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  // const [isSticky, setIsSticky] = useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -67,7 +67,16 @@ function ResponsiveAppBar({ isSticky }) {
   const { cartNum, setCartNum } = useContext(CartContext)
 
   const location = useLocation()
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('UID');
+    localStorage.removeItem('token');
+    if (location.pathname === '/home/user') {
+      navigate('/home');
+    }
+    window.location.reload()
+  }
 
   return (
     <AppBar
@@ -227,7 +236,7 @@ function ResponsiveAppBar({ isSticky }) {
             }
             <CartDrawer open={open} onClose={setOpen} />
 
-            {localStorage.getItem('UID') ?
+            {localStorage.getItem('UID') && localStorage.getItem('token') ?
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" />
@@ -262,11 +271,23 @@ function ResponsiveAppBar({ isSticky }) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              {settings.map((setting) => {
+                return (
+                  <div key={setting}>
+                    {setting === 'Logout' ? (
+                      <MenuItem onClick={() => { handleCloseUserMenu(); handleLogout(); }}>
+                        <Typography textAlign="center">{setting}</Typography>
+                      </MenuItem>
+                    ) : (
+                      <NavLink style={{ textDecoration: 'none' }} to={'/home/user'}>
+                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                          <Typography textAlign="center">{setting}</Typography>
+                        </MenuItem>
+                      </NavLink>
+                    )}
+                  </div>
+                );
+              })}
             </Menu>
           </Box>
         </Toolbar>
