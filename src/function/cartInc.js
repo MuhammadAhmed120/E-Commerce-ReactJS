@@ -11,7 +11,7 @@ export default function cartInc(event, item, setCartNum, setQuanNum, itemQuan, s
         } else {
             cart[dupItem].qty += 1;
         }
-    } else {
+    } else { 
         if (itemQuan) {
             cart.push({ item, qty: itemQuan, size });
         } else {
