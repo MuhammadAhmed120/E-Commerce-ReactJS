@@ -47,11 +47,8 @@ function UserAccount() {
     const [user, setUser] = useState(null)
     const [userOrders, setUserOrders] = useState(null)
 
-    const { customerName, customerEmail, customerNumber,     customerAddress, customerPostal } = user || {}
-
-    // const [fullname, setFullname] = useState();
-    // const [email, setEmail] = useState('');
-
+    const { customerName, customerEmail, customerNumber, customerAddress, customerPostal } = user || {}
+    
     const token = localStorage.getItem('token')
 
     const [loader, setLoader] = useState(null)
@@ -67,7 +64,6 @@ function UserAccount() {
                 try {
                     const response = await axios.post('http://localhost:3001/home/user', null, { headers });
 
-                    console.log(response)
                     if (response.status === 200) {
                         setUser(response.data.userData)
                         setUserOrders(response.data.userOrders)
@@ -104,14 +100,11 @@ function UserAccount() {
     }
 
     const updateData = async () => {
-        console.log("dataaa")
         const headers = {
             'Authorization': `Bearer ${token}`
         };
 
         if (mobileNum !== customerNumber || address !== customerAddress || postal !== customerPostal) {
-            console.log("updatingData")
-
             setLoading(true)
             const updatedData = {
                 customerNumber: mobileNum.toString(),
@@ -122,15 +115,11 @@ function UserAccount() {
             try {
                 const updatingData = await axios.put('http://localhost:3001/home/user', updatedData, { headers });
 
-                console.log(updatingData)
-
-                // if (updatingData.status === 200) {
-
-                //     return setLoader(true)
-                // } else {
-                //     console.error('USER NOT FOUND:', updatingData.data);
-                // }
-
+                if (updatingData.status === 200) {
+                    return setLoader(true)
+                } else {
+                    console.error('USER NOT FOUND:', updatingData.data);
+                }
                 setLoading(false)
             } catch (error) {
                 console.error('Error:', error);
@@ -138,34 +127,15 @@ function UserAccount() {
         }
     }
 
-    const [isSticky, setIsSticky] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY >= 110) {
-                setIsSticky(true);
-            } else if (window.scrollY === 0) {
-                setIsSticky(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [])
-
-
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
 
 
     return (
         <>
-            <Navbar isSticky={isSticky} />
+            <Navbar />
 
-            <span className='navs'>
+            <div className='navs'>
                 <NavLink className='navs-link' to={'/home'}>
                     Home { }
                 </NavLink>
@@ -174,7 +144,7 @@ function UserAccount() {
                     User { }
                 </NavLink>
                 /
-            </span>
+            </div>
 
             <Modal
                 keepMounted
@@ -250,7 +220,7 @@ function UserAccount() {
                 </Box>
             </Modal >
 
-            <div className={`check-con ${isSticky ? 'pos-mar' : ''}`}>
+            <div className={`check-con`}>
                 <h1 className='checkout-title'>My Account </h1>
                 {/* <p className='checkout-step'>2</p> */}
             </div>

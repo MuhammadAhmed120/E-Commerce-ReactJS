@@ -13,16 +13,14 @@ import '../index.css'
 import axios from 'axios';
 import Footer from '../components/footer';
 
-const { TextArea } = Input;
 const { Option } = Select
 
 function Checkout() {
-
-
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [clothCart, setClothCart] = useState([])
     const [itemDel, setItemDel] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const savedCart = (JSON.parse(localStorage.getItem('cart')) || [])
@@ -30,6 +28,7 @@ function Checkout() {
     }, [quanNum])
 
     function quanFunc(func, item, del, e) {
+        e.preventDefault()
         const updatedCart = [...clothCart];
         let itemIndex = clothCart.findIndex(cartItem => cartItem.item.clothID === item.item.clothID);
 
@@ -64,80 +63,11 @@ function Checkout() {
     let totalQuan = clothCart.map(v => v.qty).reduce((acc, qty) => acc + qty, 0)
     let totalPrice = clothCart.reduce((acc, qty) => acc + Number(qty.item.clothPrice) * Number(qty.qty), 0)
 
-
-
-    const [loading, setLoading] = useState(null)
-    const [address, setAddress] = useState("")
-
-    const navigate = useNavigate()
-
-
-
-
-
-    const onFinish = async (values) => {
-        console.log('Received values of form: ', values);
-        setLoading(true)
-        try {
-            const customerData = {
-                customerName: values.fullname,
-                customerEmail: values.email,
-                customerPassword: values.password,
-                repeatPassword: values.confirm,
-                customerNumber: values.phone
-            }
-            const registerCustomer = await axios.post('http://localhost:3001/', customerData)
-            console.log('registerCustomer.data---->', registerCustomer.data)
-            setLoading(false)
-            localStorage.setItem('UID', registerCustomer.data.token)
-
-            const userUID = localStorage.getItem('UID')
-            userUID && navigate('/home')
-        } catch (error) {
-            console.log(error)
-            setLoading(false)
-        }
-    };
-
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-                defaultValue={'+92'}
-            >
-                <Option value="92">+92</Option>
-            </Select>
-        </Form.Item>
-    );
-
-    const [isSticky, setIsSticky] = useState(false);
-
-    useEffect(() => {
-        // Add an event listener to handle scroll events
-        const handleScroll = () => {
-            if (window.scrollY >= 110) {
-                setIsSticky(true);
-            } else if (window.scrollY === 0) {
-                setIsSticky(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-
-
     return (
         <>
-            <Navbar isSticky={isSticky} />
+            <Navbar />
 
-            <span className='navs'>
+            <div className='navs'>
                 <NavLink className='navs-link' to={'/home'}>
                     Home { }
                 </NavLink>
@@ -146,21 +76,26 @@ function Checkout() {
                     Checkout { }
                 </NavLink>
                 / { }
-            </span>
+            </div>
 
-            <div className={`check-con ${isSticky ? 'pos-mar' : ''}`}>
-                <h1 className='checkout-title'>CHECKOUT </h1>
+            <div className={`check-con`} style={{ marginBottom: 0 }}>
+                <h1 className='checkout-title'>SHOPPING CART </h1>
                 <p className='checkout-step'>1</p>
             </div>
 
+            <div style={{ textAlign: 'center', marginTop: -10 }}>
+                <NavLink to={`/home`} style={{ fontSize: 18, textDecoration: 'underline' }} className='navs-link'>
+                    Continue Shopping
+                </NavLink>
+            </div>
 
             <div className='checkout-cart'>
-                <div className='checkout-shop-title'>
+                {/* <div className='checkout-shop-title'>
                     <h2>SHOPPING CART</h2>
                     <NavLink to={'/home'}>
                         <Button variant='outlined'>BROWSE</Button>
                     </NavLink>
-                </div>
+                </div> */}
 
                 <List
                     itemLayout="horizontal"
@@ -171,157 +106,86 @@ function Checkout() {
                             <List.Item
                                 key={index}
                             >
-                                <List.Item.Meta
-                                    avatar={<img className='drawer-cart-img' src={item.item.clothImg} />}
-                                    title={
-                                        <span style={{ display: 'flex', justifyContent: 'space-between', marginBottom: -5 }}>
-                                            <span style={{ fontSize: 19 }}>
+                                <NavLink to={`/home/product/${item.item.clothID}`} style={{ width: '100%' }}>
+                                    <List.Item.Meta
+                                        className='order-list'
+                                        avatar={
+                                            <img
+                                                className='checkout-item-img'
+                                                src={`http://localhost:3001/images/${item.item.clothImg}`}
+                                            />
+                                        }
+                                        title={
+                                            <div style={{ fontSize: 21, marginBottom: -5 }}>
                                                 {item.item.clothTitle}
-                                            </span>
-                                            <span>
-                                                <NavLink to={`/home/product/${item.item.clothID}`}>
-                                                    <BsArrowRight size={16} className='item-arrow' />
-                                                </NavLink>
-                                            </span>
-                                        </span>
-                                    }
-                                    description={
-                                        <div>
-                                            <div style={{ fontWeight: '400', color: '#126373', fontSize: 17, lineHeight: 1.2 }}>{item.item.clothCon}</div>
-                                            <div style={{ fontWeight: '600', color: '#126373', fontSize: 19, marginBottom: -5 }}>
-                                                RS {item.item.clothPrice * item.qty}
                                             </div>
-                                            <div style={{ fontWeight: '500', color: '#126373', fontSize: 18 }}>{item.size.toUpperCase()}</div>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-                                                    <div style={{ fontWeight: '400', color: '#126373', fontSize: 16 }}>QTY: </div>
-                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                                                        <button onClick={() => quanFunc('dec', item)} className={`quan-btn ${item.qty === 1 ? 'btn-disabled' : ''}`} >-</button>
-                                                        <p style={{ fontSize: 20, margin: 0, color: 'black' }}>
-                                                            {item.qty}
-                                                        </p>
-                                                        <button onClick={() => quanFunc('inc', item)} className='quan-btn'>+</button>
+                                        }
+                                        description={
+                                            <div>
+                                                <div style={{ fontWeight: '500', color: '#126373', fontSize: 18 }}>
+                                                    {item.size.toUpperCase()}
+                                                </div>
+
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+                                                        <div style={{ fontWeight: '400', color: '#126373', fontSize: 16 }}>QTY: </div>
+                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                                                            <button
+                                                                onClick={(e) => quanFunc('dec', item, '', e)}
+                                                                className={`quan-btn ${item.qty === 1 && 'btn-disabled'}`} style={{ padding: '0 10px' }}
+                                                            >
+                                                                -
+                                                            </button>
+
+                                                            <p style={{ fontSize: 20, margin: 0, color: 'black' }}>
+                                                                {item.qty}
+                                                            </p>
+
+                                                            <button
+                                                                onClick={(e) => quanFunc('inc', item, '', e)} className='quan-btn'>
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div className='drawer-trash-con'>
+                                                        <IoMdTrash className='drawer-trash' size={22}
+                                                            onClick={(e) => {
+                                                                quanFunc('', item, true, e)
+                                                            }}
+                                                        />
                                                     </div>
                                                 </div>
-                                                <div className='drawer-trash-con'>
-                                                    <IoMdTrash className='drawer-trash' size={19} onClick={(e) => quanFunc('', item, true, e)} />
+
+                                                <div style={{ fontWeight: '500', color: '#126373', fontSize: 19 }}>
+                                                    PKR {item.item.clothPrice * item.qty}
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
-                                />
+                                        }
+                                    />
+                                </NavLink>
                             </List.Item>
                         )
                     }}
                 />
 
                 <div className='checkout-num'>
-                    <div style={{ display: 'flex', gap: '1rem', flexGrow: 1 }}>
-                        <p>Total: <b> Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</b></p>
-                        <p>Items: <b>{cartNum < 10 ? `0${cartNum}` : cartNum}</b></p>
-                        <p> Quantity: <b>{totalQuan < 10 ? `0${totalQuan}` : totalQuan}</b></p>
+                    <div>
+                        <p>Subtotal: <b> Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</b></p>
+                        {/* <p>Items: <b>{cartNum < 10 ? `0${cartNum}` : cartNum}</b></p> */}
+                        {/* <p> Quantity: <b>{totalQuan < 10 ? `0${totalQuan}` : totalQuan}</b></p> */}
                     </div>
+                    <p style={{ margin: 0, fontWeight: 500 }}>Shipping, taxes calculated at checkout.</p>
                     <div>
                         <NavLink to={'/home/checkout/order'}>
-                            <Button variant='contained'>CONFIRM CART</Button>
+                            <Button variant='contained' size='large' className='confirm-btn'>
+                                <span>
+                                    CONFIRM CART
+                                </span>
+                            </Button>
                         </NavLink>
                     </div>
                 </div>
             </div >
-
-
-            {/* <div className='checkout-details'>
-                <Form
-                    name="normal_login"
-                    className="form"
-                    initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    scrollToFirstError={true}
-                >
-                    <Form.Item>
-                        <div className='form-name'>
-                            <h2>Delivery Details:</h2>
-                        </div>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="fullname"
-                        label="Fullname"
-                        tooltip="Please enter your real name!"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your fullname!',
-                                whitespace: true,
-                            },
-                        ]}
-                    >
-                        <Input placeholder='Ahmed Khan' />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="email"
-                        label="E-mail"
-                        rules={[
-                            {
-                                type: 'email',
-                                message: 'The input is not valid E-mail!',
-                            },
-                            {
-                                required: true,
-                                message: 'Please input your E-mail!',
-                            },
-                        ]}
-                    >
-                        <Input placeholder='xyz@gmail.com' />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="address"
-                        label="House Address"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your address!',
-                            },
-                        ]}
-                    >
-                        <TextArea
-                            // value={value}
-                            // onChange={(e) => setAddress(e.target.value)}
-                            placeholder="Gulshan-e-Iqbal, Block-13, House No 843/13, Karachi."
-                            autoSize={{
-                                minRows: 3,
-                                maxRows: 5,
-                            }}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="phone"
-                        label="Phone Number"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your phone number!',
-                            },
-                        ]}
-                        validateTrigger="onBlur"
-                    >
-                        <Input
-                            addonBefore={prefixSelector}
-                            maxLength={10}
-                            minLength={10}
-                            showCount={false}
-                            style={{
-                                width: '100%',
-                            }}
-                            placeholder='3428665302'
-                        />
-                    </Form.Item>
-
-                </Form >
-            </div> */}
 
             <Footer />
         </>

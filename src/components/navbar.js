@@ -43,7 +43,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-function ResponsiveAppBar({ isSticky }) {
+function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -78,12 +78,30 @@ function ResponsiveAppBar({ isSticky }) {
     window.location.reload()
   }
 
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 110) {
+        setIsSticky(true);
+      } else if (window.scrollY === 0) {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <AppBar
       className={`navbar ${isSticky ? 'sticky-navbar' : ''}`}
       sx={{
         zIndex: 199,
-        position: 'static',
+        position: 'absolute',
       }}
     >
       <Container maxWidth="m">
@@ -105,7 +123,7 @@ function ResponsiveAppBar({ isSticky }) {
                 fontFamily: 'Teko, sans-serif',
                 fontWeight: 700,
                 letterSpacing: '.1rem',
-                color: '#0b0027',
+                color: '#fff',
                 width: 'fit-content',
               }}
             >
@@ -156,7 +174,7 @@ function ResponsiveAppBar({ isSticky }) {
             </Box>
           </> : <></>} */}
 
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <NavLink to={'/home'} style={{ textDecoration: 'none', }}>
             <Typography
               variant="h5"
@@ -173,7 +191,7 @@ function ResponsiveAppBar({ isSticky }) {
                 width: 'fit-content'
               }}
             >
-              <span style={{ color: '#000' }}>FLEX</span> <span>US</span>
+              <span style={{ color: '#fff' }}>FLEX</span> <span>US</span>
             </Typography>
           </NavLink>
 
@@ -227,13 +245,14 @@ function ResponsiveAppBar({ isSticky }) {
 
           <Box className='cart-prof-con'>
             {
-              cartNum >= 1 &&
-              <IconButton className='cart-con' aria-label="cart" onClick={() => setOpen(true)}>
-                <StyledBadge badgeContent={cartNum} color="primary">
-                  <BsHandbagFill size='22' color='#fff' />
-                </StyledBadge>
-              </IconButton>
-            }
+              cartNum >= 1 && location.pathname !== '/home/checkout/order' && location.pathname !== '/home/checkout' && (
+                < IconButton className='cart-con' aria-label="cart" onClick={() => setOpen(true)}>
+                  <StyledBadge badgeContent={cartNum} color="primary">
+                    <BsHandbagFill size='22' color='#fff' />
+                  </StyledBadge>
+                </IconButton>
+              )}
+
             <CartDrawer open={open} onClose={setOpen} />
 
             {localStorage.getItem('UID') && localStorage.getItem('token') ?
@@ -245,8 +264,7 @@ function ResponsiveAppBar({ isSticky }) {
               :
               <NavLink to={location.pathname !== '/login' && location.pathname !== '/' ? '/login' : '/home'}>
                 <Button variant="outlined" sx={{ color: 'white', borderColor: '#fff' }}>{location.pathname !== '/login' && location.pathname !== '/' ? 'Login' : 'Shop'}</Button>
-              </NavLink>
-            }
+              </NavLink>}
 
             {/* <Button onClick={() => {
               localStorage.clear()

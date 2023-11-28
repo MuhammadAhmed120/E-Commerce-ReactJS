@@ -29,9 +29,7 @@ export default function Home() {
     const [sorting, setSorting] = useState('featured');
     const [loader, setLoader] = useState(true)
     const { category } = useParams()
-    const [position, setPosition] = useState("static")
     const con = useRef(null)
-
 
     useEffect(() => {
         async function fetchDataFunc() {
@@ -88,35 +86,33 @@ export default function Home() {
         setSorting(sortType);
     };
 
-    const [isSticky, setIsSticky] = useState(false);
+    // const [isSticky, setIsSticky] = useState(false);
 
-    useEffect(() => {
-        // Add an event listener to handle scroll events
-        const handleScroll = () => {
-            // console.log("Scroll-Y ~", window.scrollY.toFixed())
-            if (window.scrollY >= 310) {
-                setIsSticky(true);
-            } else if (window.scrollY === 0) {
-                setIsSticky(false);
-            }
-        };
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (window.scrollY >= 310) {
+    //             setIsSticky(true);
+    //         } else if (window.scrollY === 0) {
+    //             setIsSticky(false);
+    //         }
+    //     };
 
-        window.addEventListener('scroll', handleScroll);
+    //     window.addEventListener('scroll', handleScroll);
 
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, []);
 
 
     return (
         <div>
-            <Navbar position={position} isSticky={isSticky} />
+            <Navbar />
 
             {notificationContextHolder}
+            {/* ${isSticky ? 'home-mar' : ''} */}
 
-
-            <div className={`land-sec ${isSticky ? 'home-mar' : ''}`}>
+            <div className={`land-sec`}>
                 <div className='land-sec-left'>
                     <h2 className='land-day'>Outfit of the day</h2>
                     <h1 className='land-title'>
@@ -146,13 +142,13 @@ export default function Home() {
 
             {/* <p style={{ color: '#000', margin: 0, fontSize: 28, fontWeight: 500, width: "fit-content", borderBottom: "2px solid #2c69eb" }}>Products{category ? ` / ${category.toUpperCase()}` : ''}</p> */}
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center", alignItems: "center", marginBottom: 0, marginTop: 0, padding: "0", textAlign: 'center' }} >
-                <p style={{ color: '#fff', margin: 0, fontSize: 22, fontWeight: 400, width: "fit-content", backgroundColor: '#2c69eb', padding: "12px" }}>"Elevate your style with our unique anime-inspired t-shirt designs that blend fashion and fandom seamlessly."
+            <div className='land-quote-con' >
+                <p>"Elevate your style with our unique anime-inspired t-shirt designs that blend fashion and fandom seamlessly."
                 </p>
             </div>
 
-            <div style={{ display: "flex", flex: 1, justifyContent: "center", alignItems: "center", marginBottom: 50, marginTop: 90 }} >
-                <p style={{ color: '#333333', margin: 0, fontSize: 43, fontWeight: 900, borderBottom: "3px solid #2c69eb", textAlign: "center" }}>
+            <div className='anime-title-con' >
+                <p>
                     {/* <Fade delay={400} cascade damping={0.05} triggerOnce> */}
                     Anime Legends Fusion
                     {/* </Fade> */}
@@ -165,10 +161,9 @@ export default function Home() {
                 </div> */}
 
 
-            {/* <div className='home-sort-con'>
-
+            <div className='home-sort-con'>
                 <div>
-                    <p>Sort By:</p>
+                    {/* <p>Sort By:</p> */}
                     <Select
                         value={sorting}
                         onChange={(event) => handleSort(event.target.value)}
@@ -184,9 +179,10 @@ export default function Home() {
                         <MenuItem value="newest_arrivals">Newest Arrivals</MenuItem>
                     </Select>
                 </div>
-            </div> */}
+            </div>
             {/* <GrSort size={20} /> */}
 
+            {/* <img src={'https://www.cliffrailwaylynton.co.uk/wp-content/uploads/2018/01/250x250-Placeholder.png'} alt="" /> */}
 
             {
                 loader ?

@@ -15,8 +15,9 @@ import Gallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 // import ReactImageMagnify from 'react-image-magnify';
 
-
 import { notification } from 'antd';
+
+import { Fade, Slide, Zoom } from 'react-awesome-reveal';
 
 import CartContext from '../config/cartContext.js';
 import QuanContext from '../config/quanContext.js';
@@ -33,7 +34,7 @@ const ProductDisplay = () => {
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [quantity, setQuantity] = useState(1);
 
-    const [size, setSize] = useState('Small');
+    const [size, setSize] = useState('S');
 
     const handleChange = (event) => {
         setSize(event.target.value);
@@ -96,7 +97,7 @@ const ProductDisplay = () => {
         }
     }
 
-    const handleCardClick = (event) => {
+    const handleCardClick = () => {
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
@@ -104,24 +105,6 @@ const ProductDisplay = () => {
     };
 
     const [selectedImage, setSelectedImage] = useState(0);
-
-    const [isSticky, setIsSticky] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY >= 110) {
-                setIsSticky(true);
-            } else if (window.scrollY === 0) {
-                setIsSticky(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
 
     if (clothData.length >= 1) {
         let { clothStatus, clothImg, clothImgHover, clothTitle, clothCon, clothPrice } = clothData[productId];
@@ -142,13 +125,13 @@ const ProductDisplay = () => {
 
         return (
             <div>
-                <Navbar isSticky={isSticky} />
+                <Navbar />
 
                 {notificationContextHolder}
 
-                <h1 className={`${isSticky ? 'pos-mar' : ''}`} style={{ margin: 0, visibility: 'hidden' }}>1</h1>
+                {/* <h1 className={`${isSticky ? 'pos-mar' : ''}`} style={{ marginTop: 20, color: 'black' }}>1</h1> */}
 
-                <span className='navs'>
+                <div className='navs'>
                     <NavLink className='navs-link' to={'/home'}>
                         Home { }
                     </NavLink>
@@ -157,107 +140,106 @@ const ProductDisplay = () => {
                     / { }
                     { } {clothTitle} {` (${productId}) `} { }
                     /
-                </span>
-
-
-                <div className='cloth-display-con'>
-                    <div className='img-con'>
-                        <div className='slider-con'>
-                            <Carousel
-                                showArrows={false}
-                                showStatus={false}
-                                infiniteLoop={true}
-                                autoPlay={true}
-                                stopOnHover={true}
-                                // showThumbs={true}
-                                showIndicators={false}
-                            >
-                                {Object.values(galleryImages).map((image, index) => (
-                                    <div key={index}>
-                                        <img className='cloth-img' src={image} alt={clothTitle} />
-                                    </div>
-                                ))}
-                            </Carousel>
-                        </div>
-                    </div>
-
-                    <div className='display-det'>
-                        <h3 className='display-status'>{clothStatus}</h3>
-                        <h1 className='display-title'>{clothTitle}</h1>
-                        <p className='display-con'>{clothCon}</p>
-                        <h2 className='display-price'>RS {clothPrice}/-</h2>
-
-                        <div className='display-quan-con'>
-                            <div>
-                                <p>QUANTITY: </p>
-                            </div>
-                            <span className='quan-count-con'>
-                                <button
-                                    className={`quan-count-btn minus-btn ${quantity === 1 && 'btn-disabled'}`}
-                                    onClick={handleDecrement}
-                                >-</button>
-
-                                <input
-                                    className='quan-inp'
-                                    type='number'
-                                    value={quantity}
-                                    onChange={handleQuantityChange}
-                                    onBlur={handleCheckValue}
-                                />
-
-                                <button
-                                    className='quan-count-btn plus-btn'
-                                    onClick={handleIncrement}
-                                >+</button>
-                            </span>
-                        </div>
-
-                        <div className='display-quan-con'>
-                            <div>
-                                <p>SIZE:</p>
-                            </div>
-                            <Select
-                                value={size}
-                                onChange={handleChange}
-                                size='small'
-                                className='size-select'
-                            >
-                                <MenuItem value='Extra Small'>Extra Small (XS)</MenuItem>
-                                <MenuItem value='Small'>Small (S)</MenuItem>
-                                <MenuItem value='Medium'>Medium (M)</MenuItem>
-                                <MenuItem value='Large'>Large (L)</MenuItem>
-                                <MenuItem value='Extra Large'>Extra Large (XL)</MenuItem>
-                                <MenuItem value='Extra Extra Large'>Extra Extra Large (XXL)</MenuItem>
-                            </Select>
-                        </div>
-
-                        <div className='buy-add-con'>
-                            <div className='btn-container'>
-                                <Button
-                                    className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
-                                    variant="outlined"
-                                    size="large"
-                                    onClick={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size)}
-                                >ADD TO CART</Button>
-                            </div>
-                            <div className='btn-container'>
-                                <Button
-                                    className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
-                                    variant="contained"
-                                    size='large'
-                                    onClick={(event) => { cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size); navigate('/home/checkout') }}
-                                >
-                                    <span style={{ flex: 1, color: '#ffffff' }}>
-                                        BUY
-                                    </span>
-                                </Button>
-                            </div>
-                        </div>
-
-                    </div>
-
                 </div>
 
+
+                <Fade>
+                    <div className='cloth-display-con'>
+                        <div className='img-con'>
+                            <div className='slider-con'>
+                                <Carousel
+                                    showArrows={false}
+                                    showStatus={false}
+                                    infiniteLoop={true}
+                                    autoPlay={true}
+                                    stopOnHover={true}
+                                    // showThumbs={true}
+                                    showIndicators={false}
+                                >
+                                    {Object.values(galleryImages).map((image, index) => (
+                                        <div key={index}>
+                                            <img className='cloth-img' src={image} alt={clothTitle} />
+                                        </div>
+                                    ))}
+                                </Carousel>
+                            </div>
+                        </div>
+
+                        <div className='display-det'>
+                            <h3 className='display-status'>{clothStatus}</h3>
+                            <h1 className='display-title'>{clothTitle}</h1>
+                            <p className='display-con'>{clothCon}</p>
+                            <h2 className='display-price'>RS {clothPrice}/-</h2>
+
+                            <div className='display-quan-con'>
+                                <div>
+                                    <p>QUANTITY: </p>
+                                </div>
+                                <span className='quan-count-con'>
+                                    <button
+                                        className={`quan-count-btn minus-btn ${quantity === 1 && 'btn-disabled'}`}
+                                        onClick={handleDecrement}
+                                    >-</button>
+
+                                    <input
+                                        className='quan-inp'
+                                        type='number'
+                                        value={quantity}
+                                        onChange={handleQuantityChange}
+                                        onBlur={handleCheckValue}
+                                    />
+
+                                    <button
+                                        className='quan-count-btn plus-btn'
+                                        onClick={handleIncrement}
+                                    >+</button>
+                                </span>
+                            </div>
+
+                            <div className='display-quan-con'>
+                                <div>
+                                    <p>SIZE:</p>
+                                </div>
+                                <Select
+                                    value={size}
+                                    onChange={handleChange}
+                                    size='small'
+                                    className='size-select'
+                                >
+                                    <MenuItem value='XS'>Extra Small (XS)</MenuItem>
+                                    <MenuItem value='S'>Small (S)</MenuItem>
+                                    <MenuItem value='M'>Medium (M)</MenuItem>
+                                    <MenuItem value='L'>Large (L)</MenuItem>
+                                    <MenuItem value='XL'>Extra Large (XL)</MenuItem>
+                                    {/* <MenuItem value='Extra Extra Large'>Extra Extra Large (XXL)</MenuItem> */}
+                                </Select>
+                            </div>
+
+                            <div className='buy-add-con'>
+                                <div className='btn-container'>
+                                    <Button
+                                        className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
+                                        variant="outlined"
+                                        size="large"
+                                        onClick={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size)}
+                                    >ADD TO CART</Button>
+                                </div>
+                                <div className='btn-container'>
+                                    <Button
+                                        className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
+                                        variant="contained"
+                                        size='large'
+                                        onClick={(event) => { cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size); navigate('/home/checkout') }}
+                                    >
+                                        <span style={{ flex: 1, color: '#ffffff' }}>
+                                            BUY
+                                        </span>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Fade>
 
                 <div className='cloth-showcase-con'>
                     <h2 className='showcase-title'>You might also like:</h2>
@@ -274,7 +256,7 @@ const ProductDisplay = () => {
                                             clothTitle={item.clothTitle}
                                             clothPrice={item.clothPrice}
                                             className='card'
-                                            onCardClick={(event) => handleCardClick(event)}
+                                            onCardClick={handleCardClick}
                                             showBtn={false}
                                         />
                                     </NavLink> : ``}

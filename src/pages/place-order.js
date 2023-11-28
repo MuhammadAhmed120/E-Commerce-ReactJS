@@ -1,10 +1,10 @@
+import { useEffect, useState, useContext, useRef } from 'react';
 import Navbar from '../components/navbar';
 import { List } from 'antd';
-import { useEffect, useState, useContext } from 'react';
 import CartContext from '../config/cartContext';
 import QuanContext from '../config/quanContext';
 import { BsArrowRight } from 'react-icons/bs'
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { GiTakeMyMoney } from 'react-icons/gi';
 import { CiCircleInfo } from 'react-icons/ci'
@@ -55,9 +55,6 @@ function PlaceOrder() {
     }, [quanNum])
 
     const [user, setUser] = useState(null);
-    const { customerName, customerEmail, customerNumber, customerAddress, customerPostal } = user || {}
-
-    const [userEmail, setUserEmail] = useState(null)
 
     const token = localStorage.getItem('token')
 
@@ -73,7 +70,6 @@ function PlaceOrder() {
 
                     if (response.status === 200) {
                         setUser(response.data.userData)
-                        setUserEmail(response.data.userData.customerEmail)
                     } else {
                         console.error('USER NOT FOUND:', response.data);
                     }
@@ -90,10 +86,28 @@ function PlaceOrder() {
 
 
     const [loading, setLoading] = useState(null)
-    const navigation = useNavigate()
+
+
+
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const [open, setOpen] = useState(false);
-    const handleClose = () => setOpen(false);
+
+    const handleClose = () => {
+        setOpen(false);
+        navigate('/home');
+        setQuanNum(0);
+        setCartNum(0);
+        setClothCart([]);
+    };
+
+    // useEffect(() => {
+    //     const navigatePage = () => {
+    //         clothCart.length === 0 ? navigate('/home') : ''
+    //     }
+    //     navigatePage()
+    // }, [clothCart])
 
     const [orderStatus, setOrderStatus] = useState("")
     const [orderMessage, setOrderMessage] = useState("")
@@ -131,17 +145,13 @@ function PlaceOrder() {
 
             const placingOrder = await axios.post('http://localhost:3001/home/checkout', customerOrderData, { headers })
 
-            // console.log('Status ~ ', placingOrder.data.orderStatus)
-            console.log("placingOrder ", placingOrder)
-
             if (placingOrder.data.status === 200) {
-                // localStorage.removeItem('cart')
-
                 setOrderStatus(placingOrder.data.orderDetails.status)
                 setOrderMessage(placingOrder.data.orderDetails.message)
                 setOrderID(placingOrder.data.orderDetails.orderID)
-
                 setOpen(true)
+
+                localStorage.removeItem('cart')
             }
             setLoading(false)
         } catch (error) {
@@ -150,25 +160,6 @@ function PlaceOrder() {
             setLoading(false)
         }
     };
-
-    const [isSticky, setIsSticky] = useState(false);
-
-    useEffect(() => {
-        // Add an event listener to handle scroll events
-        const handleScroll = () => {
-            if (window.scrollY >= 110) {
-                setIsSticky(true);
-            } else if (window.scrollY === 0) {
-                setIsSticky(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
 
     const handleContactUs = () => {
         const email = 'flexus@gmail.com';
@@ -180,9 +171,28 @@ function PlaceOrder() {
         window.open(mailtoLink, '_blank');
     };
 
+    const formRef = useRef(null);
+
+    const onFinishFailed = (errorInfo) => {
+        // Get all the field names with errors
+        const errorFields = errorInfo.errorFields.map(field => field.name[0]);
+
+        // Get all the field instances in the order they appear in the form
+        const formFields = Object.keys(formRef.current.getFieldsValue());
+
+        // Find the first field with an error and focus on it
+        const firstErrorField = formFields.find(field => errorFields.includes(field));
+        if (firstErrorField) {
+            const fieldInstance = formRef.current.getFieldInstance(firstErrorField);
+            if (fieldInstance) {
+                fieldInstance.focus();
+            }
+        }
+    };
+
     return (
         <>
-            <Navbar isSticky={isSticky} />
+            <Navbar />
 
             <Modal
                 keepMounted
@@ -205,7 +215,7 @@ function PlaceOrder() {
                     <div className='add-button'>
                         <Button className='add-button' size='small' variant='contained' disableElevation onClick={handleClose}>
                             <span>
-                                Close
+                                Continue shopping
                             </span>
                         </Button>
                         <p style={{ textAlign: 'center', color: 'black', margin: "4px 0" }}>For any queries, <span style={{ textDecoration: 'underline', cursor: 'pointer', color: 'blue' }} onClick={handleContactUs}>contact us</span>.</p>
@@ -215,7 +225,7 @@ function PlaceOrder() {
 
             <p className='disclaimer'>Delivery only available in <b style={{ marginLeft: 5 }}> KARACHI</b>, Pakistan</p>
 
-            <span className='navs'>
+            <div className='navs'>
                 <NavLink className='navs-link' to={'/home'}>
                     Home { }
                 </NavLink>
@@ -228,17 +238,20 @@ function PlaceOrder() {
                     Order { }
                 </NavLink>
                 /
-            </span>
+            </div>
 
-            <div className={`check-con ${isSticky ? 'pos-mar' : ''}`}>
+            <div className={`check-con`}>
                 <h1 className='checkout-title'>CHECKOUT </h1>
                 <p className='checkout-step'>2</p>
             </div>
 
             <div className='checkout-2-con'>
                 {user ? <>
+                    <div className='form-separator visible'></div>
+
                     <div className='checkout-details'>
                         <Form
+                            ref={formRef}
                             name="normal_login"
                             className="detail-form"
                             initialValues={{
@@ -249,14 +262,15 @@ function PlaceOrder() {
                                 ZIPCode: user ? user.customerPostal : ''
                             }}
                             onFinish={onFinish}
+                            onFinishFailed={onFinishFailed}
                             scrollToFirstError={true}
                         >
                             <div className='order-del-title'>
-                                <h2>User Details:</h2>
+                                <h2>Contact:</h2>
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 15 }}>
-                                <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 300, margin: 0 }} >Enter your correct details.</p>
+                                <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your correct details.</p>
                                 <CiCircleInfo />
                             </div>
                             <Form.Item
@@ -307,14 +321,12 @@ function PlaceOrder() {
                                     },
                                 ]}
                                 validateTrigger="onBlur"
+                                tooltip="In case we need to contact you about your order"
                             >
                                 <Input
                                     maxLength={11}
                                     minLength={11}
                                     size='large'
-                                    style={{
-                                        width: '100%',
-                                    }}
                                     placeholder='Mobile Number'
                                 />
                             </Form.Item>
@@ -328,7 +340,7 @@ function PlaceOrder() {
 
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 15 }}>
-                                    <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 300, margin: 0 }} >Enter your current residential address.</p>
+                                    <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your current residential address.</p>
                                     <CiCircleInfo />
                                 </div>
                                 <Form.Item
@@ -382,15 +394,20 @@ function PlaceOrder() {
                                 </div>
 
                                 <div>
-                                    <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 300, marginTop: 5, marginBottom: 15 }}>Only one method available.</p>
+                                    <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, marginTop: 5, marginBottom: 15 }}>Only one method available.</p>
                                     <p className='cod-con'>
                                         <GiTakeMyMoney color='white' size={22} /> CASH ON DELIVERY
                                     </p>
                                 </div>
                             </div>
 
-
-                            <LoadingButton type='primary' loading={loading} variant="contained" size='small' className="form-button">
+                            <LoadingButton
+                                type='primary'
+                                loading={loading}
+                                variant="contained"
+                                size='small'
+                                className={`form-button ${clothCart.length === 0 ? 'btn-disabled' : ''}`}
+                            >
                                 <span style={{ fontSize: 20 }}>
                                     PLACE ORDER
                                 </span>
@@ -398,6 +415,9 @@ function PlaceOrder() {
 
                         </Form >
                     </div >
+
+                    {/* <div className='form-separator'></div> */}
+
                     <div className='order-con'>
                         <div className='order-item-con'>
                             <p>Items: {cartNum < 10 ? `0${cartNum}` : cartNum} </p>
@@ -414,21 +434,39 @@ function PlaceOrder() {
                                         >
                                             <List.Item.Meta
                                                 className='order-list'
-                                                avatar={<img className='drawer-cart-img' src={item.item.clothImg} />}
+                                                avatar={
+                                                    <img
+                                                        className='drawer-cart-img'
+                                                        style={{
+                                                            width: 100, height: 100
+                                                        }}
+                                                        src={`http://localhost:3001/images/${item.item.clothImg}`}
+                                                    />
+                                                }
                                                 title={
-                                                    <span>
-                                                        {item.item.clothTitle}
-                                                    </span>
+                                                    <>
+                                                        <div style={{ fontSize: 17, marginBottom: -10 }}>
+                                                            {item.item.clothTitle}
+                                                        </div>
+
+                                                        <div className='checkout-item-qty'>
+                                                            {item.qty}
+                                                        </div>
+                                                    </>
                                                 }
                                                 description={
-                                                    <div className='desc-con'>
-                                                        <div style={{ fontWeight: '600', color: '#126373' }}>
-                                                            RS {item.item.clothPrice * item.qty}
+                                                    <div className='desc-con' style={{ position: 'relative' }}>
+                                                        <div className='checkout-price'>
+                                                            <span style={{ fontSize: 17, fontWeight: 500 }} >PKR </span>
+                                                            {item.item.clothPrice * item.qty}
                                                         </div>
-                                                        <div>SIZE: <b>{item.size.toUpperCase()}</b></div>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                            <div>QTY: {item.qty}</div>
+                                                        <div style={{ fontWeight: 600, fontSize: 17, margin: "-6px 0" }}>
+                                                            {/* SIZE: */}
+                                                            {item.size.toUpperCase()}
                                                         </div>
+                                                        {/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                            
+                                                        </div> */}
                                                     </div>
                                                 }
                                             />
@@ -439,18 +477,26 @@ function PlaceOrder() {
                         </div>
 
                         <div className='form-separator' style={{ margin: '2px auto' }}></div>
+
                         <div className='check-items-con'>
                             <div>
-                                <p>Subtotal: </p>
-                                <p>Delivery Fess: </p>
-                                <div className='form-separator' style={{ margin: '8px 0' }}></div>
-                                <p>Total: </p>
+                                <p>Subtotal </p>
+                                <p>Delivery Fees </p>
+
+                                <div className='form-separator' style={{ margin: '8px 0', background: '#9399a2' }}></div>
+
+                                <p>Total </p>
                             </div>
                             <div>
                                 <p>Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</p>
                                 <p>Rs. 80/-</p>
-                                <div className='form-separator' style={{ margin: '8px 0' }}></div>
-                                <p>Rs. {totalPrice < 10 ? `0${totalPrice + 80}` : totalPrice + 80}/-</p>
+
+                                <div className='form-separator' style={{ margin: '8px auto', background: '#9399a2' }}></div>
+
+                                <p style={{ fontSize: 24, fontWeight: 600 }}>
+                                    Rs.
+                                    {totalPrice < 10 ? `0${totalPrice + 80}` : totalPrice + 80}/-
+                                </p>
                             </div>
                         </div>
                     </div>

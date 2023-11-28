@@ -38,7 +38,6 @@ const Register = () => {
     const [error, setError] = useState("")
 
     const onFinish = async (values) => {
-        console.log('Received values of form: ', values);
         setLoading(true)
         try {
             const customerData = {
@@ -49,7 +48,6 @@ const Register = () => {
                 customerNumber: values.phone
             }
             const registerCustomer = await axios.post('http://localhost:3001/', customerData)
-            console.log('registerCustomer.data---->', registerCustomer.data)
             setLoading(false)
             localStorage.setItem('token', registerCustomer.data.token)
             localStorage.setItem('UID', registerCustomer.data.user._id)
