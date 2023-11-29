@@ -62,7 +62,7 @@ const Register = () => {
                 setLoading(false)
             } else {
                 console.log('error MESSAGE ===>', error)
-                setError(error.response.data.message)
+                setError(error.response.data.errorMsg)
                 setOpen(true);
                 setLoading(false)
             }
@@ -98,7 +98,7 @@ const Register = () => {
                         {/* <RxCross2 color='red' size={19} />  */}
                         {error}
                     </Typography>
-                    <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '10px' }} size='small' variant='contained' disableElevation onClick={handleClose}>
+                    <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '10px' }} variant='contained' disableElevation onClick={handleClose}>
                         Close
                     </Button>
                 </Box>
@@ -110,19 +110,21 @@ const Register = () => {
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
                 scrollToFirstError={true}
+                requiredMark={false}
+                layout='vertical'
             >
 
                 <Form.Item>
                     <div className='form-name'>
                         <h2>Register</h2>
-                        <CiLock size='22' color='#204dad' />
+                        <CiLock size='24' color='#204dad' />
                     </div>
                 </Form.Item>
 
                 <Form.Item
                     name="fullname"
                     label="Fullname"
-                    tooltip="Please en  ter your real name!C"
+                    tooltip="Please enter your real name!"
                     rules={[
                         {
                             required: true,
@@ -147,6 +149,7 @@ const Register = () => {
                             message: 'Please input your Email!',
                         },
                     ]}
+                    hasFeedback
                 >
                     <Input size='large' placeholder='Email' />
                 </Form.Item>
@@ -162,7 +165,6 @@ const Register = () => {
                             message: 'Please input your password!',
                         },
                     ]}
-                    hasFeedback
                 >
                     <Input.Password size='large' placeholder='Password' />
                 </Form.Item>
@@ -216,7 +218,7 @@ const Register = () => {
                         placeholder='Mobile Number'
                     />
                 </Form.Item>
-                
+
                 {/* 
                 <Form.Item>
                     <Form.Item name="remember" valuePropName="checked" noStyle>
