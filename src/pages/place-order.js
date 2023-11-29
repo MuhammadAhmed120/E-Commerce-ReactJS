@@ -41,6 +41,15 @@ const style = {
     gap: '4.5rem'
 };
 
+const layout = {
+    labelCol: {
+        span: 8
+    },
+    wrapperCol: {
+        span: 16
+    }
+};
+
 
 function PlaceOrder() {
     const { cartNum, setCartNum } = useContext(CartContext)
@@ -252,6 +261,7 @@ function PlaceOrder() {
                     <div className='checkout-details'>
                         <Form
                             ref={formRef}
+                            // {...layout}
                             name="normal_login"
                             className="detail-form"
                             initialValues={{
@@ -264,6 +274,8 @@ function PlaceOrder() {
                             onFinish={onFinish}
                             onFinishFailed={onFinishFailed}
                             scrollToFirstError={true}
+                            requiredMark={false}
+                            layout='vertical'
                         >
                             <div className='order-del-title'>
                                 <h2>Contact:</h2>
@@ -273,25 +285,6 @@ function PlaceOrder() {
                                 <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your correct details.</p>
                                 <CiCircleInfo />
                             </div>
-                            <Form.Item
-                                name="email"
-                                label="Email"
-                                rules={[
-                                    {
-                                        type: 'email',
-                                        message: 'The input is not valid Email!',
-                                    },
-                                    {
-                                        required: true,
-                                        message: 'Please input your Email!',
-                                    },
-                                ]}
-                            >
-                                <Input
-                                    size='large'
-                                    placeholder='Email'
-                                />
-                            </Form.Item>
 
                             <Form.Item
                                 name="fullname"
@@ -311,26 +304,50 @@ function PlaceOrder() {
                                 />
                             </Form.Item>
 
-                            <Form.Item
-                                name="phone"
-                                label="Mobile Number"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your Mobile number!',
-                                    },
-                                ]}
-                                validateTrigger="onBlur"
-                                tooltip="In case we need to contact you about your order"
+                            <div
+                                // {...layout}
+                                className='form-dis'
                             >
-                                <Input
-                                    maxLength={11}
-                                    minLength={11}
-                                    size='large'
-                                    placeholder='Mobile Number'
-                                />
-                            </Form.Item>
+                                <Form.Item
+                                    name="email"
+                                    label="Email"
+                                    rules={[
+                                        {
+                                            type: 'email',
+                                            message: 'The input is not valid Email!',
+                                        },
+                                        {
+                                            required: true,
+                                            message: 'Please input your Email!',
+                                        },
+                                    ]}
+                                >
+                                    <Input
+                                        size='large'
+                                        placeholder='Email'
+                                    />
+                                </Form.Item>
 
+                                <Form.Item
+                                    name="phone"
+                                    label="Mobile Number"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input your Mobile number!',
+                                        },
+                                    ]}
+                                    validateTrigger="onBlur"
+                                    tooltip="In case we need to contact you about your order"
+                                >
+                                    <Input
+                                        maxLength={11}
+                                        minLength={11}
+                                        size='large'
+                                        placeholder='Mobile Number'
+                                    />
+                                </Form.Item>
+                            </div>
 
                             <div className='form-separator'></div>
 
@@ -343,9 +360,14 @@ function PlaceOrder() {
                                     <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your current residential address.</p>
                                     <CiCircleInfo />
                                 </div>
+
+                                {/* <div className='form-dis'> */}
                                 <Form.Item
                                     name="address"
                                     label="Residential Address"
+                                    style={{
+                                        flexGrow: 3
+                                    }}
                                     rules={[
                                         {
                                             required: true,
@@ -365,6 +387,9 @@ function PlaceOrder() {
 
                                 <Form.Item
                                     name="ZIPCode"
+                                    style={{
+                                        flexGrow: 1
+                                    }}
                                     label="Postal Code"
                                     rules={[
                                         {
@@ -375,13 +400,12 @@ function PlaceOrder() {
                                 >
                                     <Input
                                         size='large'
-                                        style={{
-                                            width: 120,
-                                        }}
                                         placeholder='Postal Code'
                                         maxLength={5}
                                     />
                                 </Form.Item>
+                                {/* </div> */}
+
                             </div>
 
 
@@ -435,13 +459,18 @@ function PlaceOrder() {
                                             <List.Item.Meta
                                                 className='order-list'
                                                 avatar={
-                                                    <img
-                                                        className='drawer-cart-img'
-                                                        style={{
-                                                            width: 100, height: 100
-                                                        }}
-                                                        src={`http://localhost:3001/images/${item.item.clothImg}`}
-                                                    />
+                                                    <div style={{ position: 'relative' }}>
+                                                        <img
+                                                            className='drawer-cart-img'
+                                                            style={{
+                                                                width: 100, height: 100
+                                                            }}
+                                                            src={`http://localhost:3001/images/${item.item.clothImg}`}
+                                                        />
+                                                        <div className='checkout-item-qty'>
+                                                            {item.qty}
+                                                        </div>
+                                                    </div>
                                                 }
                                                 title={
                                                     <>
@@ -449,13 +478,13 @@ function PlaceOrder() {
                                                             {item.item.clothTitle}
                                                         </div>
 
-                                                        <div className='checkout-item-qty'>
-                                                            {item.qty}
-                                                        </div>
+                                                        {/* <div className='checkout-item-qty'>
+                                                        {item.qty}
+                                                    </div> */}
                                                     </>
                                                 }
                                                 description={
-                                                    <div className='desc-con' style={{ position: 'relative' }}>
+                                                    <div className='desc-con'>
                                                         <div className='checkout-price'>
                                                             <span style={{ fontSize: 17, fontWeight: 500 }} >PKR </span>
                                                             {item.item.clothPrice * item.qty}
