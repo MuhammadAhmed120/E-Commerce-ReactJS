@@ -48,10 +48,11 @@ function UserAccount() {
     const [userOrders, setUserOrders] = useState(null)
 
     const { customerName, customerEmail, customerNumber, customerAddress, customerPostal } = user || {}
-    
+
     const token = localStorage.getItem('token')
 
     const [loader, setLoader] = useState(null)
+    const [loading, setLoading] = useState(null)
 
     useEffect(() => {
         const userData = async () => {
@@ -80,10 +81,9 @@ function UserAccount() {
             }
         };
         userData();
-    }, [token]);
+    }, [token, loading]);
 
 
-    const [loading, setLoading] = useState(null)
 
     const [mobileNum, setMobile] = useState('');
     const [address, setAddress] = useState('');
@@ -114,15 +114,19 @@ function UserAccount() {
 
             try {
                 const updatingData = await axios.put('http://localhost:3001/home/user', updatedData, { headers });
-
+                console.log(updatingData)
                 if (updatingData.status === 200) {
-                    return setLoader(true)
+                    // return setLoading(false)
                 } else {
                     console.error('USER NOT FOUND:', updatingData.data);
                 }
-                setLoading(false)
+                return setLoading(false)
             } catch (error) {
-                console.error('Error:', error);
+                if (error.message === 'Network Error') {
+                    console.log(error)
+                } else {
+                    console.log('error MESSAGE ===>', error)
+                }
             }
         }
     }
@@ -155,56 +159,65 @@ function UserAccount() {
             >
                 <Box sx={style}>
                     <RxCross2 style={{ cursor: 'pointer', marginBottom: 15 }} color='black' size={19} onClick={handleClose} />
-                    {user && <div>
-                        <Form.Item
-                            name="customerNumber"
-                            label="Mobile Number"
+                    {user &&
+                        <Form
+                            scrollToFirstError={true}
+                            layout='vertical'
                         >
-                            <Input
-                                defaultValue={customerNumber}
-                                onChange={handleNumberChange}
-                                maxLength={11}
-                                minLength={11}
-                                size='large'
-                                style={{
-                                    width: '100%',
-                                }}
-                                placeholder='Mobile Number'
-                            />
-                        </Form.Item>
+                            <div className='form-dis'>
+                                <Form.Item
+                                    name="customerNumber"
+                                    label="Mobile Number"
+                                    layout='vertical'
+                                    style={{
+                                        flexGrow: 2
+                                    }}
+                                >
+                                    <Input
+                                        defaultValue={customerNumber}
+                                        onChange={handleNumberChange}
+                                        maxLength={11}
+                                        minLength={11}
+                                        size='large'
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                        placeholder='Mobile Number'
+                                    />
+                                </Form.Item>
 
-                        <Form.Item
-                            name="customerAddress"
-                            label="Residential Address"
-                        >
-                            <TextArea
-                                defaultValue={customerAddress}
-                                onChange={handleAddressChange}
-                                size='large'
-                                placeholder="Residential Address"
-                                autoSize={{
-                                    minRows: 1,
-                                    maxRows: 6,
-                                }}
-                            />
-                        </Form.Item>
+                                <Form.Item
+                                    name="customerPostal"
+                                    label="Postal Code"
+                                >
+                                    <Input
+                                        defaultValue={postal}
+                                        onChange={handlePostalChange}
+                                        size='large'
+                                        placeholder='Postal Code'
+                                        maxLength={5}
+                                    />
+                                </Form.Item>
+                            </div>
 
-                        <Form.Item
-                            name="customerPostal"
-                            label="Postal Code"
-                        >
-                            <Input
-                                defaultValue={postal}
-                                onChange={handlePostalChange}
-                                size='large'
-                                style={{
-                                    width: 120,
-                                }}
-                                placeholder='Postal Code'
-                                maxLength={5}
-                            />
-                        </Form.Item>
-                    </div>}
+                            <Form.Item
+                                name="customerAddress"
+                                label="Residential Address"
+                            >
+                                <TextArea
+                                    defaultValue={customerAddress}
+                                    onChange={handleAddressChange}
+                                    size='large'
+                                    placeholder="Residential Address"
+                                    autoSize={{
+                                        minRows: 1,
+                                        maxRows: 6,
+                                    }}
+                                />
+                            </Form.Item>
+
+                        </Form>
+                    }
                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.5rem', fontSize: '15px', marginTop: '10px' }} >
                         <LoadingButton loading={loading} type='primary' variant='contained' disableElevation onClick={updateData}>
                             <span>
