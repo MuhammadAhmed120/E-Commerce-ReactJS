@@ -76,11 +76,32 @@ const Login = () => {
     const [forgotLoad, setForgotLoad] = useState(null)
 
     const handleResetPass = async (values) => {
-        console.log(values)
         setForgotLoad(true)
-        setTimeout(() => {
+        try {
+            const customerData = {
+                customerEmail: values.customerEmail,
+            }
+            const resetPasswordLink = await axios.post(`http://localhost:3001/password/forgot`, customerData)
+            console.log(resetPasswordLink)
+            setError('Reset email sent successfully.')
+            setOpen(true);
             setForgotLoad(false)
-        }, 5000);
+            setTimeout(() => {
+                setOpen(false);                
+            }, 10000);
+        } catch (error) {
+            if (error.message === 'Network Error') {
+                console.log(error)
+                setError(error.message)
+                setOpen(true);
+                setForgotLoad(false)
+            } else {
+                console.log('error MESSAGE ===>', error)
+                setError(error.response.data.message)
+                setOpen(true);
+                setForgotLoad(false)
+            }
+        }
     }
 
 
@@ -129,15 +150,17 @@ const Login = () => {
                                 <span>Reset link will be sent to the following email address.
                                 </span>
                             </p>
+
                             <Form
                                 name="normal_login"
-
                                 initialValues={{ remember: true }}
                                 onFinish={handleResetPass}
+                                requiredMark={false}
+                            // layout='vertical'
                             >
 
                                 <Form.Item
-                                    name="email"
+                                    name="customerEmail"
                                     label="Email"
                                     rules={[
                                         {
@@ -180,11 +203,13 @@ const Login = () => {
                 className="form"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
+                requiredMark={false}
+                layout='vertical'
             >
                 <Form.Item>
                     <div className='form-name'>
                         <h2>Login</h2>
-                        <CiLock size='22' color='#204dad' />
+                        <CiLock size='24' color='#204dad' />
                     </div>
                 </Form.Item>
                 <Form.Item
@@ -200,6 +225,7 @@ const Login = () => {
                             message: 'Please input your Email!',
                         },
                     ]}
+                    hasFeedback
                 >
                     <Input size='large' placeholder='Email' />
                 </Form.Item>
@@ -213,7 +239,6 @@ const Login = () => {
                             message: 'Please input your password!',
                         },
                     ]}
-                    hasFeedback
                 >
                     <Input.Password size='large' placeholder='Password' />
                 </Form.Item>

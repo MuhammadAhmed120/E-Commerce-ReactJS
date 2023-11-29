@@ -6,6 +6,7 @@ import ProductDisplay from "../pages/cloth-display";
 import Checkout from "../pages/checkout";
 import PlaceOrder from "../pages/place-order";
 import UserAccount from "../pages/userAccount";
+import ResetPass from "../pages/resetPass";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -70,6 +71,7 @@ export default function Routing() {
                 <Route path="/home/user" element={<UserAccount />} />
                 <Route path="/home/checkout" element={<Checkout />} />
                 <Route path="/home/checkout/order" element={<PlaceOrder />} />
+                <Route path="/reset-password/:token" element={<ResetPass />} />
             </Routes>
         </BrowserRouter>
     )
