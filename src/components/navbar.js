@@ -263,7 +263,11 @@ function ResponsiveAppBar() {
               </Tooltip>
               :
               <NavLink to={location.pathname !== '/login' && location.pathname !== '/' ? '/login' : '/home'}>
-                <Button variant="outlined" sx={{ color: 'white', borderColor: '#fff' }}>{location.pathname !== '/login' && location.pathname !== '/' ? 'Login' : 'Shop'}</Button>
+                <Button variant="outlined" sx={{ color: 'white', borderColor: '#fff' }}>
+                  <span>
+                    {location.pathname !== '/login' && location.pathname !== '/' ? 'Login' : 'Shop'}
+                  </span>
+                </Button>
               </NavLink>}
 
             {/* <Button onClick={() => {
