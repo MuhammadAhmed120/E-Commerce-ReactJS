@@ -82,7 +82,7 @@ function ResponsiveAppBar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >= 110) {
+      if (window.scrollY >= 150) {
         setIsSticky(true);
       } else if (window.scrollY === 0) {
         setIsSticky(false);
