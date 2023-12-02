@@ -55,12 +55,13 @@ function PlaceOrder() {
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [clothCart, setClothCart] = useState([])
-    const [itemDel, setItemDel] = useState(null)
+    const [isInitialLoad, setIsInitialLoad] = useState(false);
 
 
     useEffect(() => {
         const savedCart = (JSON.parse(localStorage.getItem('cart')) || [])
         setClothCart(savedCart)
+        setIsInitialLoad(true);
     }, [quanNum])
 
     const [user, setUser] = useState(null);
@@ -93,10 +94,7 @@ function PlaceOrder() {
     let totalQuan = clothCart.map(v => v.qty).reduce((acc, qty) => acc + qty, 0)
     let totalPrice = clothCart.reduce((acc, qty) => acc + Number(qty.item.clothPrice) * Number(qty.qty), 0)
 
-
     const [loading, setLoading] = useState(null)
-
-
 
     const location = useLocation()
     const navigate = useNavigate()
@@ -111,31 +109,63 @@ function PlaceOrder() {
         setClothCart([]);
     };
 
-    // useEffect(() => {
-    //     const navigatePage = () => {
-    //         clothCart.length === 0 ? navigate('/home') : ''
-    //     }
-    //     navigatePage()
-    // }, [clothCart])
+    useEffect(() => {
+        if (isInitialLoad) {
+            const navigatePage = () => {
+                if (clothCart.length === 0) {
+                    navigate('/home')
+                }
+            }
+            navigatePage()
+        }
+    }, [clothCart])
 
     const [orderStatus, setOrderStatus] = useState("")
     const [orderMessage, setOrderMessage] = useState("")
     const [orderID, setOrderID] = useState("")
+
+    // console.log('clothCart --->', clothCart)
 
     const onFinish = async (values) => {
         setLoading(true)
         const userToken = localStorage.getItem('token')
 
         try {
+            // const cart = clothCart.reduce((acc, items) => {
+            //     acc[items.item.clothID] = {
+            //         "qty": items.qty,
+            //         "name": items.item.clothTitle,
+            //         "price": items.item.clothPrice,
+            //         "size": items.size
+            //     };
+            //     return acc;
+            // }, {});
+
             const cart = clothCart.reduce((acc, items) => {
-                acc[items.item.clothID] = {
-                    "qty": items.qty,
-                    "name": items.item.clothTitle,
-                    "price": items.item.clothPrice,
-                    "size": items.size
-                };
+                const { clothID } = items.item;
+                const existingItem = acc[clothID];
+
+                if (existingItem) {
+                    // If item with the same clothID already exists, add size and quantity
+                    existingItem.sizes.push({
+                        size: items.size,
+                        qty: items.qty
+                    });
+                } else {
+                    // If item does not exist, create a new entry
+                    acc[clothID] = {
+                        name: items.item.clothTitle,
+                        price: items.item.clothPrice,
+                        sizes: [{
+                            size: items.size,
+                            qty: items.qty
+                        }]
+                    };
+                }
                 return acc;
             }, {});
+
+            // console.log('cart ~=~', cart)
 
             const customerOrderData = {
                 customerName: values.fullname,
@@ -232,9 +262,9 @@ function PlaceOrder() {
                 </Box>
             </Modal>
 
-            <p className='disclaimer'>Delivery only available in <b style={{ marginLeft: 5 }}> KARACHI</b>, Pakistan</p>
+            {/* <p className='disclaimer'>Delivery only available in <b style={{ marginLeft: 5 }}> KARACHI</b>, Pakistan</p> */}
 
-            <div className='navs'>
+            {/* <div className='navs'>
                 <NavLink className='navs-link' to={'/home'}>
                     Home { }
                 </NavLink>
@@ -247,12 +277,12 @@ function PlaceOrder() {
                     Order { }
                 </NavLink>
                 /
-            </div>
+            </div> */}
 
-            <div className={`check-con`}>
-                <h1 className='checkout-title'>CHECKOUT </h1>
+            {/* <div className={`check-con`}>
+                <h1 className='checkout-title'>CHECKOUT</h1>
                 <p className='checkout-step'>2</p>
-            </div>
+            </div> */}
 
             <div className='checkout-2-con'>
                 {user ? <>
@@ -420,7 +450,8 @@ function PlaceOrder() {
                                 <div>
                                     <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, marginTop: 5, marginBottom: 15 }}>Only one method available.</p>
                                     <p className='cod-con'>
-                                        <GiTakeMyMoney color='white' size={22} /> CASH ON DELIVERY
+                                        <GiTakeMyMoney color='#333333' size={24} />
+                                        CASH ON DELIVERY (COD)
                                     </p>
                                 </div>
                             </div>
@@ -429,7 +460,7 @@ function PlaceOrder() {
                                 type='primary'
                                 loading={loading}
                                 variant="contained"
-                                size='small'
+                                size='large'
                                 className={`form-button ${clothCart.length === 0 ? 'btn-disabled' : ''}`}
                             >
                                 <span style={{ fontSize: 20 }}>
@@ -473,22 +504,21 @@ function PlaceOrder() {
                                                     </div>
                                                 }
                                                 title={
-                                                    <>
-                                                        <div style={{ fontSize: 17, marginBottom: -10 }}>
+                                                    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap' }}>
+                                                        <div style={{ fontSize: 17, marginBottom: 0, flexGrow: 1, marginRight: 10, lineHeight: 1 }}>
                                                             {item.item.clothTitle}
                                                         </div>
 
-                                                        {/* <div className='checkout-item-qty'>
-                                                        {item.qty}
-                                                    </div> */}
-                                                    </>
-                                                }
-                                                description={
-                                                    <div className='desc-con'>
                                                         <div className='checkout-price'>
                                                             <span style={{ fontSize: 17, fontWeight: 500 }} >PKR </span>
                                                             {item.item.clothPrice * item.qty}
                                                         </div>
+                                                    </div>
+                                                }
+                                                description={
+                                                    <div className='desc-con'>
+
+
                                                         <div style={{ fontWeight: 600, fontSize: 17, margin: "-6px 0" }}>
                                                             {/* SIZE: */}
                                                             {item.size.toUpperCase()}
@@ -534,10 +564,9 @@ function PlaceOrder() {
                     :
                     <span className='loader' style={{ position: 'absolute', top: '50px', transform: 'translate(-50%, 50%)' }}></span>
                 }
-            </div >
+            </div>
 
-            <Footer />
-
+            {/* <Footer /> */}
         </>
     )
 }
