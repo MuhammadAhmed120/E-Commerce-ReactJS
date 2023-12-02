@@ -147,6 +147,9 @@ export default function Home() {
                 </p>
             </div>
 
+            <div className='section-separator'></div>
+
+
             <div className='anime-title-con' >
                 <p>
                     {/* <Fade delay={400} cascade damping={0.05} triggerOnce> */}
@@ -216,6 +219,7 @@ export default function Home() {
             }
 
 
+            <div className='section-separator'></div>
 
 
             <div className='why-con'>
