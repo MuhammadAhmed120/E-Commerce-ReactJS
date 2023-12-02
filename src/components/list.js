@@ -26,11 +26,25 @@ const Lists = ({ onClose }) => {
     function quanFunc(func, item, del, e, index) {
         e.preventDefault()
         const updatedCart = [...clothCart];
-        let itemIndex = clothCart.findIndex(cartItem => cartItem.item.clothID === item.item.clothID);
+        // let itemIndex = clothCart.findIndex(cartItem => cartItem.item.clothID === item.item.clothID);
+
+        const itemIndex = clothCart.findIndex(
+            cartItem => cartItem.item.clothID === item.item.clothID && cartItem.size === item.size
+        );
 
         if (itemIndex !== -1) {
             if (func === 'inc' || func === 'dec') {
-                func === 'inc' ? updatedCart[itemIndex].qty += 1 : updatedCart[itemIndex].qty > 1 ? updatedCart[itemIndex].qty -= 1 : updatedCart[itemIndex].qty = 1;
+                // func === 'inc' ?
+                //     updatedCart[itemIndex].qty += 1
+                //     :
+                //     updatedCart[itemIndex].qty > 1
+                //         ?
+                //         updatedCart[itemIndex].qty -= 1
+                //         :
+                //         updatedCart[itemIndex].qty = 1;
+
+                updatedCart[itemIndex].qty = func === 'inc' ? updatedCart[itemIndex].qty + 1 : Math.max(updatedCart[itemIndex].qty - 1, 1);
+
                 setCartNum(updatedCart.length);
 
                 setClothCart(updatedCart);
@@ -39,6 +53,7 @@ const Lists = ({ onClose }) => {
 
             if (del) {
                 setDeletedItemIndex(index);
+                setItemDel(true)
 
                 setTimeout(() => {
                     updatedCart.splice(itemIndex, 1)
@@ -46,6 +61,7 @@ const Lists = ({ onClose }) => {
                     setCartNum(updatedCart.length);
                     setClothCart(updatedCart);
                     localStorage.setItem('cart', JSON.stringify(updatedCart));
+                    setItemDel(false)
                 }, 480)
             }
         }
@@ -66,121 +82,130 @@ const Lists = ({ onClose }) => {
 
     return (
         <div className='lists-con'>
-            <div className='quan-con'>
-                <div className='num-con'>
-                    {/* <div> */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                        <div>
-                            {/* <RiShoppingBasketFill /> */}
-                            <p style={{ marginLeft: 3 }}>
-                                Subtotal:
-                            </p>
-                        </div>
-                        <div>
-                            <p>
-                                Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-
-                            </p>
-                        </div>
-                    </div>
-                    {/* </div> */}
-                    {/* <div>
+
+            {clothCart.length !== 0 ?
+                <>
+                    <div className='quan-con'>
+                        <div className='num-con'>
+                            {/* <div> */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                                <div>
+                                    {/* <RiShoppingBasketFill /> */}
+                                    <p style={{ marginLeft: 3 }}>
+                                        Subtotal:
+                                    </p>
+                                </div>
+                                <div>
+                                    <p>
+                                        Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-
+                                    </p>
+                                </div>
+                            </div>
+                            {/* </div> */}
+                            {/* <div>
                         <p> Items: {cartNum < 10 ? `0${cartNum}` : cartNum}</p>
                         <p> Quantity: {totalQuan < 10 ? `0${totalQuan}` : totalQuan}</p>
                     </div> */}
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                    <p style={{ margin: 5, fontSize: 16, fontWeight: 600 }}>Shipping, taxes calculated at checkout.</p>
-                    <NavLink to={clothCart.length === 0 ? '#' : '/home/checkout'}>
-                        {/* <div className={`checkout-btn ${clothCart.length === 0 ? `btn-disabled` : ``}`}> */}
-                        <div className={clothCart.length === 0 && 'btn-disabled'}>
-                            <NavLink to={"/home/checkout"} >
-                                <Button variant='outlined' size='small' className='add-button' style={{ marginBottom: 5 }} >
-                                    <span style={{ marginRight: 5, fontSize: 18, fontWeight: 600 }}>
-                                        VIEW CART
-                                    </span>
-                                    {/* <RiShoppingBasketFill /> */}
-                                </Button>
-                            </NavLink>
-                            <NavLink to={"/home/checkout/order"}>
-                                <Button variant='contained' size='small' className='add-button'>
-                                    <span style={{ marginRight: 5, fontSize: 18 }}>
-                                        CHECKOUT
-                                    </span>
-                                    <IoBagCheckOutline />
-                                </Button>
+                        </div>
+
+                        <div style={{ textAlign: 'center' }}>
+                            <p style={{ margin: 5, fontSize: 16, fontWeight: 600 }}>Shipping, taxes calculated at checkout.</p>
+                            <NavLink to={clothCart.length === 0 ? '#' : '/home/checkout'}>
+                                {/* <div className={`checkout-btn ${clothCart.length === 0 ? `btn-disabled` : ``}`}> */}
+                                <div className={clothCart.length === 0 ? 'btn-disabled' : ''}>
+                                    <NavLink to={"/home/checkout"} >
+                                        <Button variant='outlined' size='small' className='add-button' style={{ marginBottom: 5 }} >
+                                            <span style={{ marginRight: 5, fontSize: 18, fontWeight: 600 }}>
+                                                VIEW CART
+                                            </span>
+                                            {/* <RiShoppingBasketFill /> */}
+                                        </Button>
+                                    </NavLink>
+                                    <NavLink to={"/home/checkout/order"}>
+                                        <Button variant='contained' size='small' className='add-button'>
+                                            <span style={{ marginRight: 5, fontSize: 18 }}>
+                                                CHECKOUT
+                                            </span>
+                                            <IoBagCheckOutline />
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                                {/* <span style={{ display: 'flex' }}>
+                            </span> */}
+                                {/* </div> */}
                             </NavLink>
                         </div>
-                        {/* <span style={{ display: 'flex' }}>
-                            </span> */}
-                        {/* </div> */}
-                    </NavLink>
-                </div>
-            </div>
+                    </div>
 
-            {clothCart.length !== 0 ?
-                <List
-                    itemLayout="horizontal"
-                    dataSource={clothCart}
-                    renderItem={(item, index) => {
-                        return (
-                            <List.Item
-                                key={index}
-                                className={index === deletedItemIndex ? 'deleteAni' : ''}
-                            >
-                                <NavLink onClick={() => {
-                                    // onClose(true)
-                                    window.scrollTo({
-                                        top: 0,
-                                        behavior: 'smooth',
-                                    });
-                                }} to={`/home/product/${item.item.clothID}`} style={{ width: '100%' }}>
-                                    <List.Item.Meta
-                                        avatar={<img className='drawer-cart-img' src={`http://localhost:3001/images/${item.item.clothImg}`} />}
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={clothCart}
+                        renderItem={(item, index) => {
+                            return (
+                                <List.Item
+                                    key={index}
+                                    className={index === deletedItemIndex ? 'deleteAni' : ''}
+                                >
+                                    <NavLink to={`/home/product/${item.item.clothID}`} style={{ width: '100%' }}>
+                                        <List.Item.Meta
+                                            avatar={<img className='drawer-cart-img' src={`http://localhost:3001/images/${item.item.clothImg}`} />}
 
-                                        title={
-                                            <span style={{ fontSize: 16 }}>
-                                                {item.item.clothTitle}
-                                            </span>
-                                        }
-                                        description={
-                                            <div>
-                                                <div style={{ fontWeight: '600', color: '#126373', fontSize: 17, margin: "-5px 0" }}>
-                                                    RS {item.item.clothPrice * item.qty}
-                                                </div>
+                                            title={
 
-                                                <div style={{ fontWeight: '600', color: '#126373', fontSize: 15 }}>
-                                                    {item.size.toUpperCase()}
-                                                </div>
+                                                <span style={{ fontSize: 16 }}>
+                                                    {item.item.clothTitle}
+                                                </span>
 
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-                                                        <div style={{ fontWeight: 500 }}>QTY: </div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                                                            <button onClick={(e) => quanFunc('dec', item, '', e)} className={`quan-btn ${item.qty === 1 && 'btn-disabled'}`} >-</button>
-                                                            <p style={{ fontSize: 18, margin: 0, color: 'black' }}>
-                                                                {item.qty}
-                                                            </p>
-                                                            <button
-                                                                onClick={(e) => quanFunc('inc', item, '', e)} className='quan-btn'>+</button>
+                                            }
+                                            description={
+                                                <div>
+                                                    <div style={{
+                                                        display: 'flex',
+                                                        flexWrap: 'wrap',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center'
+                                                    }}>
+                                                        <div style={{ fontWeight: '600', color: '#126373', fontSize: 15 }}>
+                                                            {item.size.toUpperCase()}
+                                                        </div>
+
+                                                        <div style={{ fontWeight: '600', color: '#126373', fontSize: 18, margin: "-5px 0" }}>
+                                                            <span style={{ fontSize: 16 }}>RS</span> {item.item.clothPrice * item.qty}
                                                         </div>
                                                     </div>
-                                                    <div className='drawer-trash-con'>
-                                                        <IoMdTrash className='drawer-trash' size={19} onClick={(e) => {
-                                                            e.preventDefault()
-                                                            quanFunc('', item, true, e, index)
-                                                        }} />
+
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+                                                            <div style={{ fontWeight: 500 }}>QTY: </div>
+                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                                                                <button onClick={(e) => quanFunc('dec', item, '', e)} className={`quan-btn ${item.qty === 1 ? 'btn-disabled' : ''}`} >-</button>
+                                                                <p style={{ fontSize: 18, margin: 0, color: 'black' }}>
+                                                                    {item.qty}
+                                                                </p>
+                                                                <button
+                                                                    onClick={(e) => quanFunc('inc', item, '', e)} className='quan-btn'>+</button>
+                                                            </div>
+                                                        </div>
+                                                        <div className='drawer-trash-con'>
+                                                            <IoMdTrash className={`drawer-trash ${itemDel ? 'btn-disabled' : ''}`} size={19} onClick={(e) => {
+                                                                e.preventDefault()
+                                                                quanFunc('', item, true, e, index)
+                                                            }} />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        }
-                                    />
-                                </NavLink>
-                            </List.Item>
-                        )
-                    }}
-                /> : <>
+                                            }
+                                        />
+                                    </NavLink>
+                                </List.Item>
+                            )
+                        }}
+                    />
+                </>
+
+                : <>
                     <List>
-                        <div className='empty-cart'>
+                        {/* <div className='empty-cart'>
                             <h2>
                                 <TbMoodEmpty />
                             </h2>
@@ -193,10 +218,14 @@ const Lists = ({ onClose }) => {
                                     </span>
                                 </Button>
                             </NavLink>
+                        </div> */}
+
+                        <div className='empty-cart' style={{ marginTop: 20 }}>
+                            <p>Your cart is currently empty.</p>
                         </div>
-                    </List>
+                    </List >
                 </>}
-        </div>
+        </div >
     )
 };
 
