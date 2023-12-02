@@ -52,6 +52,8 @@ const layout = {
 
 
 function PlaceOrder() {
+    const BACKEND_PORT = 'http://localhost:3001'
+
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [clothCart, setClothCart] = useState([])
@@ -76,7 +78,7 @@ function PlaceOrder() {
                 };
 
                 try {
-                    const response = await axios.post('http://localhost:3001/home/user', null, { headers });
+                    const response = await axios.post(`${BACKEND_PORT}/home/user`, null, { headers });
 
                     if (response.status === 200) {
                         setUser(response.data.userData)
@@ -182,7 +184,7 @@ function PlaceOrder() {
                 'Authorization': `Bearer ${userToken}`
             };
 
-            const placingOrder = await axios.post('http://localhost:3001/home/checkout', customerOrderData, { headers })
+            const placingOrder = await axios.post(`${BACKEND_PORT}/home/checkout`, customerOrderData, { headers })
 
             if (placingOrder.data.status === 200) {
                 setOrderStatus(placingOrder.data.orderDetails.status)
@@ -227,6 +229,15 @@ function PlaceOrder() {
                 fieldInstance.focus();
             }
         }
+    };
+
+    const sizeMap = {
+        XS: 'Extra Small',
+        S: 'Small',
+        M: 'Medium',
+        L: 'Large',
+        XL: 'Extra Large',
+        XXL: 'Extra Extra Large',
     };
 
     return (
@@ -291,7 +302,6 @@ function PlaceOrder() {
                     <div className='checkout-details'>
                         <Form
                             ref={formRef}
-                            // {...layout}
                             name="normal_login"
                             className="detail-form"
                             initialValues={{
@@ -483,6 +493,8 @@ function PlaceOrder() {
                                 itemLayout="horizontal"
                                 dataSource={clothCart}
                                 renderItem={(item, index) => {
+                                    const itemSize = sizeMap[item.size]
+                                    
                                     return (
                                         <List.Item
                                             key={index}
@@ -496,7 +508,7 @@ function PlaceOrder() {
                                                             style={{
                                                                 width: 100, height: 100
                                                             }}
-                                                            src={`http://localhost:3001/images/${item.item.clothImg}`}
+                                                            src={`${BACKEND_PORT}/images/${item.item.clothImg}`}
                                                         />
                                                         <div className='checkout-item-qty'>
                                                             {item.qty}
@@ -504,28 +516,28 @@ function PlaceOrder() {
                                                     </div>
                                                 }
                                                 title={
-                                                    <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap' }}>
-                                                        <div style={{ fontSize: 17, marginBottom: 0, flexGrow: 1, marginRight: 10, lineHeight: 1 }}>
-                                                            {item.item.clothTitle}
-                                                        </div>
-
-                                                        <div className='checkout-price'>
-                                                            <span style={{ fontSize: 17, fontWeight: 500 }} >PKR </span>
-                                                            {item.item.clothPrice * item.qty}
-                                                        </div>
+                                                    <div style={{ fontSize: 17, marginBottom: 0, flexGrow: 1, marginRight: 10, lineHeight: 1 }}>
+                                                        {item.item.clothTitle}
                                                     </div>
                                                 }
                                                 description={
                                                     <div className='desc-con'>
 
+                                                        <div style={{ width: "100%", display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
 
-                                                        <div style={{ fontWeight: 600, fontSize: 17, margin: "-6px 0" }}>
-                                                            {/* SIZE: */}
-                                                            {item.size.toUpperCase()}
+                                                            <div className='checkout-size'>
+                                                                {/* <span style={{ fontSize: 15 }}>
+                                                                    SIZE: </span> */}
+                                                                '{item.size.toUpperCase()}'
+
+                                                                <span className='size-hover'>{itemSize}</span>
+                                                            </div>
+                                                            <div className='checkout-price'>
+                                                                <span style={{ fontSize: 17, fontWeight: 500 }} >PKR </span>
+                                                                {item.item.clothPrice * item.qty}
+                                                            </div>
+
                                                         </div>
-                                                        {/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                            
-                                                        </div> */}
                                                     </div>
                                                 }
                                             />
