@@ -436,6 +436,10 @@ input[type=number] {
     position: relative;
 }
 
+.land-sec *::selection{
+    pointer-events: none;
+}
+
 .home-mar {
     margin-top: 60px !important;
 }
@@ -589,6 +593,7 @@ input[type=number] {
     gap: 3rem;
     /* background: purple; */
     color: #444444;
+    overflow-x: hidden;
 }
 
 .why-con-img {
@@ -612,12 +617,14 @@ input[type=number] {
     text-transform: uppercase;
     color: #00ccff;
     margin: 0;
+    font-size: clamp(1.25rem, 2.5vw, 1.2rem) !important;
 }
 
 .why-con-desc>h1 {
     font-weight: 900;
-    font-size: 40px;
+    /* font-size: 40px; */
     margin: 0;
+    font-size: clamp(1.75rem, 4.5vw, 2.5rem) !important;
 }
 
 .why-con-desc p {
@@ -1561,11 +1568,13 @@ input[type=number] {
 .cloth-display-con {
     display: flex;
     /* flex-direction: column; */
-    flex-wrap: wrap;
-    width: 50%;
+    max-width: 100%;
+    width: 700px;
+    min-width: 65%;
     margin: 50px auto;
     justify-content: center;
     gap: 3rem;
+    flex-wrap: wrap;
     /* background: pink; */
     color: #202020;
 }
@@ -1588,35 +1597,39 @@ input[type=number] {
 .display-det * {
     font-family: Rajdhani, 'serif';
     /* margin: 0; */
-    color: #016f8a;
+    /* color: #016f8a; */
 }
 
 .display-status {
-    position: absolute;
+    /* position: absolute;
     top: 0;
-    right: 0;
+    right: 0; */
     background: #204dad;
-    color: white;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    font-weight: 800;
+    width: fit-content;
+    margin: 10px 0;
     padding: 5px;
-    font-weight: 500;
-    margin: 0;
 }
 
 .display-title {
-    margin-top: 10px;
+    /* margin-top: 10px; */
     margin-bottom: 0;
-    font-size: 40px;
+    font-size: 35px;
     color: #204dad;
     /* background: #016f8a; */
 }
 
 .display-con {
-    margin-top: 0;
-    font-size: 19px;
+    font-size: 18px;
     position: relative;
+    margin: 0 !important;
 }
 
 .display-price {
+    margin: 5px 0;
     font-size: 28px;
     font-weight: 600;
 }
@@ -2019,6 +2032,37 @@ body:empty {
     margin: 0;
     font-size: 17px;
     font-weight: 500;
+}
+
+.checkout-size {
+    margin: -6px 0;
+    font-size: 18px;
+    color: #444444;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+    position: relative;
+}
+
+.size-hover {
+    background: #9399a2;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px;
+    border-radius: 0px 5px 5px 5px;
+    margin: 0;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: none;
+}
+
+.checkout-size:hover {
+    color: #444444a2;
+    .size-hover {
+        display: block;
+    }
 }
 
 .form-separator {
