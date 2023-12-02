@@ -241,13 +241,15 @@ const ProductDisplay = () => {
                     </div>
                 </Fade>
 
+                <div className='section-separator'></div>
+
                 <div className='cloth-showcase-con'>
                     <h2 className='showcase-title'>You might also like:</h2>
                     <div className='card-con'>
                         {relatedCloth.map((item, index) => {
                             return (
-                                <>
-                                    {item.clothID !== productId ? <NavLink className="card-link" to={`/home/product/${item.clothID}`} key={index}>
+                                <div key={index}>
+                                    {item.clothID !== productId ? <NavLink className="card-link" to={`/home/product/${item.clothID}`}>
                                         <Card
                                             AddCartFunc={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum)}
                                             clothStatus={item.clothStatus}
@@ -260,7 +262,7 @@ const ProductDisplay = () => {
                                             showBtn={false}
                                         />
                                     </NavLink> : ``}
-                                </>
+                                </div>
                             )
                         })}
                     </div>
