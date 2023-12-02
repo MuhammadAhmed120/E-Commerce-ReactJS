@@ -31,15 +31,16 @@ export default function Home() {
     const { category } = useParams()
     const con = useRef(null)
 
+    const BACKEND_PORT = 'http://localhost:3001'
+
     useEffect(() => {
         async function fetchDataFunc() {
             try {
-                // setLoader(false)
                 if (category) {
-                    const fetchData = await axios.get(`http://localhost:3001/home/${category}`)
+                    const fetchData = await axios.get(`${BACKEND_PORT}/home/${category}`)
                     return setClothData(fetchData.data.cloth)
                 } else {
-                    const fetchData = await axios.get(`http://localhost:3001/home`)
+                    const fetchData = await axios.get(`${BACKEND_PORT}/home`)
                     return setClothData(fetchData.data.cloth)
                 }
             } catch (error) {
@@ -223,12 +224,12 @@ export default function Home() {
 
 
             <div className='why-con'>
-                <Fade direction='left' fraction={0.3} triggerOnce>
+                <Fade direction='left' fraction={0.3} delay={300} triggerOnce>
                     <div className='why-con-img'>
                         <img src={require('../shirt1.jpeg')} alt="" />
                     </div>
                 </Fade>
-                <Fade direction='right' fraction={0.3} triggerOnce>
+                <Fade direction='left' fraction={0.3} triggerOnce>
                     <div className='why-con-desc'>
                         <h3>
                             <Fade delay={800} cascade damping={0.1} triggerOnce>

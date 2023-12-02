@@ -34,6 +34,8 @@ const ProductDisplay = () => {
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [quantity, setQuantity] = useState(1);
 
+    const BACKEND_PORT = 'http://localhost:3001'
+
     const [size, setSize] = useState('S');
 
     const handleChange = (event) => {
@@ -45,7 +47,7 @@ const ProductDisplay = () => {
     useEffect(() => {
         async function fetchDataFunc() {
             try {
-                const fetchData = await axios.get('http://localhost:3001/home')
+                const fetchData = await axios.get(`${BACKEND_PORT}/home`)
                 setClothData(fetchData.data.cloth)
             } catch (error) {
                 console.log(error.message)
@@ -166,9 +168,9 @@ const ProductDisplay = () => {
                         </div>
 
                         <div className='display-det'>
-                            <h3 className='display-status'>{clothStatus}</h3>
                             <h1 className='display-title'>{clothTitle}</h1>
                             <p className='display-con'>{clothCon}</p>
+                            <h3 className='display-status'>{clothStatus}</h3>
                             <h2 className='display-price'>RS {clothPrice}/-</h2>
 
                             <div className='display-quan-con'>
@@ -229,7 +231,7 @@ const ProductDisplay = () => {
                                         className={`add-button ${clothStatus !== 'In Stock' ? `btn-disabled` : ``}`}
                                         variant="contained"
                                         size='large'
-                                        onClick={(event) => { cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size); navigate('/home/checkout') }}
+                                        onClick={(event) => { cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size); navigate('/home/checkout/order') }}
                                     >
                                         <span style={{ flex: 1, color: '#ffffff' }}>
                                             BUY

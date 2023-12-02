@@ -23,6 +23,8 @@ function Checkout() {
     const [itemDel, setItemDel] = useState(null)
     const navigate = useNavigate()
 
+    const BACKEND_PORT = 'http://localhost:3001'
+
     useEffect(() => {
         const savedCart = (JSON.parse(localStorage.getItem('cart')) || [])
         setClothCart(savedCart)
@@ -164,7 +166,7 @@ function Checkout() {
                                                 avatar={
                                                     <img
                                                         className='checkout-item-img'
-                                                        src={`http://localhost:3001/images/${item.item.clothImg}`}
+                                                        src={`${BACKEND_PORT}/images/${item.item.clothImg}`}
                                                     />
                                                 }
                                                 title={

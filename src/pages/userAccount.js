@@ -44,6 +44,8 @@ const style = {
 
 
 function UserAccount() {
+    const BACKEND_PORT = 'http://localhost:3001'
+
     const [user, setUser] = useState(null)
     const [userOrders, setUserOrders] = useState(null)
 
@@ -63,7 +65,7 @@ function UserAccount() {
                 };
 
                 try {
-                    const response = await axios.post('http://localhost:3001/home/user', null, { headers });
+                    const response = await axios.post(`${BACKEND_PORT}/home/user`, null, { headers });
 
                     if (response.status === 200) {
                         setUser(response.data.userData)
@@ -113,7 +115,7 @@ function UserAccount() {
             }
 
             try {
-                const updatingData = await axios.put('http://localhost:3001/home/user', updatedData, { headers });
+                const updatingData = await axios.put(`${BACKEND_PORT}/home/user`, updatedData, { headers });
                 console.log(updatingData)
                 if (updatingData.status === 200) {
                     // return setLoading(false)
