@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Card from '../components/card.js';
+import { GoDotFill } from "react-icons/go";
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -170,8 +171,13 @@ const ProductDisplay = () => {
                         <div className='display-det'>
                             <h1 className='display-title'>{clothTitle}</h1>
                             <p className='display-con'>{clothCon}</p>
-                            <h3 className='display-status'>{clothStatus}</h3>
-                            <h2 className='display-price'>RS {clothPrice}/-</h2>
+                            <h3 className='display-status'>
+                                <GoDotFill color={`${clothStatus === 'In Stock' ? '#00ccff' : '#016f8a'}`} />
+                                <span>
+                                    {clothStatus}
+                                </span>
+                            </h3>
+                            <h2 className='display-price'>Rs {clothPrice}</h2>
 
                             <div className='display-quan-con'>
                                 <div>
@@ -224,7 +230,11 @@ const ProductDisplay = () => {
                                         variant="outlined"
                                         size="large"
                                         onClick={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size)}
-                                    >ADD TO CART</Button>
+                                    >
+                                        <span>
+                                            ADD TO CART
+                                        </span>
+                                    </Button>
                                 </div>
                                 <div className='btn-container'>
                                     <Button
@@ -233,7 +243,7 @@ const ProductDisplay = () => {
                                         size='large'
                                         onClick={(event) => { cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size); navigate('/home/checkout/order') }}
                                     >
-                                        <span style={{ flex: 1, color: '#ffffff' }}>
+                                        <span>
                                             BUY it now
                                         </span>
                                     </Button>
@@ -246,25 +256,27 @@ const ProductDisplay = () => {
                 <div className='section-separator'></div>
 
                 <div className='cloth-showcase-con'>
-                    <h2 className='showcase-title'>You might also like:</h2>
+                    <h2 className='showcase-title'>Related items:</h2>
                     <div className='card-con'>
                         {relatedCloth.map((item, index) => {
                             return (
-                                <div key={index}>
-                                    {item.clothID !== productId ? <NavLink className="card-link" to={`/home/product/${item.clothID}`}>
-                                        <Card
-                                            AddCartFunc={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum)}
-                                            clothStatus={item.clothStatus}
-                                            clothImg={item.clothImg}
-                                            clothImgHover={item.clothImgHover}
-                                            clothTitle={item.clothTitle}
-                                            clothPrice={item.clothPrice}
-                                            className='card'
-                                            onCardClick={handleCardClick}
-                                            showBtn={false}
-                                        />
-                                    </NavLink> : ``}
-                                </div>
+                                <span key={index}>
+                                    {
+                                        item.clothID !== productId ? <NavLink className="card-link" to={`/home/product/${item.clothID}`} >
+                                            <Card
+                                                AddCartFunc={(event) => cartInc(event, clothData[productId], setCartNum, setQuanNum)}
+                                                clothStatus={item.clothStatus}
+                                                clothImg={item.clothImg}
+                                                clothImgHover={item.clothImgHover}
+                                                clothTitle={item.clothTitle}
+                                                clothPrice={item.clothPrice}
+                                                className='card'
+                                                onCardClick={handleCardClick}
+                                                showBtn={false}
+                                            />
+                                        </NavLink> : ``
+                                    }
+                                </span>
                             )
                         })}
                     </div>
