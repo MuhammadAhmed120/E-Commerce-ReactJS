@@ -29,7 +29,7 @@ const style = {
 };
 
 const Register = () => {
-    const BACKEND_PORT = 'http://localhost:3001'
+    const { REACT_APP_BACKEND_PORT } = process.env
 
     const [loading, setLoading] = useState(null)
     const [open, setOpen] = useState(false);
@@ -49,7 +49,7 @@ const Register = () => {
                 repeatPassword: values.confirm,
                 customerNumber: values.phone
             }
-            const registerCustomer = await axios.post(`${BACKEND_PORT}/`, customerData)
+            const registerCustomer = await axios.post(`${REACT_APP_BACKEND_PORT}/`, customerData)
             setLoading(false)
             localStorage.setItem('token', registerCustomer.data.token)
             localStorage.setItem('UID', registerCustomer.data.user._id)

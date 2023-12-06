@@ -17,13 +17,12 @@ import '../index.css'
 const { Option } = Select
 
 function Checkout() {
+    const { REACT_APP_BACKEND_PORT } = process.env
+
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [clothCart, setClothCart] = useState([])
     const [itemDel, setItemDel] = useState(null)
-    const navigate = useNavigate()
-
-    const BACKEND_PORT = 'http://localhost:3001'
 
     useEffect(() => {
         const savedCart = (JSON.parse(localStorage.getItem('cart')) || [])
@@ -166,7 +165,7 @@ function Checkout() {
                                                 avatar={
                                                     <img
                                                         className='checkout-item-img'
-                                                        src={`${BACKEND_PORT}/images/${item.item.clothImg}`}
+                                                        src={`${REACT_APP_BACKEND_PORT}/images/${item.item.clothImg}`}
                                                     />
                                                 }
                                                 title={

@@ -22,6 +22,8 @@ import { Fade, Slide, Zoom } from 'react-awesome-reveal';
 import Footer from '../components/footer.js';
 
 export default function Home() {
+    const { REACT_APP_BACKEND_PORT } = process.env
+
     const [clothData, setClothData] = useState([])
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
@@ -30,18 +32,17 @@ export default function Home() {
     const [loader, setLoader] = useState(true)
     const { category } = useParams()
 
-    const BACKEND_PORT = 'http://localhost:3001'
 
     useEffect(() => {
         async function fetchDataFunc() {
             setLoader(false)
             try {
                 if (category) {
-                    const fetchData = await axios.get(`${BACKEND_PORT}/home/${category}`)
+                    const fetchData = await axios.get(`${REACT_APP_BACKEND_PORT}/home/${category}`)
                     setLoader(true)
                     return setClothData(fetchData.data.cloth)
                 } else {
-                    const fetchData = await axios.get(`${BACKEND_PORT}/home`)
+                    const fetchData = await axios.get(`${REACT_APP_BACKEND_PORT}/home`)
                     setLoader(true)
                     return setClothData(fetchData.data.cloth)
                 }

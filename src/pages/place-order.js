@@ -52,7 +52,7 @@ const layout = {
 
 
 function PlaceOrder() {
-    const BACKEND_PORT = 'http://localhost:3001'
+    const { REACT_APP_BACKEND_PORT } = process.env
 
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
@@ -79,7 +79,7 @@ function PlaceOrder() {
                 };
 
                 try {
-                    const response = await axios.post(`${BACKEND_PORT}/home/user`, null, { headers });
+                    const response = await axios.post(`${REACT_APP_BACKEND_PORT}/home/user`, null, { headers });
 
                     if (response.status === 200) {
                         setUser(response.data.userData)
@@ -188,7 +188,7 @@ function PlaceOrder() {
                 'Authorization': `Bearer ${userToken}`
             };
 
-            const placingOrder = await axios.post(`${BACKEND_PORT}/home/checkout`, customerOrderData, { headers })
+            const placingOrder = await axios.post(`${REACT_APP_BACKEND_PORT}/home/checkout`, customerOrderData, { headers })
 
             if (placingOrder.data.status === 200) {
                 setOrderStatus(placingOrder.data.orderDetails.status)
@@ -541,7 +541,7 @@ function PlaceOrder() {
                                                             style={{
                                                                 width: 100, height: 100
                                                             }}
-                                                            src={`${BACKEND_PORT}/images/${item.item.clothImg}`}
+                                                            src={`${REACT_APP_BACKEND_PORT}/images/${item.item.clothImg}`}
                                                         />
                                                         <div className='checkout-item-qty'>
                                                             {item.qty}

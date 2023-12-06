@@ -31,7 +31,7 @@ const style = {
 };
 
 const Login = () => {
-    const BACKEND_PORT = 'http://localhost:3001'
+    const { REACT_APP_BACKEND_PORT } = process.env
 
     const [loading, setLoading] = useState(null)
     const navigate = useNavigate()
@@ -48,7 +48,7 @@ const Login = () => {
                 customerEmail: values.email,
                 customerPassword: values.password,
             }
-            const loginCustomer = await axios.post(`${BACKEND_PORT}/login`, customerData)
+            const loginCustomer = await axios.post(`${REACT_APP_BACKEND_PORT}/login`, customerData)
             setLoading(false)
             localStorage.setItem('token', loginCustomer.data.token)
             localStorage.setItem('UID', loginCustomer.data.user._id)
@@ -83,7 +83,7 @@ const Login = () => {
             const customerData = {
                 customerEmail: values.customerEmail,
             }
-            const resetPasswordLink = await axios.post(`${BACKEND_PORT}/password/forgot`, customerData)
+            const resetPasswordLink = await axios.post(`${REACT_APP_BACKEND_PORT}/password/forgot`, customerData)
             console.log(resetPasswordLink)
             setError('Reset email sent successfully.')
             setOpen(true);

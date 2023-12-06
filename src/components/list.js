@@ -11,12 +11,13 @@ import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 const Lists = ({ onClose }) => {
+    const { REACT_APP_BACKEND_PORT } = process.env
+
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [clothCart, setClothCart] = useState([])
     const [itemDel, setItemDel] = useState(null)
     const [deletedItemIndex, setDeletedItemIndex] = useState(null);
-
 
     useEffect(() => {
         const savedCart = (JSON.parse(localStorage.getItem('cart')) || [])
@@ -148,7 +149,7 @@ const Lists = ({ onClose }) => {
                                 >
                                     <NavLink to={`/home/product/${item.item.clothID}`} style={{ width: '100%' }}>
                                         <List.Item.Meta
-                                            avatar={<img className='drawer-cart-img' src={`http://localhost:3001/images/${item.item.clothImg}`} />}
+                                            avatar={<img className='drawer-cart-img' src={`${REACT_APP_BACKEND_PORT}/images/${item.item.clothImg}`} />}
 
                                             title={
 

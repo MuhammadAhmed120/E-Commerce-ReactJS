@@ -35,7 +35,7 @@ const ProductDisplay = () => {
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [quantity, setQuantity] = useState(1);
 
-    const BACKEND_PORT = 'http://localhost:3001'
+    const { REACT_APP_BACKEND_PORT } = process.env
 
     const [size, setSize] = useState('S');
 
@@ -48,7 +48,7 @@ const ProductDisplay = () => {
     useEffect(() => {
         async function fetchDataFunc() {
             try {
-                const fetchData = await axios.get(`${BACKEND_PORT}/home`)
+                const fetchData = await axios.get(`${REACT_APP_BACKEND_PORT}/home`)
                 setClothData(fetchData.data.cloth)
             } catch (error) {
                 console.log(error.message)

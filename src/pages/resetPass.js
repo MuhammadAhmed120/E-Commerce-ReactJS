@@ -31,7 +31,7 @@ const style = {
 };
 
 const ResetPass = () => {
-    const BACKEND_PORT = 'http://localhost:3001'
+    const { REACT_APP_BACKEND_PORT } = process.env
 
     const [loading, setLoading] = useState(null)
     const navigate = useNavigate()
@@ -53,7 +53,7 @@ const ResetPass = () => {
             const customerData = {
                 newPassword: values.password,
             }
-            const passwordChange = await axios.post(`${BACKEND_PORT}/password/reset/${token}`, customerData)
+            const passwordChange = await axios.post(`${REACT_APP_BACKEND_PORT}/password/reset/${token}`, customerData)
             console.log(passwordChange)
             setError(passwordChange.data.message)
             setOpen(true);
