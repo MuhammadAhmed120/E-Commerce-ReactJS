@@ -29,18 +29,20 @@ export default function Home() {
     const [sorting, setSorting] = useState('featured');
     const [loader, setLoader] = useState(true)
     const { category } = useParams()
-    const con = useRef(null)
 
     const BACKEND_PORT = 'http://localhost:3001'
 
     useEffect(() => {
         async function fetchDataFunc() {
+            setLoader(false)
             try {
                 if (category) {
                     const fetchData = await axios.get(`${BACKEND_PORT}/home/${category}`)
+                    setLoader(true)
                     return setClothData(fetchData.data.cloth)
                 } else {
                     const fetchData = await axios.get(`${BACKEND_PORT}/home`)
+                    setLoader(true)
                     return setClothData(fetchData.data.cloth)
                 }
             } catch (error) {
@@ -77,12 +79,6 @@ export default function Home() {
                 break;
         }
 
-        con.current.classList.add('animateCard')
-
-        setTimeout(() => {
-            con.current.classList.remove('animateCard')
-        }, 550);
-
         setClothData(sortedClothData);
         setSorting(sortType);
     };
@@ -113,33 +109,37 @@ export default function Home() {
             {notificationContextHolder}
             {/* ${isSticky ? 'home-mar' : ''} */}
 
-            <div className={`land-sec`}>
-                <div className='land-sec-left'>
-                    <h2 className='land-day'>Outfit of the day</h2>
-                    <h1 className='land-title'>
-                        All your <br />
-                        <span>
-                            styles are here
-                        </span>
-                    </h1>
-                    <p className='land-desc'>Consectetur adipiscing elit. Cursus condimentum donec non dictum. Id et sed ac mauris, adipiscing tincidunt amet vel at. Quis lobortis id. consectetur adipiscing elit. </p>
-                    {/* <Button variant='contained' size='large' className='land-buy-btn'>
+            <section>
+
+                <div className='land-sec'>
+                    <div className='land-sec-left'>
+                        <h2 className='land-day'>Outfit of the day</h2>
+                        <h1 className='land-title'>
+                            All your <br />
+                            <span>
+                                styles are here
+                            </span>
+                        </h1>
+                        <p className='land-desc'>Consectetur adipiscing elit. Cursus condimentum donec non dictum. Id et sed ac mauris, adipiscing tincidunt amet vel at. Quis lobortis id. consectetur adipiscing elit. </p>
+                        {/* <Button variant='contained' size='large' className='land-buy-btn'>
                         <span>
                             BUY NOW
                         </span>
                         <BsArrowRight className='btn-arrow' />
                     </Button> */}
+                    </div>
+                    <div className='land-sec-right'>
+                        <Fade style={{ zIndex: 99 }} fraction={0.3} direction='right' triggerOnce>
+                            <img src={require('../pic.png')} alt="" className='land-img' />
+                            {/* <img src={'https://media2.giphy.com/media/mHqFgvB8qJ0MCGEBrA/giphy.gif?cid=6c09b952mwzgeplb9ffbb5wgzuwtu10gwsy01ehh9jcw0vvm&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s'} alt="" className='land-img' /> */}
+                        </Fade>
+                        <Fade delay={450} fraction={0.3} triggerOnce>
+                            <img src={require('../rectangles.png')} alt="" className='land-vector2' />
+                        </Fade>
+                    </div>
+                    <img src={require('../vector1.png')} alt="" className='land-vector' />
                 </div>
-                <div className='land-sec-right'>
-                    <Fade style={{ zIndex: 99 }} fraction={0.3} direction='right' triggerOnce>
-                        <img src={require('../pic.png')} alt="" className='land-img' />
-                    </Fade>
-                    <Fade delay={450} fraction={0.3} triggerOnce>
-                        <img src={require('../rectangles.png')} alt="" className='land-vector2' />
-                    </Fade>
-                </div>
-                <img src={require('../vector1.png')} alt="" className='land-vector' />
-            </div>
+            </section>
 
             {/* <p style={{ color: '#000', margin: 0, fontSize: 28, fontWeight: 500, width: "fit-content", borderBottom: "2px solid #2c69eb" }}>Products{category ? ` / ${category.toUpperCase()}` : ''}</p> */}
 
@@ -151,107 +151,107 @@ export default function Home() {
             <div className='section-separator'></div>
 
 
-            <div className='anime-title-con' >
-                <p>
-                    {/* <Fade delay={400} cascade damping={0.05} triggerOnce> */}
-                    Anime Legends Fusion
-                    {/* </Fade> */}
-                </p>
-            </div>
-
-            {/* <p style={{ color: '#000', margin: 0, fontSize: 20 }}>{sorting.split("_").join(" ").toUpperCase()}</p> */}
-            {/* <div>
-                    <p style={{ color: '#000', margin: 0, fontSize: 20 }}>{category ? ` / ${category.toUpperCase()}` : ''} {`(${sorting.split("_").join(" ").toUpperCase()})`}</p>
-                </div> */}
-
-
-            <div className='home-sort-con'>
-                <div>
-                    {/* <p>Sort By:</p> */}
-                    <Select
-                        value={sorting}
-                        onChange={(event) => handleSort(event.target.value)}
-                        autoWidth={true}
-                        sx={{ borderRadius: 30 }}
-                        size='small'
-                    >
-                        <MenuItem value="featured">Featured</MenuItem>
-                        <MenuItem value="price,_high_to_low">Price, High to Low</MenuItem>
-                        <MenuItem value="price,_low_to_high">Price, Low to High</MenuItem>
-                        <MenuItem value="alphabetically_a-z">Alphabetically A-Z</MenuItem>
-                        <MenuItem value="alphabetically_z-a">Alphabetically Z-A</MenuItem>
-                        <MenuItem value="newest_arrivals">Newest Arrivals</MenuItem>
-                    </Select>
+            <section>
+                <div className='anime-title-con' >
+                    <p>
+                        {/* <Fade delay={400} cascade damping={0.05} triggerOnce> */}
+                        Anime Legends Fusion
+                        {/* </Fade> */}
+                    </p>
                 </div>
-            </div>
-            {/* <GrSort size={20} /> */}
 
-            {/* <img src={'https://www.cliffrailwaylynton.co.uk/wp-content/uploads/2018/01/250x250-Placeholder.png'} alt="" /> */}
+                <div style={{ textAlign: 'center', position: 'relative', paddingBottom: 20 }}>
+                    {
+                        loader ?
+                            <>
+                                <div className='home-sort-con'>
+                                    <div>
+                                        <Select
+                                            value={sorting}
+                                            onChange={(event) => handleSort(event.target.value)}
+                                            autoWidth={true}
+                                            sx={{ borderRadius: 30 }}
+                                            size='small'
+                                        >
+                                            <MenuItem value="featured">Featured</MenuItem>
+                                            <MenuItem value="price,_high_to_low">Price, High to Low</MenuItem>
+                                            <MenuItem value="price,_low_to_high">Price, Low to High</MenuItem>
+                                            <MenuItem value="alphabetically_a-z">Alphabetically A-Z</MenuItem>
+                                            <MenuItem value="alphabetically_z-a">Alphabetically Z-A</MenuItem>
+                                            <MenuItem value="newest_arrivals">Newest Arrivals</MenuItem>
+                                        </Select>
+                                    </div>
+                                </div>
+                                {/* <GrSort size={20} /> */}
 
-            {
-                loader ?
-                    <div style={{ textAlign: 'center' }}>
-                        <div className='card-con' ref={con}>
-                            {clothData.map((item, index) => (
-                                <NavLink className="card-link" to={`/home/product/${item.clothID}`} key={index}>
-                                    <Fade fraction={0.4} triggerOnce>
-                                        <Card
-                                            AddCartFunc={(event) => cartInc(event, item, setCartNum, setQuanNum)}
-                                            clothStatus={item.clothStatus}
-                                            clothImg={item.clothImg}
-                                            clothImgHover={item.clothImgHover}
-                                            clothTitle={item.clothTitle}
-                                            clothPrice={item.clothPrice}
-                                            showBtn={false}
-                                            className="card"
-                                        />
-                                    </Fade>
-                                </NavLink>
-                            ))}
-                        </div>
-                        {/* <Button variant='contained' size='large' className='land-buy-btn'>
-                            <span>
-                                View all
-                            </span>
-                            <BsArrowRight className='btn-arrow' />
-                        </Button> */}
-                    </div>
-                    : <span className='loader'></span>
-            }
+
+                                <div className='card-con'>
+                                    {clothData.map((item, index) => (
+                                        <NavLink className="card-link" to={`/home/product/${item.clothID}`} key={index}>
+                                            <Fade fraction={0.4} triggerOnce>
+                                                <Card
+                                                    AddCartFunc={(event) => cartInc(event, item, setCartNum, setQuanNum)}
+                                                    clothStatus={item.clothStatus}
+                                                    clothImg={item.clothImg}
+                                                    clothImgHover={item.clothImgHover}
+                                                    clothTitle={item.clothTitle}
+                                                    clothPrice={item.clothPrice}
+                                                    showBtn={false}
+                                                    className="card"
+                                                />
+                                            </Fade>
+                                        </NavLink>
+                                    ))}
+                                </div>
+                                {/* <Button variant='contained' size='large' className='land-buy-btn'>
+                                    <span>
+                                        View all
+                                    </span>
+                                    <BsArrowRight className='btn-arrow' />
+                                </Button> */}
+                            </>
+                            : <span className='loader'></span>
+                    }
+                </div>
+            </section>
+
+
 
 
             <div className='section-separator'></div>
 
-
-            <div className='why-con'>
-                <Fade direction='left' fraction={0.3} delay={300} triggerOnce>
-                    <div className='why-con-img'>
-                        <img src={require('../shirt1.jpeg')} alt="" />
-                    </div>
-                </Fade>
-                <Fade direction='left' fraction={0.3} triggerOnce>
-                    <div className='why-con-desc'>
-                        <h3>
-                            <Fade delay={800} cascade damping={0.1} triggerOnce>
-                                a good change
-                            </Fade>
-                        </h3>
-                        <h1>
-                            WHY SHOP WITH US
-                        </h1>
-                        <p>
-                            Along with hundreds of online stores, you might think as to what makes Flexus any different?
-                            And the difference is how we treat our customers. Developing a long-term relationship demands that we give our best. The quality of our products speaks for itself!
-                        </p>
-                        {/* <Button variant='contained' size='small' className='land-buy-btn'>
+            <section>
+                <div className='why-con'>
+                    <Fade direction='left' fraction={0.3} delay={300} triggerOnce>
+                        <div className='why-con-img'>
+                            {/* <img src={require('../shirt1.jpeg')} alt="" /> */}
+                            <img src={'https://d9jhi50qo719s.cloudfront.net/340/samples/4cw_800.gif?230831030803'} alt="" />
+                        </div>
+                    </Fade>
+                    <Fade direction='left' fraction={0.3} triggerOnce>
+                        <div className='why-con-desc'>
+                            <h3>
+                                <Fade delay={800} cascade damping={0.1} triggerOnce>
+                                    a good change
+                                </Fade>
+                            </h3>
+                            <h1>
+                                WHY SHOP WITH US
+                            </h1>
+                            <p>
+                                Along with hundreds of online stores, you might think as to what makes Flexus any different?
+                                And the difference is how we treat our customers. Developing a long-term relationship demands that we give our best. The quality of our products speaks for itself!
+                            </p>
+                            {/* <Button variant='contained' size='small' className='land-buy-btn'>
                             <span>
                                 shop now
                             </span>
                             <BsArrowRight className='btn-arrow' />
                         </Button> */}
-                    </div>
-                </Fade>
-            </div>
+                        </div>
+                    </Fade>
+                </div>
+            </section>
 
             <Footer />
 
