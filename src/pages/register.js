@@ -55,7 +55,7 @@ const Register = () => {
             localStorage.setItem('UID', registerCustomer.data.user._id)
 
             const userToken = localStorage.getItem('token')
-            userToken && navigate('/home')
+            userToken && navigate(-1)
         } catch (error) {
             if (error.message === 'Network Error') {
                 console.log(error)

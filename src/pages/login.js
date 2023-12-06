@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { NavLink } from 'react-router-dom';
@@ -54,7 +54,7 @@ const Login = () => {
             localStorage.setItem('UID', loginCustomer.data.user._id)
 
             const userToken = localStorage.getItem('token')
-            userToken && navigate('/home')
+            userToken && navigate(-1)
         } catch (error) {
             if (error.message === 'Network Error') {
                 console.log(error)
@@ -89,7 +89,7 @@ const Login = () => {
             setOpen(true);
             setForgotLoad(false)
             setTimeout(() => {
-                setOpen(false);                
+                setOpen(false);
             }, 10000);
         } catch (error) {
             if (error.message === 'Network Error') {
@@ -154,7 +154,7 @@ const Login = () => {
                             </p>
 
                             <Form
-                                name="normal_login"
+                                name="reset_pass"
                                 initialValues={{ remember: true }}
                                 onFinish={handleResetPass}
                                 requiredMark={false}
