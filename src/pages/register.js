@@ -107,7 +107,7 @@ const Register = () => {
             </Modal>
 
             <Form
-                name="normal_login"
+                name="normal_register"
                 className="form"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
@@ -153,10 +153,8 @@ const Register = () => {
                     ]}
                     hasFeedback
                 >
-                    <Input size='large' placeholder='Email' />
+                    <Input className='custom-input' size='large' placeholder='Email' />
                 </Form.Item>
-
-
 
                 <Form.Item
                     name="password"
