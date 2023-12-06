@@ -25,7 +25,9 @@ const DisplayCard = ({ AddCartFunc, clothStatus, clothImg, clothTitle, clothPric
             {/* IMAGE */}
             <Carousel autoplay>
                 <div onMouseEnter={imgHovered} onMouseLeave={imgNotHovered}>
-                    <img src={`http://localhost:3001/images/${imgSrc}`} alt={clothTitle} className={`card-img`} />
+                    {/* <img src={`http://localhost:3001/images/${imgSrc}`} alt={clothTitle} className={`card-img`} /> */}
+                    {/* <img src={`https://essentialworkwear.com/wp-content/uploads/drummer-sky-blue-300x300.jpg`} alt={clothTitle} className={`card-img`} /> */}
+                    <img src={require('../newpic.png')} alt={clothTitle} className={`card-img`} />
                 </div>
             </Carousel>
 
