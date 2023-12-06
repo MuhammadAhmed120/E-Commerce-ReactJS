@@ -67,6 +67,7 @@ function PlaceOrder() {
     }, [quanNum])
 
     const [user, setUser] = useState(null);
+    const [noUser, setNoUser] = useState(null);
 
     const token = localStorage.getItem('token')
 
@@ -82,12 +83,15 @@ function PlaceOrder() {
 
                     if (response.status === 200) {
                         setUser(response.data.userData)
+                        setNoUser(false)
                     } else {
                         console.error('USER NOT FOUND:', response.data);
                     }
                 } catch (error) {
                     console.error('Error:', error);
                 }
+            } else {
+                setNoUser(true)
             }
         };
         userData();
@@ -296,13 +300,13 @@ function PlaceOrder() {
             </div> */}
 
             <div className='checkout-2-con'>
-                {user ? <>
+                {noUser !== null ? <>
                     <div className='form-separator visible'></div>
 
                     <div className='checkout-details'>
                         <Form
                             ref={formRef}
-                            name="normal_login"
+                            name="order_form"
                             className="detail-form"
                             initialValues={{
                                 email: user ? user.customerEmail : '',
@@ -317,11 +321,13 @@ function PlaceOrder() {
                             requiredMark={false}
                             layout='vertical'
                         >
-                            <div className='order-del-title'>
-                                <h2>Contact:</h2>
+                            <div className='order-del-title' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <h2>Contact</h2>
+                                {console.log(user)}
+                                {noUser && <p style={{ fontSize: 16 }}>Have an account? <NavLink to='/login' style={{ textDecoration: 'underline' }}>Login</NavLink></p>}
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 15 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 0 }}>
                                 <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your correct details.</p>
                                 <CiCircleInfo />
                             </div>
@@ -333,7 +339,7 @@ function PlaceOrder() {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input your fullname!',
+                                        message: 'Enter your fullname!',
                                         whitespace: true,
                                     },
                                 ]}
@@ -354,11 +360,11 @@ function PlaceOrder() {
                                     rules={[
                                         {
                                             type: 'email',
-                                            message: 'The input is not valid Email!',
+                                            message: 'Enter a valid email',
                                         },
                                         {
                                             required: true,
-                                            message: 'Please input your Email!',
+                                            message: 'Enter an email',
                                         },
                                     ]}
                                 >
@@ -374,7 +380,7 @@ function PlaceOrder() {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your Mobile number!',
+                                            message: 'Enter a phone number',
                                         },
                                     ]}
                                     validateTrigger="onBlur"
@@ -392,11 +398,11 @@ function PlaceOrder() {
                             <div className='form-separator'></div>
 
                             <div className='order-del-title'>
-                                <h2>Delivery Address:</h2>
+                                <h2>Delivery</h2>
                             </div>
 
                             <div>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 15 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 0 }}>
                                     <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your current residential address.</p>
                                     <CiCircleInfo />
                                 </div>
@@ -411,7 +417,7 @@ function PlaceOrder() {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input your address!',
+                                            message: 'Enter an address!',
                                         },
                                     ]}
                                 >
@@ -434,7 +440,7 @@ function PlaceOrder() {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please input Postal code!',
+                                            message: 'Enter a postal code!',
                                         },
                                     ]}
                                 >
@@ -454,7 +460,7 @@ function PlaceOrder() {
                             {/* display: 'flex', alignItems: 'center', gap: '1rem', */}
                             <div style={{ marginBottom: 50 }}>
                                 <div style={{ margin: 0 }} className='order-del-title'>
-                                    <h2 >Payment Method:</h2>
+                                    <h2 >Payment</h2>
                                 </div>
 
                                 <div>
@@ -494,7 +500,7 @@ function PlaceOrder() {
                                 dataSource={clothCart}
                                 renderItem={(item, index) => {
                                     const itemSize = sizeMap[item.size]
-                                    
+
                                     return (
                                         <List.Item
                                             key={index}
@@ -552,17 +558,17 @@ function PlaceOrder() {
                         <div className='check-items-con'>
                             <div>
                                 <p>Subtotal </p>
-                                <p>Delivery Fees </p>
+                                <p>Shipping </p>
 
-                                <div className='form-separator' style={{ margin: '8px 0', background: '#9399a2' }}></div>
+                                {/* <div className='form-separator' style={{ margin: '8px 0', background: '#9399a2' }}></div> */}
 
                                 <p>Total </p>
                             </div>
                             <div>
                                 <p>Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</p>
-                                <p>Rs. 80/-</p>
+                                <p>Free</p>
 
-                                <div className='form-separator' style={{ margin: '8px auto', background: '#9399a2' }}></div>
+                                {/* <div className='form-separator' style={{ margin: '8px auto', background: '#9399a2' }}></div> */}
 
                                 <p style={{ fontSize: 24, fontWeight: 600 }}>
                                     Rs.
@@ -571,7 +577,6 @@ function PlaceOrder() {
                             </div>
                         </div>
                     </div>
-
                 </>
                     :
                     <span className='loader' style={{ position: 'absolute', top: '50px', transform: 'translate(-50%, 50%)' }}></span>
