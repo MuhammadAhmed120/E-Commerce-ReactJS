@@ -234,7 +234,7 @@ const ProductDisplay = () => {
                                         onClick={(event) => { cartInc(event, clothData[productId], setCartNum, setQuanNum, quantity, size); navigate('/home/checkout/order') }}
                                     >
                                         <span style={{ flex: 1, color: '#ffffff' }}>
-                                            BUY
+                                            BUY it now
                                         </span>
                                     </Button>
                                 </div>
