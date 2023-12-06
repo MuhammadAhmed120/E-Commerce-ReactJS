@@ -267,7 +267,7 @@ function PlaceOrder() {
                         </div>
                     </div>
                     <div className='add-button'>
-                        <Button className='add-button' size='small' variant='contained' disableElevation onClick={handleClose}>
+                        <Button className='add-button' size='large' variant='contained' disableElevation onClick={handleClose}>
                             <span>
                                 Continue shopping
                             </span>
@@ -301,7 +301,7 @@ function PlaceOrder() {
 
             <div className='checkout-2-con'>
                 {noUser !== null ? <>
-                    <div className='form-separator visible'></div>
+                    {/* <div className='form-separator visible'></div> */}
 
                     <div className='checkout-details'>
                         <Form
@@ -472,6 +472,31 @@ function PlaceOrder() {
                                 </div>
                             </div>
 
+                            <div className='form-separator visible'></div>
+
+                            <div className='check-items-con visible'>
+                                <div>
+                                    <p>Subtotal </p>
+                                    <p>Shipping </p>
+
+                                    {/* <div className='form-separator' style={{ margin: '8px 0', background: '#9399a2' }}></div> */}
+
+                                    <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>Total </p>
+                                </div>
+                                <div>
+                                    <p>Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}</p>
+                                    <p>Free</p>
+
+                                    {/* <div className='form-separator' style={{ margin: '8px auto', background: '#9399a2' }}></div> */}
+
+                                    <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>
+                                        Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className='form-separator visible'></div>
+
                             <LoadingButton
                                 type='primary'
                                 loading={loading}
@@ -485,6 +510,8 @@ function PlaceOrder() {
                             </LoadingButton>
 
                         </Form >
+
+
                     </div >
 
                     {/* <div className='form-separator'></div> */}
@@ -555,24 +582,23 @@ function PlaceOrder() {
 
                         <div className='form-separator' style={{ margin: '2px auto' }}></div>
 
-                        <div className='check-items-con'>
+                        <div className='check-items-con change-pos'>
                             <div>
                                 <p>Subtotal </p>
                                 <p>Shipping </p>
 
                                 {/* <div className='form-separator' style={{ margin: '8px 0', background: '#9399a2' }}></div> */}
 
-                                <p>Total </p>
+                                <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>Total </p>
                             </div>
                             <div>
-                                <p>Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</p>
+                                <p>Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}</p>
                                 <p>Free</p>
 
                                 {/* <div className='form-separator' style={{ margin: '8px auto', background: '#9399a2' }}></div> */}
 
-                                <p style={{ fontSize: 24, fontWeight: 600 }}>
-                                    Rs.
-                                    {totalPrice < 10 ? `0${totalPrice + 80}` : totalPrice + 80}/-
+                                <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>
+                                    Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}
                                 </p>
                             </div>
                         </div>
