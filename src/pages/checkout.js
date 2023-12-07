@@ -3,18 +3,11 @@ import { List } from 'antd';
 import { useEffect, useState, useContext } from 'react';
 import CartContext from '../config/cartContext';
 import QuanContext from '../config/quanContext';
-import { BsArrowRight } from 'react-icons/bs'
 import { IoMdTrash } from 'react-icons/io'
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { Checkbox, Form, Input, Select } from 'antd';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { TbMoodEmpty } from 'react-icons/tb'
-import axios from 'axios';
 import Footer from '../components/footer';
 import '../index.css'
-
-const { Option } = Select
 
 function Checkout() {
     const { REACT_APP_BACKEND_PORT } = process.env
@@ -28,39 +21,6 @@ function Checkout() {
         const savedCart = (JSON.parse(localStorage.getItem('cart')) || [])
         setClothCart(savedCart)
     }, [quanNum])
-
-    // function quanFunc(func, item, del, e) {
-    //     e.preventDefault()
-    //     const updatedCart = [...clothCart];
-    //     let itemIndex = clothCart.findIndex(cartItem => cartItem.item.clothID === item.item.clothID);
-
-    //     if (itemIndex !== -1) {
-    //         if (func === 'inc' || func === 'dec') {
-    //             func === 'inc' ? updatedCart[itemIndex].qty += 1 : updatedCart[itemIndex].qty > 1 ? updatedCart[itemIndex].qty -= 1 : updatedCart[itemIndex].qty = 1;
-    //             setCartNum(updatedCart.length);
-
-    //             setClothCart(updatedCart);
-    //             localStorage.setItem('cart', JSON.stringify(updatedCart));
-    //         }
-
-    //         if (del) {
-    //             // setItemDel(true)
-    //             const targetParent = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-
-    //             // targetParent.setAttribute('class', 'ant-list-item-meta list-con')
-
-    //             // setTimeout(() => {
-    //             updatedCart.splice(itemIndex, 1)
-
-    //             setCartNum(updatedCart.length);
-    //             setClothCart(updatedCart);
-    //             localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-    //             setItemDel(false)
-    //             // }, 3300);
-    //         }
-    //     }
-    // }
 
     const [deletedItemIndex, setDeletedItemIndex] = useState(null);
 
@@ -128,7 +88,6 @@ function Checkout() {
 
             <div className={`check-con`} style={{ marginBottom: 0 }}>
                 <h1 className='checkout-title'>CART </h1>
-                {/* <p className='checkout-step'>1</p> */}
             </div>
 
             <div style={{ textAlign: 'center', marginTop: -10 }}>
@@ -139,14 +98,6 @@ function Checkout() {
 
 
             <div className='checkout-cart'>
-                {/* <div className='checkout-shop-title'>
-                    <h2>SHOPPING CART</h2>
-                    <NavLink to={'/home'}>
-                        <Button variant='outlined'>BROWSE</Button>
-                    </NavLink>
-                </div> */}
-
-
                 {clothCart.length !== 0 ?
                     <>
                         <List
@@ -179,14 +130,12 @@ function Checkout() {
                                                 }
                                                 description={
                                                     <div>
-                                                        {/* <span className='loader' style={{ top: "40%" }}></span> */}
-
                                                         <div style={{ fontWeight: '500', color: '#126373', fontSize: 18 }}>
                                                             {item.size.toUpperCase()}
                                                         </div>
 
                                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
                                                                 <div style={{ fontWeight: '400', color: '#126373', fontSize: 16 }}>QTY: </div>
                                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
                                                                     <button
@@ -230,8 +179,6 @@ function Checkout() {
                         <div className='checkout-num'>
                             <div>
                                 <p>Subtotal: <b> Rs. {totalPrice < 10 ? `0${totalPrice}` : totalPrice}/-</b></p>
-                                {/* <p>Items: <b>{cartNum < 10 ? `0${cartNum}` : cartNum}</b></p> */}
-                                {/* <p> Quantity: <b>{totalQuan < 10 ? `0${totalQuan}` : totalQuan}</b></p> */}
                             </div>
                             <p style={{ margin: 0, fontWeight: 500 }}>Shipping, taxes calculated at checkout.</p>
                             <div>
