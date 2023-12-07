@@ -9,10 +9,10 @@ import { Carousel } from 'antd';
 
 const DisplayCard = ({ AddCartFunc, clothStatus, clothImg, clothTitle, clothPrice, clothImgHover, onCardClick, showBtn }) => {
     const { REACT_APP_BACKEND_PORT } = process.env
-    
+
     let [isHovered, setisHovered] = useState(null)
-    // const imgSrc = isHovered ? clothImgHover : clothImg
-    const imgSrc = clothImg
+    const imgSrc = isHovered ? clothImgHover : clothImg
+    const imgName = clothImg
 
     function imgHovered() {
         setisHovered(true)
@@ -27,9 +27,7 @@ const DisplayCard = ({ AddCartFunc, clothStatus, clothImg, clothTitle, clothPric
             {/* IMAGE */}
             <Carousel autoplay>
                 <div onMouseEnter={imgHovered} onMouseLeave={imgNotHovered}>
-                    {/* <img src={`${REACT_APP_BACKEND_PORT}/images/${imgSrc}`} alt={clothTitle} className={`card-img`} /> */}
-                    {/* <img src={`https://essentialworkwear.com/wp-content/uploads/drummer-sky-blue-300x300.jpg`} alt={clothTitle} className={`card-img`} /> */}
-                    <img src={require('../newpic.png')} alt={clothTitle} className={`card-img`} />
+                    <img src={`${REACT_APP_BACKEND_PORT}/images/${imgName}`} alt={clothTitle} className={`card-img`} />
                 </div>
             </Carousel>
 
