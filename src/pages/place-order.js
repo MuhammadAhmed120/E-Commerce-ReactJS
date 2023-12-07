@@ -3,7 +3,6 @@ import Navbar from '../components/navbar';
 import { List } from 'antd';
 import CartContext from '../config/cartContext';
 import QuanContext from '../config/quanContext';
-import { BsArrowRight } from 'react-icons/bs'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { GiTakeMyMoney } from 'react-icons/gi';
@@ -12,22 +11,19 @@ import { Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import '../index.css'
 import axios from 'axios';
-import Footer from '../components/footer';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
 import { FcShipped } from "react-icons/fc";
 
 const { TextArea } = Input;
-const { Option } = Select
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 350,
-    // height: 450,
+    maxWidth: '80%',
+    width: 400,
     bgcolor: 'background.paper',
     border: 'none',
     color: 'green',
@@ -39,15 +35,6 @@ const style = {
     alignItems: 'center',
     flexDirection: 'column',
     gap: '4.5rem'
-};
-
-const layout = {
-    labelCol: {
-        span: 8
-    },
-    wrapperCol: {
-        span: 16
-    }
 };
 
 
@@ -102,7 +89,6 @@ function PlaceOrder() {
 
     const [loading, setLoading] = useState(null)
 
-    const location = useLocation()
     const navigate = useNavigate()
 
     const [open, setOpen] = useState(false);
@@ -130,23 +116,12 @@ function PlaceOrder() {
     const [orderMessage, setOrderMessage] = useState("")
     const [orderID, setOrderID] = useState("")
 
-    // console.log('clothCart --->', clothCart)
 
     const onFinish = async (values) => {
         setLoading(true)
         const userToken = localStorage.getItem('token')
 
         try {
-            // const cart = clothCart.reduce((acc, items) => {
-            //     acc[items.item.clothID] = {
-            //         "qty": items.qty,
-            //         "name": items.item.clothTitle,
-            //         "price": items.item.clothPrice,
-            //         "size": items.size
-            //     };
-            //     return acc;
-            // }, {});
-
             const cart = clothCart.reduce((acc, items) => {
                 const { clothID } = items.item;
                 const existingItem = acc[clothID];
@@ -170,8 +145,6 @@ function PlaceOrder() {
                 }
                 return acc;
             }, {});
-
-            // console.log('cart ~=~', cart)
 
             const customerOrderData = {
                 customerName: values.fullname,
@@ -277,32 +250,12 @@ function PlaceOrder() {
                 </Box>
             </Modal>
 
-            {/* <p className='disclaimer'>Delivery only available in <b style={{ marginLeft: 5 }}> KARACHI</b>, Pakistan</p> */}
-
-            {/* <div className='navs'>
-                <NavLink className='navs-link' to={'/home'}>
-                    Home { }
-                </NavLink>
-                / { }
-                <NavLink className='navs-link' to={'/home/checkout'}>
-                    Checkout { }
-                </NavLink>
-                / { }
-                <NavLink className='navs-link' to={'/home/checkout/order'}>
-                    Order { }
-                </NavLink>
-                /
-            </div> */}
-
-            {/* <div className={`check-con`}>
+            <div className={`check-con`} style={{ marginTop: 100 }}>
                 <h1 className='checkout-title'>CHECKOUT</h1>
-                <p className='checkout-step'>2</p>
-            </div> */}
+            </div>
 
             <div className='checkout-2-con'>
                 {noUser !== null ? <>
-                    {/* <div className='form-separator visible'></div> */}
-
                     <div className='checkout-details'>
                         <Form
                             ref={formRef}
@@ -323,12 +276,11 @@ function PlaceOrder() {
                         >
                             <div className='order-del-title' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
                                 <h2>Contact</h2>
-                                {console.log(user)}
                                 {noUser && <p style={{ fontSize: 16 }}>Have an account? <NavLink to='/login' style={{ textDecoration: 'underline' }}>Login</NavLink></p>}
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 0 }}>
-                                <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your correct details.</p>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: 5, marginBottom: 5 }}>
+                                <p style={{ color: "#9399a2", fontSize: 13, fontWeight: 500, margin: 0 }} >Enter your correct details.</p>
                                 <CiCircleInfo />
                             </div>
 
@@ -351,7 +303,6 @@ function PlaceOrder() {
                             </Form.Item>
 
                             <div
-                                // {...layout}
                                 className='form-dis'
                             >
                                 <Form.Item
@@ -402,12 +353,11 @@ function PlaceOrder() {
                             </div>
 
                             <div>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: -5, marginBottom: 0 }}>
-                                    <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, margin: 0 }} >Enter your current residential address.</p>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: 5, marginBottom: 5 }}>
+                                    <p style={{ color: "#9399a2", fontSize: 13, fontWeight: 500, margin: 0 }} >Enter your current residential address.</p>
                                     <CiCircleInfo />
                                 </div>
 
-                                {/* <div className='form-dis'> */}
                                 <Form.Item
                                     name="address"
                                     label="Residential Address"
@@ -450,21 +400,17 @@ function PlaceOrder() {
                                         maxLength={5}
                                     />
                                 </Form.Item>
-                                {/* </div> */}
-
                             </div>
-
 
                             <div className='form-separator'></div>
 
-                            {/* display: 'flex', alignItems: 'center', gap: '1rem', */}
                             <div style={{ marginBottom: 50 }}>
                                 <div style={{ margin: 0 }} className='order-del-title'>
                                     <h2 >Payment</h2>
                                 </div>
 
                                 <div>
-                                    <p style={{ color: "#9399a2", fontSize: 15, fontWeight: 500, marginTop: 5, marginBottom: 15 }}>Only one method available.</p>
+                                    <p style={{ color: "#9399a2", fontSize: 13, fontWeight: 500, marginTop: 5, marginBottom: 15 }}>Only one method available.</p>
                                     <p className='cod-con'>
                                         <GiTakeMyMoney color='#333333' size={24} />
                                         CASH ON DELIVERY (COD)
@@ -479,15 +425,11 @@ function PlaceOrder() {
                                     <p>Subtotal </p>
                                     <p>Shipping </p>
 
-                                    {/* <div className='form-separator' style={{ margin: '8px 0', background: '#9399a2' }}></div> */}
-
                                     <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>Total </p>
                                 </div>
                                 <div>
                                     <p>Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}</p>
                                     <p>Free</p>
-
-                                    {/* <div className='form-separator' style={{ margin: '8px auto', background: '#9399a2' }}></div> */}
 
                                     <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>
                                         Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}
@@ -510,11 +452,7 @@ function PlaceOrder() {
                             </LoadingButton>
 
                         </Form >
-
-
                     </div >
-
-                    {/* <div className='form-separator'></div> */}
 
                     <div className='order-con'>
                         <div className='order-item-con'>
@@ -555,12 +493,9 @@ function PlaceOrder() {
                                                 }
                                                 description={
                                                     <div className='desc-con'>
-
                                                         <div style={{ width: "100%", display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
 
                                                             <div className='checkout-size'>
-                                                                {/* <span style={{ fontSize: 15 }}>
-                                                                    SIZE: </span> */}
                                                                 '{item.size.toUpperCase()}'
 
                                                                 <span className='size-hover'>{itemSize}</span>
@@ -587,15 +522,11 @@ function PlaceOrder() {
                                 <p>Subtotal </p>
                                 <p>Shipping </p>
 
-                                {/* <div className='form-separator' style={{ margin: '8px 0', background: '#9399a2' }}></div> */}
-
                                 <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>Total </p>
                             </div>
                             <div>
                                 <p>Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}</p>
                                 <p>Free</p>
-
-                                {/* <div className='form-separator' style={{ margin: '8px auto', background: '#9399a2' }}></div> */}
 
                                 <p style={{ marginTop: 5, fontSize: 24, fontWeight: 600 }}>
                                     Rs {totalPrice < 10 ? `0${totalPrice}` : totalPrice}
@@ -608,8 +539,6 @@ function PlaceOrder() {
                     <span className='loader' style={{ position: 'absolute', top: '50px', transform: 'translate(-50%, 50%)' }}></span>
                 }
             </div>
-
-            {/* <Footer /> */}
         </>
     )
 }
