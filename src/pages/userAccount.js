@@ -1,14 +1,9 @@
 import Navbar from '../components/navbar';
-import { List } from 'antd';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
 import { RxCross2 } from 'react-icons/rx';
 import React, { useEffect, useState, useContext } from 'react';
-import CartContext from '../config/cartContext';
-import QuanContext from '../config/quanContext';
-import { BsArrowRight } from 'react-icons/bs'
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -17,13 +12,13 @@ import axios from 'axios';
 import Footer from '../components/footer';
 
 const { TextArea } = Input;
-const { Option } = Select
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+    maxWidth: '90%',
     width: 700,
     bgcolor: 'background.paper',
     border: 'none',
@@ -32,16 +27,6 @@ const style = {
     p: 2.5,
     borderRadius: 1
 };
-
-
-
-// const handleEmailChange = (e) => {
-//     setEmail(e.target.value);
-// }
-// const handleNameChange = (e) => {
-//     setFullname(e.target.value);
-// }
-
 
 function UserAccount() {
     const { REACT_APP_BACKEND_PORT } = process.env
@@ -102,6 +87,9 @@ function UserAccount() {
         setPostal(e.target.value);
     }
 
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
+
     const updateData = async () => {
         const headers = {
             'Authorization': `Bearer ${token}`
@@ -119,7 +107,8 @@ function UserAccount() {
                 const updatingData = await axios.put(`${REACT_APP_BACKEND_PORT}/home/user`, updatedData, { headers });
                 console.log(updatingData)
                 if (updatingData.status === 200) {
-                    // return setLoading(false)
+                    handleClose()
+                    return setLoading(false)
                 } else {
                     console.error('USER NOT FOUND:', updatingData.data);
                 }
@@ -133,10 +122,6 @@ function UserAccount() {
             }
         }
     }
-
-    const [open, setOpen] = React.useState(false);
-    const handleClose = () => setOpen(false);
-
 
     return (
         <>
@@ -238,7 +223,6 @@ function UserAccount() {
 
             <div className={`check-con`}>
                 <h1 className='checkout-title'>My Account </h1>
-                {/* <p className='checkout-step'>2</p> */}
             </div>
 
             <div className='my-account-con'>
@@ -264,11 +248,6 @@ function UserAccount() {
                         <h2>Order History:</h2>
                         <div className='account-con'>
                             <p style={{ margin: 0 }}>{userOrders ? `Total Orders: ${userOrders.length}` : `No Order History.`}</p>
-                            {/* {userOrders && <Button variant='outlined'>
-                            <span style={{ fontSize: 15 }}>
-                                VIEW ALL
-                            </span>
-                        </Button>} */}
                         </div>
                     </div>
                 </> :
@@ -283,308 +262,3 @@ function UserAccount() {
 }
 
 export default UserAccount;
-
-
-
-
-
-// const onFinish = async (values) => {
-//     setLoading(true)
-//     const userToken = localStorage.getItem('token')
-
-//     try {
-//         console.log('values --> ', values)
-
-//         const updatedFields = {};
-//         console.log(email)
-//         if (values.customerEmail !== email) {
-//             updatedFields.customerEmail = values.customerEmail;
-//             console.log("email")
-//         }
-//         if (values.customerName !== fullname) {
-//             updatedFields.customerName = values.customerName;
-//         }
-//         if (values.customerNumber !== mobileNum) {
-//             updatedFields.customerNumber = values.customerNumber;
-//         }
-//         if (values.customerAddress !== address) {
-//             updatedFields.customerAddress = values.customerAddress;
-//         }
-//         if (values.customerPostal !== postal) {
-//             updatedFields.customerPostal = values.customerPostal;
-//         }
-
-//         console.log('updatedFields ---> ', updatedFields)
-
-//         const headers = {
-//             'Authorization': `Bearer ${userToken}`,
-//             'Content-Type': 'application/json'
-//         };
-
-
-//         // const placingOrder = await axios.post('http://localhost:3001/home/checkout', customerOrderData, { headers })
-
-//         // console.log('Status ~ ', placingOrder.data.orderStatus)
-
-//         // if (placingOrder.data.status === 200) {
-//         //     localStorage.removeItem('cart')
-//         //     setTimeout(() => {
-//         //         navigation('/home')
-//         //     }, 1000);
-//         // }
-//         setLoading(false)
-//     } catch (error) {
-//         console.log(error)
-//         setLoading(false)
-//     }
-// };
-
-
-
-{/* <Form
-    name="normal_login"
-    className="detail-form"
-    onFinish={onFinish}
-    scrollToFirstError={true}
-></Form> */}
-
-
-// {
-//     loader ?
-//         <>
-//             <Form.Item
-//                 name="customerName"
-//                 label="Fullname"
-//                 // tooltip="Please enter your real name!"
-//                 rules={[
-//                     {
-//                         // required: true,
-//                         // message: 'Please input your fullname!',
-//                         whitespace: true,
-//                     },
-//                 ]}
-//             >
-//                 <Input
-//                     defaultValue={fullname}
-//                     onChange={handleNameChange}
-//                     size='large'
-//                     disabled={inpDisabled}
-//                     placeholder='Full Name'
-//                 />
-//             </Form.Item>
-
-//             <Form.Item
-//                 name="customerEmail"
-//                 label="Email"
-//                 rules={[
-//                     {
-//                         type: 'email',
-//                         message: 'The input is not valid Email!',
-//                     },
-//                     // {
-//                     //     required: true,
-//                     //     message: 'Please input your Email!',
-//                     // },
-//                 ]}
-//             >
-//                 <Input
-//                     defaultValue={email}
-//                     onChange={handleEmailChange}
-//                     size='large'
-//                     disabled={inpDisabled}
-//                     placeholder='Email'
-//                 />
-//             </Form.Item>
-
-
-//             <Form.Item
-//                 name="customerNumber"
-//                 label="Mobile Number"
-//                 // rules={[
-//                 //     {
-//                 //         required: true,
-//                 //         message: 'Please input your Mobile number!',
-//                 //     },
-//                 // ]}
-//                 validateTrigger="onBlur"
-//             >
-//                 <Input
-//                     defaultValue={mobileNum}
-//                     onChange={handleNumberChange}
-//                     maxLength={11}
-//                     minLength={11}
-//                     disabled={inpDisabled}
-//                     size='large'
-//                     style={{
-//                         width: '100%',
-//                     }}
-//                     placeholder='Mobile Number'
-//                 />
-//             </Form.Item>
-
-
-//             {/* <div className='form-separator'></div> */}
-
-//             <Form.Item
-//                 name="customerAddress"
-//                 label="Residential Address"
-//             // rules={[
-//             //     {
-//             //         required: true,
-//             //         message: 'Please input your address!',
-//             //     },
-//             // ]}
-//             >
-//                 <TextArea
-//                     defaultValue={address}
-//                     onChange={handleAddressChange}
-//                     disabled={inpDisabled}
-//                     size='large'
-//                     placeholder="Residential Address"
-//                     autoSize={{
-//                         minRows: 1,
-//                         maxRows: 6,
-//                     }}
-//                 />
-//             </Form.Item>
-
-//             {/* <Form.Item
-//                     name="customerPostal"
-//                     label="Postal Code"
-//                 // rules={[
-//                 //     {
-//                 //         required: true,
-//                 //         message: 'Please input Postal code!',
-//                 //     },
-//                 // ]}
-//                 >
-//                     <Input
-//                         defaultValue={postal}
-//                         onChange={handlePostalChange}
-//                         disabled={inpDisabled}
-//                         size='large'
-//                         style={{
-//                             width: 120,
-//                         }}
-//                         placeholder='Postal Code'
-//                         maxLength={5}
-//                     />
-//                 </Form.Item>*/}
-//             <div className='form-separator'></div>
-//         </>
-//         :
-//         <>
-//             <span className='loader'></span>
-//             <span style={{ opacity: 0.5, pointerEvents: 'none' }}>
-//                 <Form.Item
-//                     name="customerName"
-//                     label="Fullname"
-//                 >
-//                     <Input
-//                         defaultValue={fullname}
-//                         onChange={handleNameChange}
-//                         size='large'
-//                         disabled
-//                         placeholder='Full Name'
-//                     />
-//                 </Form.Item>
-
-//                 <Form.Item
-//                     name="customerEmail"
-//                     label="Email"
-//                 >
-//                     <Input
-//                         defaultValue={email}
-//                         onChange={handleEmailChange}
-//                         size='large'
-//                         disabled
-//                         placeholder='Email'
-//                     />
-//                 </Form.Item>
-
-
-//                 <Form.Item
-//                     name="customerNumber"
-//                     label="Mobile Number"
-//                     validateTrigger="onBlur"
-//                 >
-//                     <Input
-//                         defaultValue={mobileNum}
-//                         onChange={handleNumberChange}
-//                         maxLength={11}
-//                         minLength={11}
-//                         disabled
-//                         size='large'
-//                         style={{
-//                             width: '100%',
-//                         }}
-//                         placeholder='Mobile Number'
-//                     />
-//                 </Form.Item>
-
-//                 <Form.Item
-//                     name="customerAddress"
-//                     label="Residential Address"
-//                 >
-//                     <TextArea
-//                         defaultValue={address}
-//                         onChange={handleAddressChange}
-//                         disabled
-//                         size='large'
-//                         placeholder="Residential Address"
-//                         autoSize={{
-//                             minRows: 1,
-//                             maxRows: 6,
-//                         }}
-//                     />
-//                 </Form.Item>
-
-//                 {/* <Form.Item
-//                         name="customerPostal"
-//                         label="Postal Code"
-//                     >
-//                         <Input
-//                             defaultValue={postal}
-//                             onChange={handlePostalChange}
-//                             disabled
-//                             size='large'
-//                             style={{
-//                                 width: 120,
-//                             }}
-//                             placeholder='Postal Code'
-//                             maxLength={5}
-//                         />
-//                     </Form.Item> */}
-//             </span>
-//             <div className='form-separator'></div>
-//         </>
-// }
-// </Form >
-
-
-
-
-// {
-//     loader ?
-//         <span
-//             style={{
-//                 display: 'flex',
-//                 justifyContent: 'space-between',
-//                 alignItems: 'center',
-//                 gap: '1rem',
-//                 flexGrow: 1,
-//                 // flexWrap: 'wrap'
-//             }}
-//         >
-//             <LoadingButton loading={loading} type='primary' variant="outlined" className="form-button" onClick={toggleEditMode}>
-//                 {btnName}
-//             </LoadingButton>
-//             <LoadingButton loading={loading} type='warning' color="error" variant="contained" className="form-button">
-//                 LOGOUT
-//             </LoadingButton>
-//         </span>
-//         :
-//         <LoadingButton style={{ opacity: 0.5, pointerEvents: 'none' }} loading={true} type='primary' variant="contained" className="form-button" onClick={toggleEditMode}>
-//             {btnName}
-//         </LoadingButton>
-// }
