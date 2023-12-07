@@ -2,15 +2,12 @@ import { List } from 'antd';
 import { useEffect, useState, useContext } from 'react';
 import CartContext from '../config/cartContext';
 import QuanContext from '../config/quanContext';
-import { BsArrowRight } from 'react-icons/bs'
-import { RiShoppingBasketFill } from 'react-icons/ri'
 import { IoMdTrash } from 'react-icons/io'
-import { TbMoodEmpty } from 'react-icons/tb'
 import { IoBagCheckOutline } from 'react-icons/io5'
 import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
 
-const Lists = ({ onClose }) => {
+const Lists = () => {
     const { REACT_APP_BACKEND_PORT } = process.env
 
     const { cartNum, setCartNum } = useContext(CartContext)
@@ -27,7 +24,6 @@ const Lists = ({ onClose }) => {
     function quanFunc(func, item, del, e, index) {
         e.preventDefault()
         const updatedCart = [...clothCart];
-        // let itemIndex = clothCart.findIndex(cartItem => cartItem.item.clothID === item.item.clothID);
 
         const itemIndex = clothCart.findIndex(
             cartItem => cartItem.item.clothID === item.item.clothID && cartItem.size === item.size
@@ -35,15 +31,6 @@ const Lists = ({ onClose }) => {
 
         if (itemIndex !== -1) {
             if (func === 'inc' || func === 'dec') {
-                // func === 'inc' ?
-                //     updatedCart[itemIndex].qty += 1
-                //     :
-                //     updatedCart[itemIndex].qty > 1
-                //         ?
-                //         updatedCart[itemIndex].qty -= 1
-                //         :
-                //         updatedCart[itemIndex].qty = 1;
-
                 updatedCart[itemIndex].qty = func === 'inc' ? updatedCart[itemIndex].qty + 1 : Math.max(updatedCart[itemIndex].qty - 1, 1);
 
                 setCartNum(updatedCart.length);
@@ -68,7 +55,6 @@ const Lists = ({ onClose }) => {
         }
     }
 
-    let totalQuan = clothCart.map(v => v.qty).reduce((acc, qty) => acc + qty, 0)
     let totalPrice = clothCart.reduce((acc, qty) => acc + Number(qty.item.clothPrice) * Number(qty.qty), 0)
 
     useEffect(() => {
@@ -88,10 +74,8 @@ const Lists = ({ onClose }) => {
                 <>
                     <div className='quan-con'>
                         <div className='num-con'>
-                            {/* <div> */}
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                 <div>
-                                    {/* <RiShoppingBasketFill /> */}
                                     <p style={{ marginLeft: 3 }}>
                                         Subtotal:
                                     </p>
@@ -102,38 +86,28 @@ const Lists = ({ onClose }) => {
                                     </p>
                                 </div>
                             </div>
-                            {/* </div> */}
-                            {/* <div>
-                        <p> Items: {cartNum < 10 ? `0${cartNum}` : cartNum}</p>
-                        <p> Quantity: {totalQuan < 10 ? `0${totalQuan}` : totalQuan}</p>
-                    </div> */}
                         </div>
 
                         <div style={{ textAlign: 'center' }}>
-                            <p style={{ margin: 5, fontSize: 16, fontWeight: 600 }}>Shipping, taxes calculated at checkout.</p>
+                            <p style={{ margin: 5, fontSize: 16, fontWeight: 500 }}>Shipping, taxes calculated at checkout.</p>
                             <NavLink to={clothCart.length === 0 ? '#' : '/home/checkout'}>
-                                {/* <div className={`checkout-btn ${clothCart.length === 0 ? `btn-disabled` : ``}`}> */}
                                 <div className={clothCart.length === 0 ? 'btn-disabled' : ''}>
                                     <NavLink to={"/home/checkout"} >
                                         <Button variant='outlined' size='small' className='add-button' style={{ marginBottom: 5 }} >
-                                            <span style={{ marginRight: 5, fontSize: 18, fontWeight: 600 }}>
+                                            <span style={{ marginRight: 5, fontSize: 17, fontWeight: 500 }}>
                                                 VIEW CART
                                             </span>
-                                            {/* <RiShoppingBasketFill /> */}
                                         </Button>
                                     </NavLink>
                                     <NavLink to={"/home/checkout/order"}>
                                         <Button variant='contained' size='small' className='add-button'>
-                                            <span style={{ marginRight: 5, fontSize: 18 }}>
+                                            <span style={{ marginRight: 5, fontSize: 17 }}>
                                                 CHECKOUT
                                             </span>
                                             <IoBagCheckOutline />
                                         </Button>
                                     </NavLink>
                                 </div>
-                                {/* <span style={{ display: 'flex' }}>
-                            </span> */}
-                                {/* </div> */}
                             </NavLink>
                         </div>
                     </div>
@@ -152,12 +126,11 @@ const Lists = ({ onClose }) => {
                                             avatar={<img className='drawer-cart-img' src={`${REACT_APP_BACKEND_PORT}/images/${item.item.clothImg}`} />}
 
                                             title={
-
                                                 <span style={{ fontSize: 16 }}>
                                                     {item.item.clothTitle}
                                                 </span>
-
                                             }
+
                                             description={
                                                 <div>
                                                     <div style={{
@@ -206,21 +179,6 @@ const Lists = ({ onClose }) => {
 
                 : <>
                     <List>
-                        {/* <div className='empty-cart'>
-                            <h2>
-                                <TbMoodEmpty />
-                            </h2>
-                            <p style={{ fontWeight: 'bold', marginTop: -10 }}>Cart is Empty!</p>
-                            <NavLink to={'/home'} onClick={onClose}>
-                                <Button disableElevation variant="outlined"
-                                >
-                                    <span style={{ fontSize: 18 }}>
-                                        GO BACK SHOPPING
-                                    </span>
-                                </Button>
-                            </NavLink>
-                        </div> */}
-
                         <div className='empty-cart' style={{ marginTop: 20 }}>
                             <p>Your cart is currently empty.</p>
                         </div>
