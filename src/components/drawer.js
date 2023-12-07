@@ -1,6 +1,5 @@
 import { Drawer } from 'antd';
 import Lists from './list';
-import { BsCart4 } from 'react-icons/bs'
 import { RiShoppingBasketFill } from 'react-icons/ri'
 
 const CartDrawer = ({ open, onClose }) => {
@@ -32,11 +31,10 @@ const CartDrawer = ({ open, onClose }) => {
                 closable={false}
                 onClose={() => onClose(false)}
                 open={open}
-                className='custom-scrollbar'
             >
                 <Lists onClose={handleCloseDrawer} />
             </Drawer>
-        </div>
+        </div >
     );
 };
 export default CartDrawer;
