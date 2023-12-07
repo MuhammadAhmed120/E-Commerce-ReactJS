@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { NavLink } from 'react-router-dom';
-import Typography from '@mui/material/Typography';
 import { CiLock } from 'react-icons/ci'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { RxCross2 } from 'react-icons/rx';
 import { CiCircleInfo } from 'react-icons/ci'
 import { TbLockOpenOff } from "react-icons/tb";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useHistory } from 'react-router-dom';
 import '../index.css'
 
 import Navbar from '../components/navbar'
@@ -21,7 +19,8 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    // maxWidth: 500,
+    maxWidth: '80%',
+    width: 400,
     backgroundColor: 'background.paper',
     border: 'none',
     color: 'black',
@@ -40,6 +39,17 @@ const Login = () => {
     const handleClose = () => setOpen(false);
 
     const [error, setError] = useState("")
+
+    useEffect(() => {
+        const navigatePage = () => {
+            const token = localStorage.getItem('token')
+            const UID = localStorage.getItem('UID')
+            if (token && UID) {
+                navigate('/home')
+            }
+        }
+        navigatePage()
+    }, [])
 
     const onFinish = async (values) => {
         setLoading(true)
@@ -106,7 +116,6 @@ const Login = () => {
         }
     }
 
-
     return (
         <>
             <Navbar />
@@ -119,7 +128,6 @@ const Login = () => {
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    {/* <RxCross2 style={{ cursor: 'pointer', marginBottom: 15 }} color='black' size={19} onClick={handleClose} /> */}
                     {error.length >= 1 ?
                         <>
                             <div style={{ textAlign: 'center', padding: 10 }}>
@@ -133,11 +141,7 @@ const Login = () => {
                             </Button>
                         </>
                         :
-                        <div
-                            style={{
-                                // backgroundColor: 'pink'
-                            }}
-                        >
+                        <div>
                             <p
                                 style={{
                                     fontSize: 14,
@@ -158,7 +162,6 @@ const Login = () => {
                                 initialValues={{ remember: true }}
                                 onFinish={handleResetPass}
                                 requiredMark={false}
-                            // layout='vertical'
                             >
 
                                 <Form.Item

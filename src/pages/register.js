@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Checkbox, Form, Input, Select } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Select } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { CiLock } from 'react-icons/ci'
@@ -19,6 +19,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+    maxWidth: '80%',
     width: 400,
     bgcolor: 'background.paper',
     border: 'none',
@@ -38,6 +39,17 @@ const Register = () => {
     const navigate = useNavigate()
 
     const [error, setError] = useState("")
+
+    useEffect(() => {
+        const navigatePage = () => {
+            const token = localStorage.getItem('token')
+            const UID = localStorage.getItem('UID')
+            if (token && UID) {
+                navigate('/home')
+            }
+        }
+        navigatePage()
+    }, [])
 
     const onFinish = async (values) => {
         setLoading(true)
