@@ -369,6 +369,13 @@ input[type=number] {
 }
 
 /* HOME */
+.top-arrow {
+    position: fixed;
+    z-index: 9999;
+    bottom: 30px;
+    right: 20px;
+    animation: cartAni 0.5s ease-out;
+}
 
 /* .land-sec {
     width: 100%;
@@ -455,18 +462,6 @@ input[type=number] {
     font-weight: 200;
     max-width: 500px;
     margin-bottom: 50px;
-}
-
-.land-buy-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 18px !important;
-    transition: 0.3s ease !important;
-}
-
-.land-buy-btn:hover {
-    gap: 1rem;
 }
 
 .land-sec-right {
@@ -623,6 +618,12 @@ input[type=number] {
 
 
 /*                                             /* DRAWER */
+.cart-con {
+    cursor: pointer;
+    animation: cartAni 0.5s ease;
+    transition: 0.2s ease;
+}
+
 @keyframes cartAni {
     from {
         opacity: 0;
@@ -633,14 +634,6 @@ input[type=number] {
         opacity: 1;
         transform: scale(1);
     }
-}
-
-.cart-con {
-    cursor: pointer;
-    animation-name: cartAni;
-    animation-duration: 0.5s;
-    animation-timing-function: ease;
-    transition: 0.2s ease;
 }
 
 .cart-con:hover {
@@ -778,6 +771,7 @@ input[type=number] {
     object-fit: contain;
     display: flex;
     /* background: yellow; */
+    background: #cacaca;
 }
 
 .order-list {
@@ -790,14 +784,11 @@ input[type=number] {
     color: #126373;
     font-weight: 600;
     font-size: 19px;
-    /* position: absolute;
-    right: 0; */
-    /* flex-grow: 1; */
 }
 
 .checkout-item-qty {
     position: absolute;
-    left: 90px;
+    left: 85px;
     top: 0;
     background-color: rgba(148, 154, 163, 0.95);
     color: white;
@@ -1075,16 +1066,13 @@ input[type=number] {
     display: none;
 }
 
-
-
-
 /* CLOTH DISPLAY PAGE */
 
 .navs {
     margin-left: 2%;
     margin-top: 90px !important;
     color: #2c69eb;
-    font-size: 18px;
+    font-size: clamp(0.85rem, 1.25vw, 1.2rem) !important;
 }
 
 .navs-link {
@@ -1371,6 +1359,7 @@ body:empty {
 .checkout-item-img {
     object-fit: contain;
     max-width: 200px;
+    background: #cacaca;
 }
 
 .checkout-num {
@@ -1427,7 +1416,8 @@ body:empty {
 
 .checkout-2-con {
     width: 70%;
-    margin: 100px auto;
+    margin: 50px auto;
+    margin-top: 0px !important;
     display: flex;
     justify-content: center;
     padding: 0 20px;
@@ -1526,11 +1516,12 @@ body:empty {
 }
 
 .size-hover {
+    width: auto !important;
     background: #9399a2;
     color: #fff;
     font-size: 12px;
     font-weight: 500;
-    padding: 3px;
+    padding: 4px 6px;
     border-radius: 0px 5px 5px 5px;
     margin: 0;
     position: absolute;
@@ -1558,7 +1549,7 @@ body:empty {
     height: 25px;
     width: 100%;
     background: #d7d7d7;
-    margin: 80px 0;
+    margin: 50px 0;
 }
 
 .cod-con {
@@ -1696,10 +1687,6 @@ body:empty {
         font-size: 68px;
     }
 
-    .land-buy-btn {
-        /* font-size: 16px; */
-    }
-
     .land-img {
         max-width: 500px;
         margin-right: -20px;
@@ -1721,10 +1708,6 @@ body:empty {
 
     .land-desc {
         width: 70%;
-    }
-
-    .land-buy-btn {
-        /* font-size: 16px; */
     }
 
     .land-img {
@@ -1832,10 +1815,6 @@ body:empty {
         margin-bottom: 30px;
     }
 
-    .land-buy-btn {
-        font-size: 16px;
-    }
-
     .land-sec-right {
         align-items: center;
         justify-content: center;
@@ -1859,7 +1838,6 @@ body:empty {
 
     .why-con {
         padding: 0 15px;
-        padding-top: 100px;
         gap: 1rem;
         flex-wrap: wrap;
     }
