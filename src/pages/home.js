@@ -1,4 +1,4 @@
-import { useState, useContext, useRef, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Navbar from '../components/navbar'
 import Card from '../components/card.js';
 import axios from 'axios';
@@ -8,16 +8,13 @@ import '../index.css'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import { BsArrowRight } from 'react-icons/bs'
-
 import CartContext from '../config/cartContext.js';
 import QuanContext from '../config/quanContext.js';
 
 import { notification } from 'antd';
 
 import cartInc from '../function/cartInc';
-import { Button } from '@mui/material';
-import { Fade, Slide, Zoom } from 'react-awesome-reveal';
+import { Fade } from 'react-awesome-reveal';
 
 import Footer from '../components/footer.js';
 
@@ -84,32 +81,44 @@ export default function Home() {
         setSorting(sortType);
     };
 
-    // const [isSticky, setIsSticky] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
 
-    // useEffect(() => {
-    //     const handleScroll = () => {
-    //         if (window.scrollY >= 310) {
-    //             setIsSticky(true);
-    //         } else if (window.scrollY === 0) {
-    //             setIsSticky(false);
-    //         }
-    //     };
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY >= 700) {
+                setIsSticky(true);
+            } else {
+                setIsSticky(false);
+            }
+        };
 
-    //     window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll);
 
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, []);
-
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <div>
             <Navbar />
 
-            {notificationContextHolder}
-            {/* ${isSticky ? 'home-mar' : ''} */}
+            <div className={`${isSticky ? "top-arrow" : "dis"}`}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    onClick={() => {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth',
+                        });
+                    }}
+                    style={{ width: 36, height: 36, cursor: 'pointer' }}
+                >
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm1 10h3l-4-4-4 4h3v4h2v-4z" />
+                </svg>
+            </div>
 
+            {notificationContextHolder}
             <section>
 
                 <div className='land-sec'>
@@ -122,27 +131,19 @@ export default function Home() {
                             </span>
                         </h1>
                         <p className='land-desc'>Consectetur adipiscing elit. Cursus condimentum donec non dictum. Id et sed ac mauris, adipiscing tincidunt amet vel at. Quis lobortis id. consectetur adipiscing elit. </p>
-                        {/* <Button variant='contained' size='large' className='land-buy-btn'>
-                        <span>
-                            BUY NOW
-                        </span>
-                        <BsArrowRight className='btn-arrow' />
-                    </Button> */}
                     </div>
                     <div className='land-sec-right'>
                         <Fade style={{ zIndex: 99 }} fraction={0.3} direction='right' triggerOnce>
-                            <img src={require('../pic.png')} alt="" className='land-img' />
+                            <img src={require('../pic.png')} alt="land-img" className='land-img' />
                             {/* <img src={'https://media2.giphy.com/media/mHqFgvB8qJ0MCGEBrA/giphy.gif?cid=6c09b952mwzgeplb9ffbb5wgzuwtu10gwsy01ehh9jcw0vvm&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s'} alt="" className='land-img' /> */}
                         </Fade>
                         <Fade delay={450} fraction={0.3} triggerOnce>
-                            <img src={require('../rectangles.png')} alt="" className='land-vector2' />
+                            <img src={require('../rectangles.png')} alt="img-vector" className='land-vector2' />
                         </Fade>
                     </div>
-                    <img src={require('../vector1.png')} alt="" className='land-vector' />
+                    <img src={require('../vector1.png')} alt="land-vector" className='land-vector' />
                 </div>
             </section>
-
-            {/* <p style={{ color: '#000', margin: 0, fontSize: 28, fontWeight: 500, width: "fit-content", borderBottom: "2px solid #2c69eb" }}>Products{category ? ` / ${category.toUpperCase()}` : ''}</p> */}
 
             <div className='land-quote-con' >
                 <p>"Elevate your style with our unique anime-inspired t-shirt designs that blend fashion and fandom seamlessly."
@@ -151,13 +152,10 @@ export default function Home() {
 
             <div className='section-separator'></div>
 
-
             <section>
                 <div className='anime-title-con' >
                     <p>
-                        {/* <Fade delay={400} cascade damping={0.05} triggerOnce> */}
                         Anime Legends Fusion
-                        {/* </Fade> */}
                     </p>
                 </div>
 
@@ -171,7 +169,7 @@ export default function Home() {
                                             value={sorting}
                                             onChange={(event) => handleSort(event.target.value)}
                                             autoWidth={true}
-                                            sx={{ borderRadius: 30 }}
+                                            sx={{ borderRadius: 1.5 }}
                                             size='small'
                                         >
                                             <MenuItem value="featured">Featured</MenuItem>
@@ -204,12 +202,6 @@ export default function Home() {
                                         </NavLink>
                                     ))}
                                 </div>
-                                {/* <Button variant='contained' size='large' className='land-buy-btn'>
-                                    <span>
-                                        View all
-                                    </span>
-                                    <BsArrowRight className='btn-arrow' />
-                                </Button> */}
                             </>
                             : <span className='loader'></span>
                     }
@@ -226,7 +218,7 @@ export default function Home() {
                     <Fade direction='left' fraction={0.3} delay={300} triggerOnce>
                         <div className='why-con-img'>
                             {/* <img src={require('../shirt1.jpeg')} alt="" /> */}
-                            <img src={'https://d9jhi50qo719s.cloudfront.net/340/samples/4cw_800.gif?230831030803'} alt="" />
+                            <img src={'https://d9jhi50qo719s.cloudfront.net/340/samples/4cw_800.gif?230831030803'} alt="img" />
                         </div>
                     </Fade>
                     <Fade direction='left' fraction={0.3} triggerOnce>
@@ -243,12 +235,6 @@ export default function Home() {
                                 Along with hundreds of online stores, you might think as to what makes Flexus any different?
                                 And the difference is how we treat our customers. Developing a long-term relationship demands that we give our best. The quality of our products speaks for itself!
                             </p>
-                            {/* <Button variant='contained' size='small' className='land-buy-btn'>
-                            <span>
-                                shop now
-                            </span>
-                            <BsArrowRight className='btn-arrow' />
-                        </Button> */}
                         </div>
                     </Fade>
                 </div>
@@ -259,115 +245,3 @@ export default function Home() {
         </div >
     )
 }
-
-
-
-// import Slider from 'react-slick';
-// import 'slick-carousel/slick/slick.css';
-// import 'slick-carousel/slick/slick-theme.css'
-
-// import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-
-// import { styled } from '@mui/material/styles';
-// import Box from '@mui/material/Box';
-// import Paper from '@mui/material/Paper';
-// import Grid from '@mui/material/Unstable_Grid2';
-
-
-
-
-// const PrevArrow = ({ onClick }) => (
-//     <div className="custom-arrow prev" onClick={onClick}>
-//         <FaChevronLeft />
-//     </div>
-// );
-
-// const NextArrow = ({ onClick }) => (
-//     <div className="custom-arrow next" onClick={onClick}>
-//         <FaChevronRight />
-//     </div>
-// );
-
-// const settings = {
-//     dots: false,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 5, // Number of cards to show at a time
-//     slidesToScroll: 1, // Number of cards to scroll at a time
-//     autoplay: true,
-//     autoplaySpeed: 2000, // Adjust the autoplay interval as needed
-//     prevArrow: <PrevArrow />,
-//     nextArrow: <NextArrow />,
-//     responsive: [
-//         {
-//             breakpoint: 1500,
-//             settings: {
-//                 slidesToShow: 4,
-//             },
-//         },
-//         {
-//             breakpoint: 1200,
-//             settings: {
-//                 slidesToShow: 3,
-//             },
-//         },
-//         {
-//             breakpoint: 900,
-//             settings: {
-//                 slidesToShow: 2,
-//             },
-//         },
-//         {
-//             breakpoint: 710,
-//             settings: {
-//                 slidesToShow: 0,
-//                 slidesToScroll: 0, // Set slidesToScroll to 0 at 710px and below 
-//             },
-//         },
-//     ],
-// };
-
-{/* <Slider {...settings} className="carousel-wrapper centered-carousel"> */ }
-{/* </Slider> */ }
-
-
-
-
-// const Item = styled(Paper)(({ theme }) => ({
-//     backgroundColor: 'grey',
-//     ...theme.typography.body2,
-//     padding: theme.spacing(7),
-//     textAlign: 'center',
-//     color: 'white',
-//     fontSize: '34px',
-//     fontFamily: 'Teko, sans-serif',
-//     fontWeight: '100'
-// }));
-
-
-
-
-{/* {contextHolder} */ }
-{/* <div className='item-grid-con'>
-                <Box sx={{ flexGrow: 1 }}>
-                    <Grid container rowSpacing={1} >
-                        md = 900px+, sm = 600px - 900px, xs = 600px-
-                        <Grid xs={14} sm={7} md={8}>
-                            <Item style={{ backgroundColor: 'black', }} className='items-grid'>MEN's COLLECTION</Item>
-                        </Grid>
-                        {window.innerWidth >= 600 &&
-                            <>
-                                <Grid xs={4} sm={5} md={4}>
-                                    <Item style={{ backgroundColor: 'grey' }} className='items-grid'>HOODIES</Item>
-                                </Grid>
-                                <Grid xs={4} sm={5} md={4}>
-                                    <Item style={{ backgroundColor: 'greenyellow', color: 'black' }} className='items-grid'>JACKETS</Item>
-                                </Grid>
-                            </>
-                        }
-                        <Grid xs={14} sm={7} md={8}>
-                            <Item style={{ backgroundColor: 'green', }} className='items-grid'>WOMEN's COLLECTION</Item>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </div> */}
