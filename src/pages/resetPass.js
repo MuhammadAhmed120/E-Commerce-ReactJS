@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Input } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { NavLink, useParams } from 'react-router-dom';
-import Typography from '@mui/material/Typography';
+import { useParams } from 'react-router-dom';
 import { CiLock } from 'react-icons/ci'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { RxCross2 } from 'react-icons/rx';
-import { CiCircleInfo } from 'react-icons/ci'
 import { TbLockOpenOff } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
 import '../index.css'
@@ -21,7 +18,8 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    // maxWidth: 500,
+    maxWidth: '80%',
+    width: 400,
     backgroundColor: 'background.paper',
     border: 'none',
     color: 'black',
@@ -40,11 +38,11 @@ const ResetPass = () => {
     const [open, setOpen] = useState(false);
 
     const handleClose = () => {
+        navigate('/login')
         setOpen(false)
-        // navigate('/login')
     };
 
-    const [error, setError] = useState("")
+    const [msg, setMsg] = useState("")
 
     const onFinish = async (values) => {
         setLoading(true)
@@ -55,24 +53,24 @@ const ResetPass = () => {
             }
             const passwordChange = await axios.post(`${REACT_APP_BACKEND_PORT}/password/reset/${token}`, customerData)
             console.log(passwordChange)
-            setError(passwordChange.data.message)
+            setMsg(passwordChange.data.message)
             setOpen(true);
             setLoading(false)
         } catch (error) {
             if (error.message === 'Network Error') {
                 console.log(error)
-                setError(error.message)
+                setMsg(error.message)
                 setOpen(true);
                 setLoading(false)
             } else {
                 console.log('error MESSAGE ===>', error)
-                setError(error.response.data.message)
+                setMsg(error.response.data.message)
                 setOpen(true);
                 setLoading(false)
             }
         }
         setTimeout(() => {
-        setLoading(false)
+            setLoading(false)
         }, 10000);
     };
 
@@ -88,13 +86,13 @@ const ResetPass = () => {
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    {/* {error ? */}
+                    {/* {msg.length >= 1 ? */}
                     <>
                         <div style={{ textAlign: 'center', padding: 10 }}>
                             <TbLockOpenOff size={27} />
                         </div>
                         <p style={{ fontSize: 21, margin: 0 }}>
-                            {error}
+                            {msg}
                         </p>
                         <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '15px' }} variant='contained' disableElevation onClick={handleClose}>
                             Close
