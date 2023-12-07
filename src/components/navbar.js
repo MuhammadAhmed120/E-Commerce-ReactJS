@@ -30,6 +30,13 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 function ResponsiveAppBar() {
+  const [open, setOpen] = useState(false)
+  const { cartNum, setCartNum } = useContext(CartContext)
+  const [isSticky, setIsSticky] = useState(false);
+  
+  const location = useLocation()
+  const navigate = useNavigate();
+
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -40,12 +47,6 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const [open, setOpen] = useState(false)
-  const { cartNum, setCartNum } = useContext(CartContext)
-
-  const location = useLocation()
-  const navigate = useNavigate();
-
   const handleLogout = () => {
     localStorage.removeItem('UID');
     localStorage.removeItem('token');
@@ -54,8 +55,6 @@ function ResponsiveAppBar() {
     }
     window.location.reload()
   }
-
-  const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {

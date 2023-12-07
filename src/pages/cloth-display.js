@@ -12,13 +12,9 @@ import { GoDotFill } from "react-icons/go";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
-import Gallery from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css';
-// import ReactImageMagnify from 'react-image-magnify';
-
 import { notification } from 'antd';
 
-import { Fade, Slide, Zoom } from 'react-awesome-reveal';
+import { Fade } from 'react-awesome-reveal';
 
 import CartContext from '../config/cartContext.js';
 import QuanContext from '../config/quanContext.js';
@@ -27,6 +23,8 @@ import cartInc from '../function/cartInc';
 import Footer from '../components/footer.js';
 
 const ProductDisplay = () => {
+    const { REACT_APP_BACKEND_PORT } = process.env
+
     const [notificationApi, notificationContextHolder] = notification.useNotification();
     let { productId } = useParams()
     const [clothData, setClothData] = useState([])
@@ -34,16 +32,12 @@ const ProductDisplay = () => {
     const { cartNum, setCartNum } = useContext(CartContext)
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [quantity, setQuantity] = useState(1);
-
-    const { REACT_APP_BACKEND_PORT } = process.env
-
     const [size, setSize] = useState('S');
+    const navigate = useNavigate()
 
     const handleChange = (event) => {
         setSize(event.target.value);
     };
-
-    const navigate = useNavigate()
 
     useEffect(() => {
         async function fetchDataFunc() {
@@ -99,7 +93,6 @@ const ProductDisplay = () => {
             setQuantity(1)
         }
     }
-
     const handleCardClick = () => {
         window.scrollTo({
             top: 0,
@@ -107,32 +100,16 @@ const ProductDisplay = () => {
         });
     };
 
-    const [selectedImage, setSelectedImage] = useState(0);
-
     if (clothData.length >= 1) {
         let { clothStatus, clothImg, clothImgHover, clothTitle, clothCon, clothPrice } = clothData[productId];
 
         let galleryImages = Object.values(clothData[productId].galleryImages);
-
-        const handleImageChange = (index) => {
-            setSelectedImage(index);
-        };
-
-        const handlePrevImage = () => {
-            setSelectedImage((selectedImage - 1 + galleryImages.length) % galleryImages.length);
-        };
-
-        const handleNextImage = () => {
-            setSelectedImage((selectedImage + 1) % galleryImages.length);
-        };
 
         return (
             <div>
                 <Navbar />
 
                 {notificationContextHolder}
-
-                {/* <h1 className={`${isSticky ? 'pos-mar' : ''}`} style={{ marginTop: 20, color: 'black' }}>1</h1> */}
 
                 <div className='navs'>
                     <NavLink className='navs-link' to={'/home'}>
@@ -145,7 +122,6 @@ const ProductDisplay = () => {
                     /
                 </div>
 
-
                 <Fade>
                     <div className='cloth-display-con'>
                         <div className='img-con'>
@@ -156,12 +132,11 @@ const ProductDisplay = () => {
                                     infiniteLoop={true}
                                     autoPlay={true}
                                     stopOnHover={true}
-                                    // showThumbs={true}
                                     showIndicators={false}
                                 >
                                     {Object.values(galleryImages).map((image, index) => (
                                         <div key={index}>
-                                            <img className='cloth-img' src={image} alt={clothTitle} />
+                                            <img className='cloth-img' src={`${REACT_APP_BACKEND_PORT}/images/${image}`} alt={clothTitle} />
                                         </div>
                                     ))}
                                 </Carousel>
@@ -219,7 +194,6 @@ const ProductDisplay = () => {
                                     <MenuItem value='M'>Medium (M)</MenuItem>
                                     <MenuItem value='L'>Large (L)</MenuItem>
                                     <MenuItem value='XL'>Extra Large (XL)</MenuItem>
-                                    {/* <MenuItem value='Extra Extra Large'>Extra Extra Large (XXL)</MenuItem> */}
                                 </Select>
                             </div>
 

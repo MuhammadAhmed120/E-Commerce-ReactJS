@@ -31,16 +31,17 @@ const style = {
 function UserAccount() {
     const { REACT_APP_BACKEND_PORT } = process.env
 
-
     const [user, setUser] = useState(null)
     const [userOrders, setUserOrders] = useState(null)
-
-    const { customerName, customerEmail, customerNumber, customerAddress, customerPostal } = user || {}
-
-    const token = localStorage.getItem('token')
-
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
     const [loader, setLoader] = useState(null)
     const [loading, setLoading] = useState(null)
+    const [mobileNum, setMobile] = useState('');
+    const [address, setAddress] = useState('');
+    const [postal, setPostal] = useState('');
+    const token = localStorage.getItem('token')
+    const { customerName, customerEmail, customerNumber, customerAddress, customerPostal } = user || {}
 
     useEffect(() => {
         const userData = async () => {
@@ -71,12 +72,6 @@ function UserAccount() {
         userData();
     }, [token, loading]);
 
-
-
-    const [mobileNum, setMobile] = useState('');
-    const [address, setAddress] = useState('');
-    const [postal, setPostal] = useState('');
-
     const handleNumberChange = (e) => {
         setMobile(e.target.value);
     }
@@ -86,9 +81,6 @@ function UserAccount() {
     const handlePostalChange = (e) => {
         setPostal(e.target.value);
     }
-
-    const [open, setOpen] = useState(false);
-    const handleClose = () => setOpen(false);
 
     const updateData = async () => {
         const headers = {
@@ -167,9 +159,6 @@ function UserAccount() {
                                         maxLength={11}
                                         minLength={11}
                                         size='large'
-                                        style={{
-                                            width: '100%',
-                                        }}
                                         placeholder='Mobile Number'
                                     />
                                 </Form.Item>
@@ -206,7 +195,7 @@ function UserAccount() {
 
                         </Form>
                     }
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.5rem', fontSize: '15px', marginTop: '10px' }} >
+                    <div className='account-modal-btn'>
                         <LoadingButton loading={loading} type='primary' variant='contained' disableElevation onClick={updateData}>
                             <span>
                                 update

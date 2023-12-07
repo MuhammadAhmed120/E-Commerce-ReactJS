@@ -36,13 +36,12 @@ const ResetPass = () => {
     const { token } = useParams()
 
     const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState("")
 
     const handleClose = () => {
         navigate('/login')
         setOpen(false)
     };
-
-    const [msg, setMsg] = useState("")
 
     const onFinish = async (values) => {
         setLoading(true)
@@ -86,7 +85,6 @@ const ResetPass = () => {
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    {/* {msg.length >= 1 ? */}
                     <>
                         <div style={{ textAlign: 'center', padding: 10 }}>
                             <TbLockOpenOff size={27} />
@@ -94,31 +92,10 @@ const ResetPass = () => {
                         <p style={{ fontSize: 21, margin: 0 }}>
                             {msg}
                         </p>
-                        <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '15px' }} variant='contained' disableElevation onClick={handleClose}>
+                        <Button className='modal-error-close' variant='contained' disableElevation onClick={handleClose}>
                             Close
                         </Button>
                     </>
-                    {/* :
-                        <div>
-                            <p
-                                style={{
-                                    fontSize: 14,
-                                    marginTop: 0,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    flexWrap: 'wrap'
-                                }}
-                            >
-                                <CiCircleInfo size={18} />
-                                <span>
-                                    Password reset successful.
-                                </span>
-                            </p>
-                            <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '15px' }} variant='contained' disableElevation onClick={handleClose}>
-                                LOGIN
-                            </Button>
-                        </div>} */}
                 </Box>
             </Modal >
 

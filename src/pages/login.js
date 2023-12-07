@@ -136,7 +136,7 @@ const Login = () => {
                             <p style={{ fontSize: 21, margin: 0 }}>
                                 {error}
                             </p>
-                            <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '15px' }} size='small' variant='contained' disableElevation onClick={handleClose}>
+                            <Button className='modal-error-close' variant='contained' disableElevation onClick={handleClose}>
                                 Close
                             </Button>
                         </>

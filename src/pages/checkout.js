@@ -68,7 +68,6 @@ function Checkout() {
         }
     }, [deletedItemIndex]);
 
-    let totalQuan = clothCart.map(v => v.qty).reduce((acc, qty) => acc + qty, 0)
     let totalPrice = clothCart.reduce((acc, qty) => acc + Number(qty.item.clothPrice) * Number(qty.qty), 0)
 
     return (
@@ -120,24 +119,21 @@ function Checkout() {
                                                     />
                                                 }
                                                 title={
-                                                    <div>
-                                                        <div style={{ fontSize: 21, marginBottom: -5 }}>
-                                                            {item.item.clothTitle}
-                                                        </div>
-
-
+                                                    <div style={{ fontSize: 21, marginBottom: -5 }}>
+                                                        {item.item.clothTitle}
                                                     </div>
                                                 }
                                                 description={
                                                     <div>
+
                                                         <div style={{ fontWeight: '500', color: '#126373', fontSize: 18 }}>
                                                             {item.size.toUpperCase()}
                                                         </div>
 
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-                                                                <div style={{ fontWeight: '400', color: '#126373', fontSize: 16 }}>QTY: </div>
-                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                                                        <div className='item-list-qty'>
+                                                            <div>
+                                                                <div style={{ fontSize: 16 }}>QTY: </div>
+                                                                <div>
                                                                     <button
                                                                         onClick={(e) => quanFunc('dec', item, '', e)}
                                                                         className={`quan-btn ${item.qty === 1 ? 'btn-disabled' : ''}`} style={{ padding: '0 10px' }}
@@ -145,7 +141,7 @@ function Checkout() {
                                                                         -
                                                                     </button>
 
-                                                                    <p style={{ fontSize: 20, margin: 0, color: 'black' }}>
+                                                                    <p style={{ fontSize: 20 }}>
                                                                         {item.qty}
                                                                     </p>
 
@@ -155,6 +151,7 @@ function Checkout() {
                                                                     </button>
                                                                 </div>
                                                             </div>
+
                                                             <div className='drawer-trash-con'>
                                                                 <IoMdTrash className={`drawer-trash ${itemDel ? 'btn-disabled' : ''}`} size={22}
                                                                     onClick={(e) => {
@@ -196,11 +193,10 @@ function Checkout() {
                     <>
                         <List>
                             <div className='empty-cart'>
-                                <p style={{ fontWeight: '500', margin: 0 }}>Your cart is currently empty.</p>
+                                <p>Your cart is currently empty.</p>
                             </div>
                         </List >
                     </>}
-
             </div >
 
             <Footer />

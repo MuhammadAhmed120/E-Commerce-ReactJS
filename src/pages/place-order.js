@@ -3,17 +3,18 @@ import Navbar from '../components/navbar';
 import { List } from 'antd';
 import CartContext from '../config/cartContext';
 import QuanContext from '../config/quanContext';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { GiTakeMyMoney } from 'react-icons/gi';
 import { CiCircleInfo } from 'react-icons/ci'
-import { Form, Input, Select } from 'antd';
+import { Form, Input } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
-import '../index.css'
+import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { FcShipped } from "react-icons/fc";
+import '../index.css'
 
 const { TextArea } = Input;
 
@@ -23,7 +24,7 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     maxWidth: '80%',
-    width: 400,
+    width: 550,
     bgcolor: 'background.paper',
     border: 'none',
     color: 'green',
@@ -45,7 +46,17 @@ function PlaceOrder() {
     const { quanNum, setQuanNum } = useContext(QuanContext)
     const [clothCart, setClothCart] = useState([])
     const [isInitialLoad, setIsInitialLoad] = useState(false);
-
+    const [loading, setLoading] = useState(null)
+    const [open, setOpen] = useState(false);
+    const [error, setError] = useState("")
+    const [user, setUser] = useState(null);
+    const [noUser, setNoUser] = useState(null);
+    const [orderStatus, setOrderStatus] = useState("")
+    const [orderMessage, setOrderMessage] = useState("")
+    const [orderID, setOrderID] = useState("")
+    const token = localStorage.getItem('token')
+    const navigate = useNavigate()
+    const formRef = useRef(null);
 
     useEffect(() => {
         const savedCart = (JSON.parse(localStorage.getItem('cart')) || [])
@@ -53,10 +64,6 @@ function PlaceOrder() {
         setIsInitialLoad(true);
     }, [quanNum])
 
-    const [user, setUser] = useState(null);
-    const [noUser, setNoUser] = useState(null);
-
-    const token = localStorage.getItem('token')
 
     useEffect(() => {
         const userData = async () => {
@@ -70,12 +77,19 @@ function PlaceOrder() {
 
                     if (response.status === 200) {
                         setUser(response.data.userData)
+                        setError('')
                         setNoUser(false)
                     } else {
                         console.error('USER NOT FOUND:', response.data);
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    if (error.message === 'Network Error') {
+                        setError(error.message)
+                        setOpen(true);
+                    } else {
+                        setError("Something went wrong, check your internet connection.")
+                        setOpen(true);
+                    }
                 }
             } else {
                 setNoUser(true)
@@ -87,13 +101,11 @@ function PlaceOrder() {
     let totalQuan = clothCart.map(v => v.qty).reduce((acc, qty) => acc + qty, 0)
     let totalPrice = clothCart.reduce((acc, qty) => acc + Number(qty.item.clothPrice) * Number(qty.qty), 0)
 
-    const [loading, setLoading] = useState(null)
-
-    const navigate = useNavigate()
-
-    const [open, setOpen] = useState(false);
-
     const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleShopClose = () => {
         setOpen(false);
         navigate('/home');
         setQuanNum(0);
@@ -111,11 +123,6 @@ function PlaceOrder() {
             navigatePage()
         }
     }, [clothCart])
-
-    const [orderStatus, setOrderStatus] = useState("")
-    const [orderMessage, setOrderMessage] = useState("")
-    const [orderID, setOrderID] = useState("")
-
 
     const onFinish = async (values) => {
         setLoading(true)
@@ -164,6 +171,7 @@ function PlaceOrder() {
             const placingOrder = await axios.post(`${REACT_APP_BACKEND_PORT}/home/checkout`, customerOrderData, { headers })
 
             if (placingOrder.data.status === 200) {
+                setError('')
                 setOrderStatus(placingOrder.data.orderDetails.status)
                 setOrderMessage(placingOrder.data.orderDetails.message)
                 setOrderID(placingOrder.data.orderDetails.orderID)
@@ -174,8 +182,14 @@ function PlaceOrder() {
             setLoading(false)
         } catch (error) {
             console.log(error)
-            setOrderMessage(error.message)
-            setLoading(false)
+            if (error.message === 'Network Error') {
+                setError(error.message)
+                setOpen(true);
+            } else {
+                setError(error.response.data.error)
+                setOpen(true)
+                setLoading(false)
+            }
         }
     };
 
@@ -188,8 +202,6 @@ function PlaceOrder() {
 
         window.open(mailtoLink, '_blank');
     };
-
-    const formRef = useRef(null);
 
     const onFinishFailed = (errorInfo) => {
         // Get all the field names with errors
@@ -224,34 +236,46 @@ function PlaceOrder() {
             <Modal
                 keepMounted
                 open={open}
-                onClose={handleClose}
+                onClose={error.length >= 1 ? handleClose : handleShopClose}
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description"
             >
                 <Box sx={style}>
-                    <div className='order-modal'>
-                        <div>
-                            <FcShipped size={60} />
-                            <h1 style={{ marginTop: 0 }}>{orderStatus}</h1>
-                        </div>
-                        <div>
-                            <p style={{ fontSize: 22 }}>OrderID: <b>{orderID}</b></p>
-                            <p>{orderMessage}</p>
-                        </div>
-                    </div>
-                    <div className='add-button'>
-                        <Button className='add-button' size='large' variant='contained' disableElevation onClick={handleClose}>
-                            <span>
-                                Continue shopping
-                            </span>
-                        </Button>
-                        <p style={{ textAlign: 'center', color: 'black', margin: "4px 0" }}>For any queries, <span style={{ textDecoration: 'underline', cursor: 'pointer', color: 'blue' }} onClick={handleContactUs}>contact us</span>.</p>
-                    </div>
+                    {error.length >= 1 ?
+                        <span style={{ alignSelf: 'flex-start', width: '100%' }}>
+                            <Typography id="keep-mounted-modal-title" variant="a" component="a" className='form-error-modal'>
+                                {error === '"customerZIPCode" length must be 5 characters long' ? 'Postal code must be exactly 5 digits.' : error}
+                            </Typography>
+                            <Button className='modal-error-close' variant='contained' disableElevation onClick={handleClose}>
+                                Close
+                            </Button>
+                        </span>
+                        : <>
+                            <div className='order-modal'>
+                                <div>
+                                    <FcShipped size={60} />
+                                    <h1 style={{ marginTop: 0 }}>{orderStatus}</h1>
+                                </div>
+                                <div>
+                                    <p style={{ fontSize: 22 }}>OrderID: <b>{orderID}</b></p>
+                                    <p>{orderMessage}</p>
+                                </div>
+                            </div>
+                            <div className='add-button'>
+                                <Button className='add-button' size='large' variant='contained' disableElevation onClick={handleShopClose}>
+                                    <span>
+                                        Continue shopping
+                                    </span>
+                                </Button>
+                                <p style={{ textAlign: 'center', color: 'black', margin: "4px 0" }}>For any queries, <span style={{ textDecoration: 'underline', cursor: 'pointer', color: 'blue' }} onClick={handleContactUs}>contact us</span>.</p>
+                            </div>
+                        </>
+                    }
                 </Box>
             </Modal>
 
-            <div className={`check-con`} style={{ marginTop: 100 }}>
-                <h1 className='checkout-title'>CHECKOUT</h1>
+            <div className={`check-con`}>
+                <h1 className='checkout-title' style={{ marginTop: 80 }}>CHECKOUT</h1>
             </div>
 
             <div className='checkout-2-con'>
@@ -274,20 +298,19 @@ function PlaceOrder() {
                             requiredMark={false}
                             layout='vertical'
                         >
-                            <div className='order-del-title' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <div className='order-del-title'>
                                 <h2>Contact</h2>
-                                {noUser && <p style={{ fontSize: 16 }}>Have an account? <NavLink to='/login' style={{ textDecoration: 'underline' }}>Login</NavLink></p>}
+                                {noUser && <p>Have an account? <NavLink to='/login' style={{ textDecoration: 'underline' }}>Login</NavLink></p>}
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: 5, marginBottom: 5 }}>
-                                <p style={{ color: "#9399a2", fontSize: 13, fontWeight: 500, margin: 0 }} >Enter your correct details.</p>
+                            <div className='correct-info'>
+                                <p className='correct-info-det'>Enter your correct details.</p>
                                 <CiCircleInfo />
                             </div>
 
                             <Form.Item
                                 name="fullname"
                                 label="Fullname"
-                                // tooltip="Please enter your real name!"
                                 rules={[
                                     {
                                         required: true,
@@ -353,8 +376,8 @@ function PlaceOrder() {
                             </div>
 
                             <div>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: "flex-end", gap: "0.5rem", marginTop: 5, marginBottom: 5 }}>
-                                    <p style={{ color: "#9399a2", fontSize: 13, fontWeight: 500, margin: 0 }} >Enter your current residential address.</p>
+                                <div className='correct-info'>
+                                    <p className='correct-info-det'>Enter your current residential address.</p>
                                     <CiCircleInfo />
                                 </div>
 
@@ -410,7 +433,7 @@ function PlaceOrder() {
                                 </div>
 
                                 <div>
-                                    <p style={{ color: "#9399a2", fontSize: 13, fontWeight: 500, marginTop: 5, marginBottom: 15 }}>Only one method available.</p>
+                                    <p style={{ marginTop: 5, marginBottom: 15 }} className='correct-info-det'>Only one method available.</p>
                                     <p className='cod-con'>
                                         <GiTakeMyMoney color='#333333' size={24} />
                                         CASH ON DELIVERY (COD)
@@ -494,7 +517,6 @@ function PlaceOrder() {
                                                 description={
                                                     <div className='desc-con'>
                                                         <div style={{ width: "100%", display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-
                                                             <div className='checkout-size'>
                                                                 '{item.size.toUpperCase()}'
 

@@ -12,8 +12,6 @@ import '../index.css'
 
 import axios from 'axios';
 
-const { Option } = Select
-
 const style = {
     position: 'absolute',
     top: '50%',
@@ -83,19 +81,6 @@ const Register = () => {
         }
     };
 
-    // const prefixSelector = (
-    //     <Form.Item name="prefix" noStyle>
-    //         <Select
-    //             style={{
-    //                 width: 70,
-    //             }}
-    //             defaultValue={'+92'}
-    //         >
-    //             <Option value="92">+92</Option>
-    //         </Select>
-    //     </Form.Item>
-    // );
-
     return (
         <>
             <Navbar />
@@ -109,10 +94,9 @@ const Register = () => {
             >
                 <Box sx={style}>
                     <Typography id="keep-mounted-modal-title" variant="a" component="a" className='form-error-modal' style={{ cursor: 'pointer' }} onClick={handleClose}>
-                        {/* <RxCross2 color='red' size={19} />  */}
                         {error}
                     </Typography>
-                    <Button style={{ float: 'right', fontFamily: 'Rajdhani', fontSize: '15px', marginTop: '10px' }} variant='contained' disableElevation onClick={handleClose}>
+                    <Button className='modal-error-close' variant='contained' disableElevation onClick={handleClose}>
                         Close
                     </Button>
                 </Box>
@@ -127,7 +111,6 @@ const Register = () => {
                 requiredMark={false}
                 layout='vertical'
             >
-
                 <Form.Item>
                     <div className='form-name'>
                         <h2>Register</h2>
@@ -181,29 +164,6 @@ const Register = () => {
                     <Input.Password size='large' placeholder='Password' />
                 </Form.Item>
 
-                {/* <Form.Item
-                    name="confirm"
-                    label="Confirm Password"
-                    dependencies={['password']}
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please confirm your password!',
-                        },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (!value || getFieldValue('password') === value) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject(new Error('The new password that you entered do not match!'));
-                            },
-                        }),
-                    ]}
-                >
-                    <Input.Password size='large' />
-                </Form.Item> */}
-
                 <Form.Item
                     name="phone"
                     label="Mobile Number"
@@ -214,12 +174,8 @@ const Register = () => {
                         },
                     ]}
                     validateTrigger="onBlur"
-                // help={
-                //     <p style={{ float: 'right', margin: '4px 0' }}>(Optional)</p>
-                // }
                 >
                     <Input
-                        // addonBefore={prefixSelector}
                         maxLength={10}
                         size='large'
                         minLength={10}
@@ -230,13 +186,6 @@ const Register = () => {
                         placeholder='Mobile Number'
                     />
                 </Form.Item>
-
-                {/* 
-                <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-                </Form.Item> */}
 
                 <Form.Item>
                     <LoadingButton type='primary' loading={loading} variant="contained" className="form-button">

@@ -135,7 +135,6 @@ export default function Home() {
                     <div className='land-sec-right'>
                         <Fade style={{ zIndex: 99 }} fraction={0.3} direction='right' triggerOnce>
                             <img src={require('../pic.png')} alt="land-img" className='land-img' />
-                            {/* <img src={'https://media2.giphy.com/media/mHqFgvB8qJ0MCGEBrA/giphy.gif?cid=6c09b952mwzgeplb9ffbb5wgzuwtu10gwsy01ehh9jcw0vvm&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s'} alt="" className='land-img' /> */}
                         </Fade>
                         <Fade delay={450} fraction={0.3} triggerOnce>
                             <img src={require('../rectangles.png')} alt="img-vector" className='land-vector2' />
@@ -181,8 +180,6 @@ export default function Home() {
                                         </Select>
                                     </div>
                                 </div>
-                                {/* <GrSort size={20} /> */}
-
 
                                 <div className='card-con'>
                                     {clothData.map((item, index) => (
@@ -208,16 +205,12 @@ export default function Home() {
                 </div>
             </section>
 
-
-
-
             <div className='section-separator'></div>
 
             <section>
                 <div className='why-con'>
                     <Fade direction='left' fraction={0.3} delay={300} triggerOnce>
                         <div className='why-con-img'>
-                            {/* <img src={require('../shirt1.jpeg')} alt="" /> */}
                             <img src={'https://d9jhi50qo719s.cloudfront.net/340/samples/4cw_800.gif?230831030803'} alt="img" />
                         </div>
                     </Fade>
@@ -241,7 +234,6 @@ export default function Home() {
             </section>
 
             <Footer />
-
         </div >
     )
 }
