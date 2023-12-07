@@ -148,18 +148,19 @@ const Lists = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-                                                            <div style={{ fontWeight: 500 }}>QTY: </div>
-                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                                                    <div className='item-list-qty'>
+                                                        <div>
+                                                            <div>QTY: </div>
+                                                            <div>
                                                                 <button onClick={(e) => quanFunc('dec', item, '', e)} className={`quan-btn ${item.qty === 1 ? 'btn-disabled' : ''}`} >-</button>
-                                                                <p style={{ fontSize: 18, margin: 0, color: 'black' }}>
+                                                                <p style={{ fontSize: 18 }}>
                                                                     {item.qty}
                                                                 </p>
                                                                 <button
                                                                     onClick={(e) => quanFunc('inc', item, '', e)} className='quan-btn'>+</button>
                                                             </div>
                                                         </div>
+                                                        
                                                         <div className='drawer-trash-con'>
                                                             <IoMdTrash className={`drawer-trash ${itemDel ? 'btn-disabled' : ''}`} size={19} onClick={(e) => {
                                                                 e.preventDefault()
