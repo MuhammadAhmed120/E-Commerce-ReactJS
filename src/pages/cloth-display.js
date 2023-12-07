@@ -141,7 +141,7 @@ const ProductDisplay = () => {
                                     >
                                         {Object.values(galleryImages).map((image, index) => (
                                             <div key={index}>
-                                                <img className='cloth-img' src={`${REACT_APP_BACKEND_PORT}/images/${image}`} alt={clothTitle} />
+                                                <img className='cloth-img' src={image} alt={clothTitle} />
                                             </div>
                                         ))}
                                     </Carousel>
