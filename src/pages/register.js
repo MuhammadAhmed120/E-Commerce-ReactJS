@@ -161,7 +161,7 @@ const Register = () => {
                         },
                     ]}
                 >
-                    <Input.Password size='large' placeholder='Password' />
+                    <Input.Password size='large' placeholder='Password' minLength={6} />
                 </Form.Item>
 
                 <Form.Item
@@ -176,9 +176,9 @@ const Register = () => {
                     validateTrigger="onBlur"
                 >
                     <Input
-                        maxLength={10}
+                        maxLength={11}
+                        minLength={11}
                         size='large'
-                        minLength={10}
                         showCount={false}
                         style={{
                             width: '100%',
