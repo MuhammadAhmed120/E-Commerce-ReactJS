@@ -1262,7 +1262,6 @@ input[type=number] {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-
 }
 
 .order-del-title * {
@@ -1271,6 +1270,7 @@ input[type=number] {
 
 .order-del-title h2 {
     font-size: 30px;
+    margin-right: 20px;
 }
 
 .order-del-title p {
