@@ -173,6 +173,7 @@ function UserAccount() {
                                         size='large'
                                         placeholder='Postal Code'
                                         maxLength={5}
+                                        minLength={5}
                                     />
                                 </Form.Item>
                             </div>
