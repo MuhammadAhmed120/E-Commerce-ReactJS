@@ -108,8 +108,10 @@ function UserAccount() {
             } catch (error) {
                 if (error.message === 'Network Error') {
                     console.log(error)
+                    setLoading(false)
                 } else {
                     console.log('error MESSAGE ===>', error)
+                    setLoading(false)
                 }
             }
         }
