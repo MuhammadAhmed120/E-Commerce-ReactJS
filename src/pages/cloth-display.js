@@ -141,7 +141,7 @@ const ProductDisplay = () => {
                                     >
                                         {Object.values(galleryImages).map((image, index) => (
                                             <div key={index}>
-                                                <img className='cloth-img' src={image} alt={clothTitle} />
+                                                <img className='cloth-img' src={`${REACT_APP_BACKEND_PORT}/images/${imgName}`} alt={clothTitle} />
                                             </div>
                                         ))}
                                     </Carousel>
@@ -275,7 +275,6 @@ const ProductDisplay = () => {
             <>
                 <Navbar />
                 <span className='loader'></span>
-                <p style={{ color: 'black', fontSize: 'clamp(1.05rem, 1.45vh, 1.75rem)', position: 'fixed', transform: 'translate(-50%)', top: '53%', left: '50%', whiteSpace: 'nowrap', overflow: 'hidden' }}>Something went wrong.</p>
             </>
         );
     }
