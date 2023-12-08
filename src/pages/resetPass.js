@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input } from 'antd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useParams } from 'react-router-dom';
@@ -42,6 +42,17 @@ const ResetPass = () => {
         navigate('/login')
         setOpen(false)
     };
+
+    useEffect(() => {
+        const navigatePage = () => {
+            const token = localStorage.getItem('token')
+            const UID = localStorage.getItem('UID')
+            if (token && UID) {
+                navigate('/home')
+            }
+        }
+        navigatePage()
+    }, [])
 
     const onFinish = async (values) => {
         setLoading(true)
@@ -124,7 +135,7 @@ const ResetPass = () => {
                     ]}
                     hasFeedback
                 >
-                    <Input.Password size='large' placeholder='Password' />
+                    <Input.Password size='large' placeholder='Password' minLength={6} />
                 </Form.Item>
 
                 <Form.Item
