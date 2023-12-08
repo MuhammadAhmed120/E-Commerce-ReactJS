@@ -121,7 +121,7 @@ function ResponsiveAppBar() {
                 textTransform: 'uppercase'
               }}
             >
-              <span>FLEXUS</span>
+              <span>STORE</span>
             </Typography>
           </NavLink>
 
