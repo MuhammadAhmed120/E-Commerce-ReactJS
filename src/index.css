@@ -612,16 +612,16 @@ input[type=number] {
 .cross-btn {
     float: right;
     cursor: pointer;
-    background-color: var(--dark);
+    background-color: #444444;
     color: var(--light);
-    font-size: 13px;
-    padding: 0px 6px;
-    border-radius: 4px;
+    font-size: 12px;
+    padding: 2.5px 8px;
+    border-radius: 5px;
 }
 
 .lists-con {
     margin-top: -15px;
-    margin-bottom: 50px;
+    margin-bottom: 170px;
 }
 
 .list-con {
@@ -689,10 +689,9 @@ input[type=number] {
     z-index: 5;
     background: #fff;
     color: var(--dark);
-
     padding: 10px;
     padding-bottom: 20px;
-    border-top: 1px solid gainsboro;
+    border-top: 1px solid #cacaca;
 }
 
 .num-con {
@@ -764,7 +763,7 @@ input[type=number] {
 }
 
 .order-list {
-    align-items: center !important;
+    align-items: flex-start !important;
     position: relative;
 }
 
@@ -1303,6 +1302,12 @@ input[type=number] {
     margin: 0;
 }
 
+.order-item-list {
+    overflow-x: auto;
+    max-height: 45vh;
+    height: 100%;
+}
+
 .dis-1 {
     display: flex;
     align-items: center;
@@ -1338,7 +1343,7 @@ input[type=number] {
 
 .checkout-size {
     margin: -4px 0;
-    margin-right: 5px;
+    margin-right: 15px;
     font-size: 18px;
     color: #444444;
     font-weight: 700;
@@ -1362,7 +1367,8 @@ input[type=number] {
     display: none;
 }
 
-.checkout-size:hover {
+.checkout-size:hover,
+.checkout-size:active {
     color: #444444a2;
 
     .size-hover {
