@@ -421,6 +421,7 @@ function PlaceOrder() {
                                         size='large'
                                         placeholder='Postal Code'
                                         maxLength={5}
+                                        minLength={5}
                                     />
                                 </Form.Item>
                             </div>
@@ -486,6 +487,7 @@ function PlaceOrder() {
                             <List
                                 itemLayout="horizontal"
                                 dataSource={clothCart}
+                                className='order-item-list'
                                 renderItem={(item, index) => {
                                     const itemSize = sizeMap[item.size]
 
@@ -510,7 +512,7 @@ function PlaceOrder() {
                                                     </div>
                                                 }
                                                 title={
-                                                    <div style={{ fontSize: 17, marginBottom: 0, flexGrow: 1, marginRight: 10, lineHeight: 1 }}>
+                                                    <div style={{ fontSize: 17, marginBottom: 0, flexGrow: 1, lineHeight: 1, marginTop: 10 }}>
                                                         {item.item.clothTitle}
                                                     </div>
                                                 }
