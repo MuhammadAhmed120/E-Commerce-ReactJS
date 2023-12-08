@@ -97,9 +97,6 @@ const ResetPass = () => {
             >
                 <Box sx={style}>
                     <>
-                        <div style={{ textAlign: 'center', padding: 10 }}>
-                            <TbLockOpenOff size={27} />
-                        </div>
                         <p style={{ fontSize: 21, margin: 0 }}>
                             {msg}
                         </p>
