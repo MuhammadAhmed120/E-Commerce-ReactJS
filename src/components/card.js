@@ -27,7 +27,7 @@ const DisplayCard = ({ AddCartFunc, clothStatus, clothImg, clothTitle, clothPric
             {/* IMAGE */}
             <Carousel autoplay>
                 <div onMouseEnter={imgHovered} onMouseLeave={imgNotHovered}>
-                    <img src={imgName} alt={clothTitle} className={`card-img`} />
+                    <img src={`${REACT_APP_BACKEND_PORT}/images/${imgName}`} alt={clothTitle} className={`card-img`} />
                 </div>
             </Carousel>
 
