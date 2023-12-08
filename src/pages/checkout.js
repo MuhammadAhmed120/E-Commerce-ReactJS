@@ -102,7 +102,8 @@ function Checkout() {
                         <List
                             itemLayout="horizontal"
                             dataSource={clothCart}
-                            className='list-check'
+                            className='list-check order-item-list'
+                            style={{ maxHeight: '65vh' }}
                             renderItem={(item, index) => {
                                 return (
                                     <List.Item
@@ -119,7 +120,7 @@ function Checkout() {
                                                     />
                                                 }
                                                 title={
-                                                    <div style={{ fontSize: 21, marginBottom: -5 }}>
+                                                    <div style={{ fontSize: 21, marginBottom: -5, marginTop: 5, lineHeight: 1 }}>
                                                         {item.item.clothTitle}
                                                     </div>
                                                 }
