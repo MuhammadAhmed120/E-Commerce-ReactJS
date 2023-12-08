@@ -12,7 +12,6 @@ const DisplayCard = ({ AddCartFunc, clothStatus, clothImg, clothTitle, clothPric
 
     let [isHovered, setisHovered] = useState(null)
     const imgSrc = isHovered ? clothImgHover : clothImg
-    const imgName = clothImg
 
     function imgHovered() {
         setisHovered(true)
@@ -27,7 +26,7 @@ const DisplayCard = ({ AddCartFunc, clothStatus, clothImg, clothTitle, clothPric
             {/* IMAGE */}
             <Carousel autoplay>
                 <div onMouseEnter={imgHovered} onMouseLeave={imgNotHovered}>
-                    <img src={`${REACT_APP_BACKEND_PORT}/images/${imgName}`} alt={clothTitle} className={`card-img`} />
+                    <img src={`${REACT_APP_BACKEND_PORT}/images/${clothImg}`} alt={clothTitle} className={`card-img`} />
                 </div>
             </Carousel>
 
