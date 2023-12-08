@@ -182,9 +182,11 @@ function PlaceOrder() {
             setLoading(false)
         } catch (error) {
             console.log(error)
-            if (error.message === 'Network Error') {
+            // ERR_NETWORK
+            if (error.code === 'ERR_NETWORK') {
                 setError(error.message)
                 setOpen(true);
+                setLoading(false)
             } else {
                 setError(error.response.data.error)
                 setOpen(true)
