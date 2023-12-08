@@ -133,7 +133,7 @@ const Login = () => {
                             <div style={{ textAlign: 'center', padding: 10 }}>
                                 <TbLockOpenOff size={27} />
                             </div>
-                            <p style={{ fontSize: 21, margin: 0 }}>
+                            <p style={{ fontSize: 21, margin: 0, textAlign: 'center' }}>
                                 {error}
                             </p>
                             <Button className='modal-error-close' variant='contained' disableElevation onClick={handleClose}>
