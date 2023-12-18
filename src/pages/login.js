@@ -201,8 +201,6 @@ const Login = () => {
                 </Box>
             </Modal >
 
-
-
             <Form
                 name="normal_login"
                 className="form"
